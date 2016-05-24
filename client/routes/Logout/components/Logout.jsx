@@ -10,6 +10,8 @@ class Logout extends Component {
     this.state = {
       errorMsg: false
     }
+
+    this.logout();
   }
 
   logout() {
@@ -22,8 +24,10 @@ class Logout extends Component {
         } else {
           errorMsg = false;
         }
-
         this.setState({errorMsg: errorMsg});
+
+        window.iapp.Auth.onLogout()
+
         console.log("logout", response);
       })
       .catch((response) => {

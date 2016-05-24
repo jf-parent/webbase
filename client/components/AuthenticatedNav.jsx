@@ -21,6 +21,7 @@ class AuthenticatedNav extends Component {
                 <div className="navbar-collapse collapse">
                     <ul className="nav navbar-nav">
                       <NavItem to="/profile">Profile</NavItem>
+                      <NavItem to="/settings">Settings</NavItem>
                       <NavItem to="/logout">Logout</NavItem>
                     </ul>
                     <SocialMedia />

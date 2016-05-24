@@ -2,38 +2,36 @@ import React, { Component } from "react"
 import Loading from "./ux/Loading"
 import AuthenticatedNav from "./AuthenticatedNav"
 import UnAuthenticatedNav from "./UnAuthenticatedNav"
-import axios from "axios"
 import Home from "./Home"
+import Observer from "Observer"
 
 class App extends Component {
   constructor(props, context) {
     super(props, context);
 
+    window.iapp.Auth.isAuthenticated();
     this.state = {
-      isLoading: true
+      isLoading: true,
+      isAuthenticated: false
     };
 
-    this.state.isAuthenticated = false;
-    this.get_session();
+    this.updateAuth = this.updateAuth.bind(this);
   }
 
-  get_session() {
+  componentDidMount() {
+    Observer.on("updateAuth", this.updateAuth);
+  }
 
-    axios.get("/api/get_session")
-      .then((response) => {
-        this.setState({
-          "isAuthenticated": response.data.success,
-          "isLoading": false
-        });
-        console.log("get_session", response);
-      })
-      .catch((response) => {
-          this.setState({
-            "isLoading": false
-          });
-        console.log("get_session error", response);
-      });
-    }
+  componentDidUnMount() {
+    Observer.un("updateAuth", this.updateAuth);
+  }
+
+  updateAuth() {
+    this.setState({
+      isLoading: false,
+      isAuthenticated: window.iapp.Auth.getUser()
+    });
+  }
 
   render() {
     if (this.state.isLoading) {

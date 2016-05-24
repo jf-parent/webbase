@@ -3,8 +3,8 @@ import { Link } from "react-router"
 import { Form } from "formsy-react"
 import ErrorMsg from "components/ux/ErrorMsg"
 import ValidatedInput from "components/ux/Input"
-import PasswordInput from "components/ux/PasswordInput"
 import LaddaButton from "components/ux/LaddaButton"
+import PasswordInput from "components/ux/PasswordInput"
 import axios from "axios"
 
 class Register extends Component {
@@ -27,17 +27,20 @@ class Register extends Component {
 
     axios.post("/api/register", data)
       .then((response) => {
+        console.log("register", response);
+
         let errorMsg;
         this.refs.button.setState({isLoading: false});
 
         if (!response.data.success) {
           errorMsg = "An error has occured: " + response.data.error;
+          this.setState({errorMsg: errorMsg});
         } else {
           errorMsg = false;
+          this.setState({errorMsg: errorMsg});
+          window.iapp.Auth.onLogin(response.data.user);
         }
 
-        this.setState({errorMsg: errorMsg});
-        console.log("register", response);
       })
       .catch((response) => {
         this.setState({
@@ -64,7 +67,7 @@ class Register extends Component {
         <Form ref="form" onValid={this.enableButton} onInvalid={this.disableButton} className="form-signin">
           <h2 className="form-signin-heading">Registration</h2>
           <ValidatedInput type="email" name="email" placeholder="Email address" validations="isEmail" required autoFocus/>
-          <ValidatedInput type="text" name="username" placeholder="Username" required validations="minLength:3" maxLength="30" />
+          <ValidatedInput type="text" name="name" placeholder="Name" required validations="minLength:2" maxLength="60" />
           <PasswordInput type="password" name="password" placeholder="Password" type="password" required/>
           <LaddaButton ref="button" isDisabled={true} isLoading={this.state.isLoading} onSubmit={this.onSubmit}>Register</LaddaButton>
           <center>{errorMsg}</center>

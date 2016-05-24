@@ -8,8 +8,10 @@ const PasswordInput = React.createClass({
 
   getInitialState() {
     return {
-      type: "password",
-      _value: ""
+      _value: "",
+      showErrMsg: false,
+      quiet: this.props.quiet,
+      showPassword: false
     };
   },
 
@@ -30,22 +32,51 @@ const PasswordInput = React.createClass({
     return this.showError() ? this.state.errorMessage : "";
   },
 
+  onFocus() {
+    this.setState({showErrMsg: false});
+  },
+
+  onBlur() {
+    this.setState({showErrMsg: true});
+  },
+
+  toggleShowPassword() {
+    this.setState({showPassword: !this.state.showPassword})
+  },
+
   render() {
 
-    const className = "form-group" + (this.props.className || " ") +
+    let className = "form-group" + (this.props.className || " ") +
       (this.showRequired() ? " has-warning" : this.showError() ? " has-error" : " has-success");
+    let errorMessage = this.getCustomErrorMessage();
+    let errorMsg = null;
 
-    const errorMessage = this.getCustomErrorMessage();
-    let errorMsg = errorMessage ? <ErrorMsg msg={errorMessage} /> : null;
+    if (!this.state.quiet) {
+      if (this.state.showErrMsg) {
+        errorMsg = errorMessage ? <ErrorMsg msg={errorMessage} /> : null;
+      }
+    }
+    let type = this.state.showPassword ? "text" : "password";
 
     return (
+
       <div className={className}>
         <input
           className="form-control"
           {...this.props}
-          type={this.state.type}
+          type={type}
           onChange={this.changeValue}
           value={this.getValue()}
+          onBlur={this.onBlur}
+          onFocus={this.onFocus}
+        />
+        <span
+          onMouseOver={this.toggleShowPassword}
+          onMouseOut={this.toggleShowPassword}
+          onTouchStart={this.toggleShowPassword}
+          onTouchEnd={this.toggleShowPassword}
+          id="show-password"
+          className="glyphicon glyphicon-eye-open"
         />
         <center>{errorMsg}</center>
       </div>
@@ -54,4 +85,3 @@ const PasswordInput = React.createClass({
 });
 
 export default PasswordInput;
-

@@ -1,30 +1,38 @@
 import functools
+import traceback
 
 from aiohttp import web
 from aiohttp.abc import AbstractView
-from aiohttp_security import remember, forget, authorized_userid, permits
+from aiohttp_session import get_session
 
+from server.auth import permits
 from server.settings import logger
-from server.exceptions import *
+from server.exceptions import *  # noqa
+
 
 def require(permission):
     def wrapper(func):
         @functools.wraps(func)
         async def wrapped(*args):
+            logger.debug('require: {permission}'.format(permission=permission))
+
             # Supports class based views see web.View
             if isinstance(args[0], AbstractView):
                 request = args[0].request
+                params = args[0]  # self
             else:
                 request = args[-1]
+                params = request  # request
 
-            logger.debug('require: %s'%permission)
-            has_perm = await permits(request, permission)
+            session = await get_session(request)
+            has_perm = permits(request, session, permission)
             if not has_perm:
-                raise web.HTTPForbidden(body=b'Forbidden require')
+                raise NotAuthorizedException(permission)
 
-            return (await func(request))
+            return (await func(params))
         return wrapped
     return wrapper
+
 
 def exception_handler():
     def wrapper(func):
@@ -35,10 +43,13 @@ def exception_handler():
                 if isinstance(args[0], AbstractView):
                     return (await func(*args))
                 else:
-                    request = args[-1]
-                    return (await func(request))
+                    return (await func(args[-1]))
             except Exception as e:
-                logger.error('Request Exception<{exception}>'.format(exception = str(e)))
+                tb = traceback.format_exc()
+                logger.error(
+                    'Request HandledException<{exception}>'
+                    .format(exception=str(tb))
+                )
                 if isinstance(e, ServerBaseException):
                     data = {'success': False, 'error': e.get_name()}
                 else:
@@ -48,4 +59,3 @@ def exception_handler():
 
         return wrapped
     return wrapper
-

@@ -1,17 +1,17 @@
-from aiohttp_security.abc import AbstractAuthorizationPolicy
+from server.auth.user import User
 
-from server.settings import logger
 
-class DBAuthorizationPolicy(AbstractAuthorizationPolicy):
-    def __init__(self, dbengine):
-        self.dbengine = dbengine
+def permits(request, session, permission):
+    if permission == 'login':
+        return session.get('email', False)
 
-    async def authorized_user_id(self, identity):
-        logger.debug('authorized_user_id')
-        return 'test'
-
-    async def permits(self, identity, permission, context=None):
-        logger.debug('permits')
-        if permission == 'login':
+    if permission == 'admin':
+        email = session.get('email')
+        if not email:
             return False
-        return True
+
+        user = request.db_session.query(User).filter(User.email == email).one()
+        if user.role == 'admin':
+            return True
+        else:
+            return False

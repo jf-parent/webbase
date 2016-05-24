@@ -3,6 +3,10 @@
 import React from "react"
 import { render } from "react-dom"
 import { Router, browserHistory } from "react-router"
+import Auth from "Auth"
+
+window.iapp = {};
+window.iapp.Auth = new Auth();
 
 require("ladda/dist/ladda-themeless.min.css");
 require("bootstrap-webpack!./bootstrap.config.js");
@@ -16,6 +20,8 @@ const rootRoute = {
     component: require("./components/App"),
     childRoutes: [
       require("./routes/Login"),
+      require("./routes/Profile"),
+      require("./routes/Settings"),
       require("./routes/Register"),
       require("./routes/Logout"),
       require("./routes/ErrorPage")

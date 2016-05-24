@@ -1,11 +1,13 @@
-from aiohttp import web
 from mongoalchemy.session import Session
-from server.settings import config, logger
+from server.settings import config
+
 
 async def db_handler(app, handler):
     async def middleware(request):
         if request.path.startswith('/api/'):
-            request.db_session = Session.connect(config.get("MONGO_DATABASE_NAME"))
+            request.db_session = Session.connect(
+                config.get("MONGO_DATABASE_NAME")
+            )
             response = await handler(request)
             return response
         else:

@@ -5,21 +5,18 @@ import asyncio
 import sys
 import base64
 
-sys.path.append('.')
-
-from IPython import embed
 import jinja2
 import aiohttp_jinja2
 from cryptography import fernet
-import uvloop
-import aiohttp_debugtoolbar
 from aiohttp_session import session_middleware
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from aiohttp import web
-from aiohttp_security import setup as setup_security
-from aiohttp_security import SessionIdentityPolicy
 
-from server import routes, config, logger, ROOT, db_handler, DBAuthorizationPolicy
+sys.path.append('.')
+
+from server.routes import routes  # noqa
+from server.middlewares import db_handler  # noqa
+from server.settings import config, logger, ROOT  # noqa
 
 async def on_shutdown(app):
     for ws in app['websockets']:
@@ -30,7 +27,6 @@ async def shutdown(server, app, handler):
 
     server.close()
     await server.wait_closed()
-    #app.client.close()  # database connection close
     await app.shutdown()
     await handler.finish_connections(10.0)
     await app.cleanup()
@@ -45,15 +41,15 @@ async def init(loop):
         db_handler
     ])
 
-    #WEBSOCKET
+    # WEBSOCKET
     app['websockets'] = []
     handler = app.make_handler()
 
-    #ROUTES
+    # ROUTES
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    #STATIC
+    # STATIC
     if config.get('DEBUG'):
         static_path = os.path.join(ROOT, 'dev')
     else:
@@ -63,18 +59,7 @@ async def init(loop):
 
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
 
-    #DB
-    #app.client = ma.AsyncIOMotorClient(config.get('MONGO_HOST'))
-    #app.db = app.client[config.get('MONGO_DATABASE_NAME')]
-
-    #AUTH
-    setup_security(
-        app,
-        SessionIdentityPolicy(), #TODO investiate session_key
-        DBAuthorizationPolicy(None)
-    )
-
-    #PREPARE HOOK
+    # PREPARE HOOK
     async def after_request(request, response):
         if hasattr(request, 'session'):
             request.db_session.end()
@@ -82,10 +67,14 @@ async def init(loop):
 
     app.on_response_prepare.append(after_request)
 
-    #SHUTDOWN
+    # SHUTDOWN
     app.on_shutdown.append(on_shutdown)
 
-    serv_generator = loop.create_server(handler, config.get('SERVER_HOST'), config.get('SERVER_PORT'))
+    serv_generator = loop.create_server(
+        handler,
+        config.get('SERVER_HOST'),
+        config.get('SERVER_PORT')
+    )
     return serv_generator, handler, app
 
 """

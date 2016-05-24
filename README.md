@@ -100,3 +100,15 @@ $ make deps
 $ npm install
 ```
 
+## PROMETHEUS
+
+```bash
+su
+cd $PROG
+git clone https://github.com/hynek/prometheus_async
+python setup.py install
+wget https://github.com/prometheus/prometheus/releases/download/0.18.0/prometheus-0.18.0.linux-amd64.tar.gz
+tar xvf prometheus-0.18.0.linux-amd64.tar.gz
+cd prometheus-0.18.0.linux-amd64
+./prometheus --version
+```

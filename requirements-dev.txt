@@ -1,2 +1,4 @@
 ipython
 ipdb
+flake8
+pip-save

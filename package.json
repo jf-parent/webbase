@@ -4,7 +4,7 @@
   "description": "Base for web",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint client --ext .js --ext .jsx --cache || true"
+    "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true"
   },
   "engines": {
     "node": "4.4.4",
@@ -72,6 +72,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "react-transform-hmr": "^1.0.4",
+    "react-ux-password-field": "^0.9.12",
     "string-replace-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
