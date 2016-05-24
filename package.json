@@ -1,0 +1,80 @@
+{
+  "name": "webbase",
+  "version": "1.0.0",
+  "description": "Base for web",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint client --ext .js --ext .jsx --cache || true"
+  },
+  "engines": {
+    "node": "4.4.4",
+    "npm": "2.15.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jf-parent/webbase.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "aiohttp",
+    "webpack"
+  ],
+  "author": "parent.j.f@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jf-parent/webbase/issues"
+  },
+  "homepage": "https://github.com/jf-parent/webbase#readme",
+  "dependencies": {
+    "axios": "^0.11.1",
+    "babel-polyfill": "^6.9.0",
+    "dotenv": "^2.0.0",
+    "ladda": "^1.0.0",
+    "react": "^15.0.2",
+    "react-addons-pure-render-mixin": "^15.1.0",
+    "react-dom": "^15.0.2",
+    "react-ladda": "^4.0.3",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.1",
+    "react-router-active-component": "^4.0.0-rc.0",
+    "redux": "^3.5.2",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-react-transform": "^2.0.2",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-runtime": "^6.9.0",
+    "bootstrap": "^3.3.6",
+    "bootstrap-webpack": "0.0.5",
+    "clean-webpack-plugin": "^0.1.9",
+    "css-loader": "^0.23.1",
+    "eslint": "^2.10.2",
+    "eslint-loader": "^1.3.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^5.1.1",
+    "export-files-webpack-plugin": "0.0.1",
+    "exports-loader": "^0.6.3",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "font-awesome": "^4.6.1",
+    "font-awesome-webpack": "0.0.4",
+    "html-webpack-plugin": "^2.17.0",
+    "imports-loader": "^0.6.5",
+    "jquery": "^2.2.4",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "react-transform-hmr": "^1.0.4",
+    "string-replace-webpack-plugin": "0.0.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
