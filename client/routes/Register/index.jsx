@@ -1,10 +1,15 @@
-module.exports = {
+import { requireNotAuth } from 'Auth'
+import { injectReducer } from 'store/reducers'
+
+export default (store) => ({
   path: 'register',
-  onEnter: window.iapp.Auth.requireNotAuth,
+  onEnter: requireNotAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require('./components/Register'))
-    })
+      const Register = require('./containers/RegisterContainer').default
+      const reducer = require('./modules/reducer').default
+      injectReducer(store, { key: 'register', reducer })
+      cb(null, Register)
+    }, 'register')
   }
-}
-
+})

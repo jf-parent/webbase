@@ -13,14 +13,22 @@ class Login extends BaseComponent {
     super(props)
 
     this._initLogger()
-    this._bind('enableButton', 'disableButton', 'onSubmit')
+    this._bind(
+      'enableButton',
+      'disableButton',
+      'onSubmit'
+    )
   }
 
-  onSubmit (event) {
-    event.preventDefault()
+  onSubmit () {
     this.debug('onSubmit()')
 
-    this.props.actions.login(this.refs.form.getModel())
+    this.props.actions.doLogin(this.refs.form.getModel())
+  }
+
+  componentWillUnmount () {
+    this.debug('componentWillUnmount')
+    this.props.actions.resetLoginState()
   }
 
   enableButton () {
@@ -36,7 +44,7 @@ class Login extends BaseComponent {
   render () {
     this.debug('render')
 
-    let errorMsg = this.props.session.loginError ? <ErrorMsg msg={this.props.session.loginError} /> : null
+    let errorMsg = this.props.login.error ? <ErrorMsg msg={this.props.login.error} /> : null
 
     return (
       <center>
@@ -44,7 +52,7 @@ class Login extends BaseComponent {
           <h2 className='form-signin-heading'>Please log in</h2>
           <ValidatedInput type='email' name='email' placeholder='Email address' validations='isEmail' required autoFocus />
           <PasswordInput type='password' name='password' placeholder='Password' quiet required />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.session.loading} onSubmit={this.onSubmit}>Login</LaddaButton>
+          <LaddaButton ref='button' isDisabled isLoading={this.props.login.loading} onSubmit={this.onSubmit}>Login</LaddaButton>
           <center>{errorMsg}</center>
         </Form>
         <p>

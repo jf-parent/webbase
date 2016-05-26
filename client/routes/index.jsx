@@ -1,31 +1,22 @@
 import CoreLayout from 'layouts/CoreLayout/CoreLayout'
 import Login from 'routes/Login'
+import Logout from 'routes/Logout'
 import Profile from 'routes/Profile'
-// import Home from 'routes/Home'
+import ErrorPage from 'routes/ErrorPage'
+import Settings from 'routes/Settings'
+import Register from 'routes/Register'
 
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
-  // indexRoute: Home,
   childRoutes: [
     Login(store),
-    Profile(store)
+    Profile(store),
+    Logout(store),
+    Settings(store),
+    Register(store),
+    ErrorPage(store)
   ]
-
-  /*
-  getChildRoutes (location, cb) {
-    require.ensure([], (require) => {
-      cb(null, [
-        require('./routes/Login').default(store),
-        require('./routes/Profile'.default(store)),
-        require('./routes/Settings'.default(store)),
-        require('./routes/Register'.default(store)),
-        require('./routes/Logout'.default(store)),
-        require('./routes/ErrorPage')
-      ])
-    })
-  }
-  */
 })
 
 export default createRoutes

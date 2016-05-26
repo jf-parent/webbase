@@ -3,7 +3,6 @@ export const requireNotAuth = (store) => {
     const user = store.getState().session.user
     console.log('requireNotAuth (user)', user)
     if (user) {
-      this.nextPath = nextState.location.pathname
       replace({
         pathname: '/profile'
       })
@@ -16,9 +15,9 @@ export const requireAuth = (store) => {
     const user = store.getState().session.user
     console.log('requireAuth (user)', user)
     if (!user) {
-      this.nextPath = nextState.location.pathname
       replace({
-        pathname: '/login'
+        pathname: '/login',
+        state: { nextPathname: nextState.location.pathname }
       })
     }
   }

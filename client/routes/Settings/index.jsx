@@ -1,9 +1,12 @@
-module.exports = {
+import { requireAuth } from 'Auth'
+
+export default (store) => ({
   path: 'settings',
-  onEnter: window.iapp.Auth.requireAuth,
+  onEnter: requireAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require('./components/Settings'))
-    })
+      const Settings = require('./containers/SettingsContainer').default
+      cb(null, Settings)
+    }, 'settings')
   }
-}
+})

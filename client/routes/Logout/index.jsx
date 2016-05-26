@@ -1,9 +1,15 @@
-module.exports = {
+import { requireAuth } from 'Auth'
+import { injectReducer } from 'store/reducers'
+
+export default (store) => ({
   path: 'logout',
-  onEnter: window.iapp.Auth.requireAuth,
+  onEnter: requireAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require('./components/Logout'))
-    })
+      const Logout = require('./containers/LogoutContainer').default
+      const reducer = require('./modules/reducer').default
+      injectReducer(store, { key: 'logout', reducer })
+      cb(null, Logout)
+    }, 'logout')
   }
-}
+})

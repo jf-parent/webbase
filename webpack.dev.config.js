@@ -35,7 +35,7 @@ var config = {
    output: {
      path: BUILD_DIR + '/static/scripts/',
      filename: '[name].js',
-     chunkFilename: '[id].chunk.js',
+     chunkFilename: '[name].chunk.js',
      publicPath: '/static/scripts/'
    },
 
