@@ -1,16 +1,16 @@
-import React, { Component } from "react"
+import React, { Component, PropTypes } from 'react'
 
 class ErrorMsg extends Component {
 
-  constructor(props, context) {
-    super(props, context)
+  static propTypes = {
+    msg: PropTypes.string.isRequired
   }
 
-  render() {
+  render () {
     return (
-        <div className="alert alert-danger err-msg" role="alert">
-            <strong>Error:</strong> {this.props.msg}
-        </div>
+      <div className='alert alert-danger err-msg' role='alert'>
+        <strong>Error:</strong> {this.props.msg}
+      </div>
     )
   }
 }

@@ -51,9 +51,9 @@ async def init(loop):
 
     # STATIC
     if config.get('DEBUG'):
-        static_path = os.path.join(ROOT, 'dev')
+        static_path = os.path.join(ROOT, 'client-dev')
     else:
-        static_path = os.path.join(ROOT, 'prod')
+        static_path = os.path.join(ROOT, 'client-prod')
 
     app.router.add_static('/', static_path, name='static')
 

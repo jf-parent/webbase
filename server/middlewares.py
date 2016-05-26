@@ -8,10 +8,8 @@ async def db_handler(app, handler):
             request.db_session = Session.connect(
                 config.get("MONGO_DATABASE_NAME")
             )
-            response = await handler(request)
-            return response
-        else:
-            response = await handler(request)
-            return response
+
+        response = await handler(request)
+        return response
 
     return middleware

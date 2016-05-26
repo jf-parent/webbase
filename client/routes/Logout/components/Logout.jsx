@@ -1,52 +1,56 @@
-import React, { Component } from "react"
-import Loading from "components/ux/Loading"
-import ErrorMsg from "components/ux/ErrorMsg"
-import axios from "axios"
+import React, { Component } from 'react'
+import Loading from 'components/ux/Loading'
+import ErrorMsg from 'components/ux/ErrorMsg'
+import axios from 'axios'
 
 class Logout extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
+
+    this._initLogger()
 
     this.state = {
       errorMsg: false
     }
 
-    this.logout();
+    this.logout()
   }
 
-  logout() {
-    axios.get("/api/logout")
+  logout () {
+    this.debug('logout')
+
+    axios.get('/api/logout')
       .then((response) => {
-        let errorMsg;
+        this.debug('/api/logout (response)', response)
+        let errorMsg
 
         if (!response.data.success) {
-          errorMsg = "An error has occured: " + response.data.error;
+          errorMsg = 'An error has occured: ' + response.data.error
         } else {
-          errorMsg = false;
+          errorMsg = false
         }
-        this.setState({errorMsg: errorMsg});
+        this.setState({errorMsg: errorMsg})
 
         window.iapp.Auth.onLogout()
-
-        console.log("logout", response);
       })
       .catch((response) => {
+        this.debug('/api/logout erro (response)', response)
         this.setState({
-          errorMsg: "An error has occured: " + response.data.error
-        });
-        console.log("logout error", response);
-      });
+          errorMsg: 'An error has occured: ' + response.data.error
+        })
+      })
   }
 
-  render() {
+  render () {
+    this.debug('render')
     if (this.state.errorMsg) {
       return (
         <ErrorMsg msg={this.state.errorMsg} />
-      );
+      )
     } else {
       return (
         <Loading />
-      );
+      )
     }
   }
 }

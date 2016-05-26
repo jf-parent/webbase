@@ -1,9 +1,9 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 
-var url = require("file!assets/images/404.png");
+var url = require('file!assets/images/404.png')
 
 class ErrorPage extends Component {
-  render() {
+  render () {
     return (
       <center>
         <h1>

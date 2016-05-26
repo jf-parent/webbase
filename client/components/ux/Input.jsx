@@ -1,43 +1,38 @@
-import React from "react";
-import Formsy from "formsy-react";
+import React, { PropTypes } from 'react'
+import Formsy from 'formsy-react'
 
 const ValidatedInput = React.createClass({
 
-  // Add the Formsy Mixin
+  propTypes: {
+    type: PropTypes.string,
+    className: PropTypes.string
+  },
+
   mixins: [Formsy.Mixin],
 
-  // setValue() will set the value of the component, which in
-  // turn will validate it and the rest of the form
-  changeValue(event) {
-    this.setValue(event.currentTarget[this.props.type === "checkbox" ? "checked" : "value"]);
+  changeValue (event) {
+    this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value'])
   },
-  render() {
 
-    // Set a specific className based on the validation
-    // state of this component. showRequired() is true
-    // when the value is empty and the required prop is
-    // passed to the input. showError() is true when the
-    // value typed is invalid
-    const className = "form-group" + (this.props.className || " ") +
-      (this.showRequired() ? " has-warning" : this.showError() ? " has-error" : " has-success");
+  render () {
+    const className = 'form-group' + (this.props.className || ' ') +
+      (this.showRequired() ? ' has-warning' : this.showError() ? ' has-error' : ' has-success')
 
-    // An error message is returned ONLY if the component is invalid
-    // or the server has returned an error message
-    //const errorMessage = this.getErrorMessage();
+    // const errorMessage = this.getErrorMessage()
 
     return (
       <div className={className}>
         <input
-          className="form-control"
+          className='form-control'
           {...this.props}
-          type={this.props.type || "text"}
+          type={this.props.type || 'text'}
           onChange={this.changeValue}
           value={this.getValue()}
-          checked={this.props.type === "checkbox" && this.getValue() ? "checked" : null}
+          checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
         />
       </div>
-    );
+    )
   }
-});
+})
 
-export default ValidatedInput;
+export default ValidatedInput

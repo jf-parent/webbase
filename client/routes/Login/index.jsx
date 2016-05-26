@@ -1,9 +1,12 @@
-module.exports = {
-  path: "login",
-  onEnter: window.iapp.Auth.requireNotAuth,
-  getComponent(nextState, cb) {
+import { requireNotAuth } from 'Auth'
+
+export default (store) => ({
+  path: 'login',
+  onEnter: requireNotAuth(store),
+  getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require("./components/Login"))
+      const Login = require('./containers/LoginContainer').default
+      cb(null, Login)
     })
   }
-}
+})

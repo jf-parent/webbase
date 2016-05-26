@@ -1,10 +1,14 @@
-require('babel-polyfill');
-
+var webpack = require('webpack');
 var serverConfig = require('./configs/server');
 
 var isProduction = !serverConfig['DEBUG'];
 
 console.log('[*] isProduction:', isProduction);
+
+definePlugin = new webpack.DefinePlugin({
+  __DEV__: !isProduction,
+  __DEBUG__: !isProduction
+});
 
 if (isProduction) {
     process.env.NODE_ENV = 'production';

@@ -15,6 +15,9 @@ class User(Document):
     email = StringField(required=True)
     role = EnumField(StringField(), 'admin', 'user')
     enable = BoolField(default=True)
+    # settings =
+    # social_id =
+    # social_provider =
 
     # PASSWORD
     hashed_password = StringField(required=True)

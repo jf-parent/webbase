@@ -4,7 +4,7 @@ var path = require('path');
 var serverConfig = require('./configs/server');
 var ExportFilesWebpackPlugin = require('export-files-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BUILD_DIR = path.resolve(__dirname, 'dev');
+var BUILD_DIR = path.resolve(__dirname, 'client-dev');
 var APP_DIR = path.resolve(__dirname, 'client');
 var serverAddr = serverConfig['SERVER_HOST'] + ':' + serverConfig['SERVER_PORT'];
 var clientPort = '8080';
@@ -46,6 +46,7 @@ var config = {
         filename: BUILD_DIR + '/index.html',
         template: APP_DIR + '/views/index.tpl'
       }),
+      definePlugin
   ],
 
   module : {
@@ -71,7 +72,7 @@ var config = {
       host: '0.0.0.0',
       port: clientPort,
 
-      contentBase: 'dev/',
+      contentBase: BUILD_DIR,
 
       inline: true,
 

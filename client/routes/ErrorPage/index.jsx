@@ -1,9 +1,8 @@
-module.exports = {
-  path: "*",
-  getComponent(nextState, cb) {
+module.export = {
+  path: '*',
+  getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require("./components/ErrorPage"))
-    })
+      cb(null, require('./components/ErrorPage'))
+    }, 'errorpage')
   }
 }
-
