@@ -1,9 +1,12 @@
-import { combineReducers } from 'redux'
-import session from '../reducers'
 import { routerReducer as router } from 'react-router-redux'
+import { combineReducers } from 'redux'
+
+import locales from 'locales/reducer'
+import session from '../reducers'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
+    locales,
     session,
     router,
     ...asyncReducers

@@ -1,6 +1,14 @@
 import React, { PropTypes } from 'react'
 import { Router } from 'react-router'
 import { Provider } from 'react-redux'
+import { addLocaleData } from 'react-intl'
+import enLocaleData from 'react-intl/locale-data/en'
+import frLocaleData from 'react-intl/locale-data/fr'
+
+import ConnectedIntlProvider from 'locales/ConnectedIntlProvider'
+
+addLocaleData(enLocaleData)
+addLocaleData(frLocaleData)
 
 class AppContainer extends React.Component {
   static propTypes = {
@@ -15,9 +23,11 @@ class AppContainer extends React.Component {
 
     return (
       <Provider store={store}>
-        <div style={{ height: '100%' }}>
-          <Router history={history} children={routes} key={routerKey} />
-        </div>
+        <ConnectedIntlProvider>
+          <div style={{ height: '100%' }}>
+            <Router history={history} children={routes} key={routerKey} />
+          </div>
+        </ConnectedIntlProvider>
       </Provider>
     )
   }

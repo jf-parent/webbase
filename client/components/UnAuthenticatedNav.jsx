@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import activeComponent from 'react-router-active-component'
+
 import SocialMedia from 'components/SocialMedia'
 
 class UnAuthenticatedNav extends Component {

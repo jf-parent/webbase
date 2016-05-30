@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { Form } from 'formsy-react'
+import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
@@ -56,7 +57,12 @@ class Login extends BaseComponent {
           <center>{errorMsg}</center>
         </Form>
         <p>
-          <Link to='/register'>Don't have an account yet? Register here</Link>
+          <Link to='/register'>
+            <FormattedMessage
+              id='login.register_redirect'
+              defaultMessage="Don't have an account yet? Register here"
+            />
+          </Link>
         </p>
         <p>
           <Link to='/forgotten-password'>Forgot password?</Link>
