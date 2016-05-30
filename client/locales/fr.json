@@ -1,4 +1,21 @@
 {
-    "test": "Français",
-    "login.register_redirect": "Vous n'avez pas de compte? Enregistrez-vous ici"
+    "nav.home": "Page d'acceuil",
+    "nav.register": "S'enregistrer",
+    "nav.login": "Se connecter",
+    "nav.profile": "Profil",
+    "nav.logout": "Se déconnecter",
+    "nav.settings": "Paramètre",
+    "error-page.page-not-found": "Page introuvable",
+    "login.emailPlaceholder": "Courriel",
+    "login.passwordPlaceholder": "Mot de passe",
+    "login.submit-btn": "Se connecter",
+    "login.forgotten-password-btn": "Mot de passe oublié?",
+    "login.please-login": "Connectez-vous",
+    "login.register-redirect": "Vous n'avez pas de compte? Enregistrez-vous ici",
+    "register.already-have-an-account": "Vous avez déjà un compte? cliquer ici",
+    "register.registration": "Enregistrement",
+    "register.register-btn": "Enregistrez-vous",
+    "register.emailPlaceholder": "Courriel",
+    "register.passwordPlaceholder": "Mot de passe",
+    "register.namePlaceholder": "Nom"
 }

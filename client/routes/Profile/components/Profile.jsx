@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 class Profile extends Component {
   constructor (props) {
@@ -12,7 +13,10 @@ class Profile extends Component {
   render () {
     return (
       <div>
-        Profile
+        <FormattedMessage
+          id='nav.profile'
+          defaultMessage='Profile'
+        />
       </div>
     )
   }

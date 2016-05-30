@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
@@ -53,12 +52,7 @@ class CoreLayout extends BaseComponent {
 
       return (
         <div>
-          <h1>
-            <FormattedMessage
-              id='test'
-              defaultMessage='DEfault messag'
-            />
-          </h1>
+          <LocalesMenu />
           {Nav}
           <div className='container'>
             <div className='jumbotron' id='jumbotron'>
@@ -68,7 +62,7 @@ class CoreLayout extends BaseComponent {
           <footer >
             <div className='container'>
               <div className='jumbotron'>
-                <LocalesMenu />
+                <h2>Webbase</h2>
               </div>
             </div>
           </footer>

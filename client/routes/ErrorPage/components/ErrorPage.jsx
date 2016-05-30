@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 var url = require('file!../assets/images/404.png')
 
@@ -7,7 +8,10 @@ class ErrorPage extends Component {
     return (
       <center>
         <h1>
-          Page Not Found!
+          <FormattedMessage
+            id='error-page.page-not-found'
+            defaultMessage='Page Not Found!'
+          />
         </h1>
         <img src={url} />
         <p>

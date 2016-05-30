@@ -15,7 +15,8 @@ logger.setLevel('debug')
 
 export function doChangeLocale (locale) {
   return dispatch => {
-    let strings = messages[locale] ? messages[locale] : messages['en']
+    // Note use the defaultMessage for English
+    let strings = locale === 'en' ? {} : messages[locale]
 
     dispatch(changeLocale(locale, strings))
   }
