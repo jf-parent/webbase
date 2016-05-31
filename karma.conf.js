@@ -1,19 +1,11 @@
-var path = require('path');
+var argv = require('yargs').argv;
 var webpackConfig = require('./webpack.config.js');
 
 config = function(config) {
   config.set({
     basePath: '',
-    files: [
-        './node_modules/phantomjs-polyfill/bind-polyfill.js',
-        {
-          pattern: './tests.webpack.js',
-          watched: false,
-          served: true,
-          included: true
-        }
-    ],
-    frameworks: ['mocha'],
+    files: [{pattern: './tests.webpack.js', watched: false, included: true, served: true}],
+    frameworks: ['mocha', 'sinon'],
 
     webpack: webpackConfig,
 
@@ -23,6 +15,7 @@ config = function(config) {
 
     plugins: [
       'karma-mocha',
+      'karma-sinon',
       'karma-phantomjs-launcher',
 //      'karma-firefox-launcher',
 //      'karma-chrome-launcher',
@@ -38,7 +31,7 @@ config = function(config) {
     logLevel: config.LOG_INFO,
     browsers: ['PhantomJS'],
     debug: true,
-    singleRun: false
+    singleRun: !argv.watch
   })
 };
 

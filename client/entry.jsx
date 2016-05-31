@@ -2,13 +2,16 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { useRouterHistory } from 'react-router'
-import { syncHistoryWithStore, push } from 'react-router-redux'
+import { push } from 'react-router-redux'
 import log from 'loglevel'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 require('./polyfills')
-import createStore from './store/createStore'
+
+import InitStoreHistory from 'helpers/InitStoreHistory'
+
+const store = InitStoreHistory.store
+const history = InitStoreHistory.history
+
 import AppContainer from './containers/AppContainer'
 
 import 'ladda/dist/ladda-themeless.min.css'
@@ -21,19 +24,6 @@ require('jquery')
 // ========================================================
 
 let logger = log.getLogger('entry')
-
-const browserHistory = useRouterHistory(createBrowserHistory)({
-  basename: ''
-})
-
-// ========================================================
-// Store and History Instantiation
-// ========================================================
-const initialState = window.___INITIAL_STATE__
-const store = createStore(initialState, browserHistory)
-const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState: (state) => state.router
-})
 
 // ========================================================
 // Developer Tools Setup

@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var fs = require('fs')
 var path = require('path');
 var serverConfig = require('./configs/server');
-var ExportFilesWebpackPlugin = require('export-files-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var BUILD_DIR = path.resolve(__dirname, 'dist');
 var APP_DIR = path.resolve(__dirname, 'client');

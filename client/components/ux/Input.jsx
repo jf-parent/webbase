@@ -3,32 +3,38 @@ import Formsy from 'formsy-react'
 
 const ValidatedInput = React.createClass({
 
+  mixins: [Formsy.Mixin],
+
   propTypes: {
     type: PropTypes.string,
+    name: PropTypes.string,
     className: PropTypes.string
   },
 
-  mixins: [Formsy.Mixin],
+  getInitialState () {
+    return {
+      _value: ''
+    }
+  },
 
-  changeValue (event) {
-    this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value'])
+  onValueChange (event) {
+    this.setValue(event.target.value)
   },
 
   render () {
     const className = 'form-group' + (this.props.className || ' ') +
       (this.showRequired() ? ' has-warning' : this.showError() ? ' has-error' : ' has-success')
+    const name = 'form-control-' + this.props.name
 
     // const errorMessage = this.getErrorMessage()
-
     return (
-      <div className={className}>
+      <div className={className} name={name}>
         <input
           className='form-control'
           {...this.props}
+          onChange={this.onValueChange}
           type={this.props.type || 'text'}
-          onChange={this.changeValue}
           value={this.getValue()}
-          checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
         />
       </div>
     )

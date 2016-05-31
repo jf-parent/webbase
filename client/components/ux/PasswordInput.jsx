@@ -9,6 +9,7 @@ const PasswordInput = React.createClass({
 
   propTypes: {
     quiet: PropTypes.bool,
+    name: PropTypes.string,
     className: PropTypes.string
   },
 
@@ -46,30 +47,35 @@ const PasswordInput = React.createClass({
     this.setState({showErrMsg: true})
   },
 
+  onValueChange (event) {
+    this.setValue(event.target.value)
+  },
+
   toggleShowPassword () {
     this.setState({showPassword: !this.state.showPassword})
   },
 
   render () {
-    let className = 'form-group' + (this.props.className || ' ') +
+    const className = 'form-group' + (this.props.className || ' ') +
       (this.showRequired() ? ' has-warning' : this.showError() ? ' has-error' : ' has-success')
-    let errorMessage = this.getCustomErrorMessage()
+    const errorMessage = this.getCustomErrorMessage()
+
     let errorMsg = null
 
     if (!this.state.quiet) {
       if (this.state.showErrMsg) {
-        errorMsg = errorMessage ? <ErrorMsg msg={errorMessage} /> : null
+        errorMsg = errorMessage ? <ErrorMsg msg={errorMessage} name={'error-msg-' + this.props.name} /> : null
       }
     }
     let type = this.state.showPassword ? 'text' : 'password'
 
     return (
-      <div className={className}>
+      <div className={className} name={'form-control-' + this.props.name}>
         <input
           className='form-control'
           {...this.props}
           type={type}
-          onChange={this.changeValue}
+          onChange={this.onValueChange}
           value={this.getValue()}
           onBlur={this.onBlur}
           onFocus={this.onFocus}

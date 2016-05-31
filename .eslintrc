@@ -16,6 +16,9 @@
     "__PROD__"     : false,
     "__DEBUG__"    : false,
     "__COVERAGE__" : false,
+    "it"           : false,
+    "beforeEach"   : false,
+    "describe"     : false,
     "__BASENAME__" : false
   },
   "env": {
