@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-var config = require('json!../../configs/social_media.json')
+var config = require('!json!../../configs/social_media.json')
 
 class SocialMedia extends Component {
 

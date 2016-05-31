@@ -4,13 +4,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { useRouterHistory } from 'react-router'
 import { syncHistoryWithStore, push } from 'react-router-redux'
-
-import createBrowserHistory from 'history/lib/createBrowserHistory'
-import createStore from 'store/createStore'
-import AppContainer from 'containers/AppContainer'
 import log from 'loglevel'
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 
-require('ladda/dist/ladda-themeless.min.css')
+require('./polyfills')
+import createStore from './store/createStore'
+import AppContainer from './containers/AppContainer'
+
+import 'ladda/dist/ladda-themeless.min.css'
 require('bootstrap-webpack!./bootstrap.config.js')
 require('font-awesome-webpack')
 require('jquery')

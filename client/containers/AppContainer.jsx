@@ -5,7 +5,7 @@ import { addLocaleData } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import frLocaleData from 'react-intl/locale-data/fr'
 
-import ConnectedIntlProvider from 'locales/ConnectedIntlProvider'
+import ConnectedIntlProvider from '../locales/ConnectedIntlProvider'
 
 addLocaleData(enLocaleData)
 addLocaleData(frLocaleData)

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import BaseComponent from 'core/BaseComponent'
-import Loading from 'components/ux/Loading'
-import ErrorMsg from 'components/ux/ErrorMsg'
+import BaseComponent from '../../../core/BaseComponent'
+import Loading from '../../../components/ux/Loading'
+import ErrorMsg from '../../../components/ux/ErrorMsg'
 
 class Logout extends BaseComponent {
   constructor (props) {

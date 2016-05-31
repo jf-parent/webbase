@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import Settings from 'routes/Settings/components/Settings'
+import Settings from '../components/Settings'
 
 function mapStateToProps (state) {
   return {

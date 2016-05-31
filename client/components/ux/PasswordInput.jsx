@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import Formsy from 'formsy-react'
-import ErrorMsg from 'components/ux/ErrorMsg'
+
+import ErrorMsg from './ErrorMsg'
 
 const PasswordInput = React.createClass({
 

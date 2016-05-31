@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { actions } from '../modules/reducer'
-import Logout from 'routes/Logout/components/Logout'
+import Logout from '../components/Logout'
 
 function mapStateToProps (state) {
   return {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { getSessionSuccess } from 'actions/AuthActions'
+import { getSessionSuccess } from '../../../actions/AuthActions'
 
 // ====================================
 // Constants
@@ -66,7 +66,7 @@ const initialState = {
   error: null
 }
 
-export default function login (state = initialState, action) {
+export default function register (state = initialState, action) {
   switch (action.type) {
     case REGISTER_LOADING:
       return Object.assign({},

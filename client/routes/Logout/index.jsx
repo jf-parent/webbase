@@ -1,5 +1,5 @@
-import { requireAuth } from 'Auth'
-import { injectReducer } from 'store/reducers'
+import { requireAuth } from '../../Auth'
+import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
   path: 'logout',

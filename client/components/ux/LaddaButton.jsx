@@ -6,7 +6,7 @@ class LaddaButton extends Component {
     isDisabled: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    children: PropTypes.string.isRequired
+    children: PropTypes.any
   }
 
   constructor (props) {

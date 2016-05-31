@@ -49,11 +49,7 @@ async def init(loop):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    # STATIC
-    if config.get('DEBUG'):
-        static_path = os.path.join(ROOT, 'client-dev')
-    else:
-        static_path = os.path.join(ROOT, 'client-prod')
+    static_path = os.path.join(ROOT, 'dist')
 
     app.router.add_static('/', static_path, name='static')
 

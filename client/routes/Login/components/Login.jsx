@@ -3,11 +3,11 @@ import { Link } from 'react-router'
 import { Form } from 'formsy-react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import BaseComponent from 'core/BaseComponent'
-import ErrorMsg from 'components/ux/ErrorMsg'
-import ValidatedInput from 'components/ux/Input'
-import PasswordInput from 'components/ux/PasswordInput'
-import LaddaButton from 'components/ux/LaddaButton'
+import BaseComponent from '../../../core/BaseComponent'
+import ErrorMsg from '../../../components/ux/ErrorMsg'
+import ValidatedInput from '../../../components/ux/Input'
+import PasswordInput from '../../../components/ux/PasswordInput'
+import LaddaButton from '../../../components/ux/LaddaButton'
 
 const loginMessages = defineMessages({
   emailPlaceholder: {

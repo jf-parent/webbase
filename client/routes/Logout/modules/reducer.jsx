@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { resetSession } from 'actions/AuthActions'
+import { resetSession } from '../../../actions/AuthActions'
 
 // ====================================
 // Constants

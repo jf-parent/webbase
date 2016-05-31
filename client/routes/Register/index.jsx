@@ -1,5 +1,5 @@
-import { requireNotAuth } from 'Auth'
-import { injectReducer } from 'store/reducers'
+import { requireNotAuth } from '../../Auth'
+import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
   path: 'register',

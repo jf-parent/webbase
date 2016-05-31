@@ -1,10 +1,10 @@
-import CoreLayout from 'layouts/CoreLayout/CoreLayout'
-import Login from 'routes/Login'
-import Logout from 'routes/Logout'
-import Profile from 'routes/Profile'
-import ErrorPage from 'routes/ErrorPage'
-import Settings from 'routes/Settings'
-import Register from 'routes/Register'
+import CoreLayout from '../layouts/CoreLayout/CoreLayout'
+import Login from '../routes/Login'
+import Logout from '../routes/Logout'
+import Profile from '../routes/Profile'
+import ErrorPage from '../routes/ErrorPage'
+import Settings from '../routes/Settings'
+import Register from '../routes/Register'
 
 export const createRoutes = (store) => ({
   path: '/',

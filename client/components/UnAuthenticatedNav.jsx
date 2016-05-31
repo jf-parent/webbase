@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import activeComponent from 'react-router-active-component'
 import { FormattedMessage } from 'react-intl'
 
-import SocialMedia from 'components/SocialMedia'
+import SocialMedia from './SocialMedia'
 
 class UnAuthenticatedNav extends Component {
 

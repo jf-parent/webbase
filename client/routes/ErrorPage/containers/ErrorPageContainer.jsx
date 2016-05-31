@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import ErrorPage from 'routes/ErrorPage/components/ErrorPage'
+import ErrorPage from '../../../routes/ErrorPage/components/ErrorPage'
 
 function mapStateToProps (state) {
   return {

@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import BaseComponent from 'core/BaseComponent'
-import Loading from 'components/ux/Loading'
-import AuthenticatedNav from 'components/AuthenticatedNav'
-import UnAuthenticatedNav from 'components/UnAuthenticatedNav'
-import Home from 'components/Home'
-import LocalesMenu from 'locales/LocalesMenu'
+import BaseComponent from '../../core/BaseComponent'
+import Loading from '../../components/ux/Loading'
+import AuthenticatedNav from '../../components/AuthenticatedNav'
+import UnAuthenticatedNav from '../../components/UnAuthenticatedNav'
+import Home from '../../components/Home'
+import LocalesMenu from '../../locales/LocalesMenu'
 
 import * as AuthActions from '../../actions/AuthActions'
 

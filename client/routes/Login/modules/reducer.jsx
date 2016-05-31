@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { getSessionSuccess } from 'actions/AuthActions'
+import { getSessionSuccess } from '../../../actions/AuthActions'
 
 // ====================================
 // Constants

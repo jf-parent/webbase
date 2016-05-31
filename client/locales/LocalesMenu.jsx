@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import BaseComponent from 'core/BaseComponent'
-import { actions } from 'locales/reducer'
+import BaseComponent from '../core/BaseComponent'
+import { actions } from './reducer'
 
 function mapStateToProps (state) {
   return {

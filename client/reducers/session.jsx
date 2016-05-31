@@ -5,7 +5,7 @@ import {
   AUTH_GETTING_SESSION_SUCCESS,
   AUTH_GETTING_SESSION_ERROR,
   AUTH_RESET_SESSION
-} from 'actions/AuthActions'
+} from '../actions/AuthActions'
 
 const initialState = {
   loading: true,

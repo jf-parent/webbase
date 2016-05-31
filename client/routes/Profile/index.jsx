@@ -1,4 +1,4 @@
-import { requireAuth } from 'Auth'
+import { requireAuth } from '../../Auth'
 
 export default (store) => ({
   path: 'profile',

@@ -1,4 +1,4 @@
-var fr = require('!json!locales/fr.json')
+var fr = require('!json-loader!./fr.json')
 
 let messages = {
   fr: fr

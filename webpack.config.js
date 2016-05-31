@@ -1,21 +1,27 @@
 var webpack = require('webpack');
 var serverConfig = require('./configs/server');
 
-var isProduction = !serverConfig['DEBUG'];
-
-console.log('[*] isProduction:', isProduction);
+var isDev = process.env.NODE_ENV == 'development';
+var isProd = process.env.NODE_ENV == 'production';
+var isTest = process.env.NODE_ENV == 'test';
 
 definePlugin = new webpack.DefinePlugin({
-  __DEV__: !isProduction,
-  __DEBUG__: !isProduction
+  __DEV__: isDev,
+  __TEST__: isTest,
+  __PROD__: isProd,
+  __DEBUG__: isDev
 });
 
-if (isProduction) {
-    process.env.NODE_ENV = 'production';
-    var config = require('./webpack.prod.config.js');
+var config;
+if (isProd) {
+    console.log('[*] Prod config');
+    config = require('./webpack.prod.config.js');
+} else if (isTest) {
+    console.log('[*] Test config');
+    config = require('./webpack.test.config.js');
 } else {
-    process.env.NODE_ENV = 'dev';
-    var config = require('./webpack.dev.config.js');
+    console.log('[*] Dev config');
+    config = require('./webpack.dev.config.js');
 }
 
 module.exports = config;

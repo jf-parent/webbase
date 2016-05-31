@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { Form } from 'formsy-react'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { defineMessages, FormattedMessage } from 'react-intl'
 
-import BaseComponent from 'core/BaseComponent'
-import ErrorMsg from 'components/ux/ErrorMsg'
-import ValidatedInput from 'components/ux/Input'
-import LaddaButton from 'components/ux/LaddaButton'
-import PasswordInput from 'components/ux/PasswordInput'
+import BaseComponent from '../../../core/BaseComponent'
+import ErrorMsg from '../../../components/ux/ErrorMsg'
+import ValidatedInput from '../..//../components/ux/Input'
+import LaddaButton from '../../..//components/ux/LaddaButton'
+import PasswordInput from '../../../components/ux/PasswordInput'
 
 const registerMessages = defineMessages({
   emailPlaceholder: {
@@ -51,7 +51,7 @@ class Register extends BaseComponent {
   render () {
     this.debug('render')
 
-    const { formatMessage } = this.props.intl
+    const { formatMessage } = this._reactInternalInstance._context.intl
     const errorMsg = this.props.register.error ? <ErrorMsg msg={this.props.register.error} /> : null
     const emailPlaceholder = formatMessage(registerMessages.emailPlaceholder)
     const namePlaceholder = formatMessage(registerMessages.namePlaceholder)
@@ -91,4 +91,4 @@ class Register extends BaseComponent {
   }
 }
 
-export default injectIntl(Register)
+export default Register

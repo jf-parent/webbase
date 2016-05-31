@@ -20,11 +20,11 @@ var config = {
       extensions: ['', '.js', '.jsx']
    },
 
-   debug: true,
+   debug: false,
 
    //devtool: 'eval-source-map',
 
-   profile: true,
+   profile: false,
 
    entry: [
        'webpack-dev-server/client?http://' + clientAddr,
@@ -52,45 +52,53 @@ var config = {
   module : {
     preLoaders: [
       {
-        test: /\.jsx$/,
+        test: /\.(js|jsx)$/,
         loaders: ['eslint'],
         include: APP_DIR
       }
     ],
     loaders : [
       { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
+      { test: /\.json$/, loader: 'json' },
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       { test: /\.css$/, loader: "style-loader!css-loader" },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
     ]
-  },
+    },
 
-  devServer: {
-      publicPath: '/static/scripts/',
+    externals: {
+        'cheerio': 'window',
+        'react/addons': true,
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true
+    },
 
-      host: '0.0.0.0',
-      port: clientPort,
+    devServer: {
+        publicPath: '/static/scripts/',
 
-      contentBase: BUILD_DIR,
+        host: '0.0.0.0',
+        port: clientPort,
 
-      inline: true,
+        contentBase: BUILD_DIR,
 
-      hot: true,
+        inline: true,
 
-      historyApiFallback: true,
+        hot: true,
 
-      stats: 'errors-only',
+        historyApiFallback: true,
 
-      headers: {
-        'Access-Control-Allow-Origin': 'http://' + serverAddr,
-        'Access-Control-Allow-Headers': 'X-Requested-With'
-      },
+        stats: 'errors-only',
 
-      proxy: {
-        '/api/*': 'http://' + serverAddr
-      }
-  }
+        headers: {
+            'Access-Control-Allow-Origin': 'http://' + serverAddr,
+            'Access-Control-Allow-Headers': 'X-Requested-With'
+        },
+
+        proxy: {
+            '/api/*': 'http://' + serverAddr
+        }
+    }
 };
 
 module.exports = config;

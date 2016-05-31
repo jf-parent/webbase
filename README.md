@@ -15,6 +15,20 @@ $ chkconfig sshd on
 $ systemctl start sshd
 ```
 
+## Install Phantomjs
+
+Ref: http://sameerhalai.com/blog/how-to-install-phantomjs-on-a-centos-server/
+
+```bash
+$ su
+$ wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+$ tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2
+$ cp phantomjs-2.1.1-linux-x86_64.tar.bz2/bin/phantomjs /usr/local/bin
+$ rm phantomjs-2.1.1-linux-x86_64*
+$ yum install fontconfig freetype
+$ phantomjs --version
+```
+
 ## Install Node
 
 Ref: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-a-centos-7-server
