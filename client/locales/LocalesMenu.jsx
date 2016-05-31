@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import BaseComponent from '../core/BaseComponent'
 import { actions } from './reducer'
@@ -34,14 +35,16 @@ class LocalesMenu extends BaseComponent {
   render () {
     this.debug('Render')
 
+    const aClassName = [bootstrap['btn'], bootstrap['btn-link']]
+
     return (
-      <div className='container'>
-        <ul className='list-inline pull-right'>
+      <div className={bootstrap['container']}>
+        <ul className={bootstrap['list-inline'] + ' ' + bootstrap['pull-right']}>
           <li>
-            <a className='btn btn-link' onClick={this.onClick} value='en'>English</a>
+            <a className={aClassName.join(' ')} onClick={this.onClick} value='en'>English</a>
           </li>
           <li>
-            <a className='btn btn-link' onClick={this.onClick} value='fr' >Français</a>
+            <a className={aClassName.join(' ')} onClick={this.onClick} value='fr' >Français</a>
           </li>
         </ul>
       </div>

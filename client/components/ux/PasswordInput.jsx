@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react'
 import Formsy from 'formsy-react'
+import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import ErrorMsg from './ErrorMsg'
+import PasswordInputStyle from './PasswordInputStyle.css'
 
 const PasswordInput = React.createClass({
 
@@ -56,9 +58,23 @@ const PasswordInput = React.createClass({
   },
 
   render () {
-    const className = 'form-group' + (this.props.className || ' ') +
-      (this.showRequired() ? ' has-warning' : this.showError() ? ' has-error' : ' has-success')
     const errorMessage = this.getCustomErrorMessage()
+
+    let className = [bootstrap['form-group']]
+
+    // User defined class
+    if (this.props.className) {
+      className.push(this.props.className)
+    }
+
+    // Input state class
+    if (this.showRequired()) {
+      className.push(bootstrap['has-warning'])
+    } else if (this.showError()) {
+      className.push(bootstrap['has-error'])
+    } else {
+      className.push(bootstrap['has-success'])
+    }
 
     let errorMsg = null
 
@@ -70,9 +86,9 @@ const PasswordInput = React.createClass({
     let type = this.state.showPassword ? 'text' : 'password'
 
     return (
-      <div className={className} name={'form-control-' + this.props.name}>
+      <div className={className.join(' ')} name={'form-control-' + this.props.name}>
         <input
-          className='form-control'
+          className={bootstrap['form-control']}
           {...this.props}
           type={type}
           onChange={this.onValueChange}
@@ -85,8 +101,7 @@ const PasswordInput = React.createClass({
           onMouseOut={this.toggleShowPassword}
           onTouchStart={this.toggleShowPassword}
           onTouchEnd={this.toggleShowPassword}
-          id='show-password'
-          className='glyphicon glyphicon-eye-open'
+          className={bootstrap['glyphicon'] + ' ' + bootstrap['glyphicon-eye-open'] + ' ' + PasswordInputStyle['show-password']}
         />
         <center>{errorMsg}</center>
       </div>

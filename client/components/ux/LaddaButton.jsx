@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import Ladda from 'react-ladda'
+// import laddaStyle from 'ladda/dist/ladda-themeless.min.css'
+import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 class LaddaButton extends Component {
   static propTypes = {
@@ -19,14 +21,18 @@ class LaddaButton extends Component {
   }
 
   render () {
-    let buttonBaseCls = 'btn btn-lg btn-primary btn-block'
-    let buttonCls = this.state.isDisabled ? buttonBaseCls + ' btn-danger' : buttonBaseCls + ' btn-success'
+    let buttonClass = [bootstrap['btn'], bootstrap['btn-lg'], bootstrap['btn-primary'], bootstrap['btn-block']]
+    if (this.state.isDisabled) {
+      buttonClass.push(bootstrap['btn-danger'])
+    } else {
+      buttonClass.push(bootstrap['btn-success'])
+    }
 
     return (
       <center>
         <Ladda
           disabled={this.state.isDisabled}
-          className={buttonCls}
+          className={buttonClass.join(' ')}
           onClick={this.props.onSubmit}
           loading={this.state.isLoading}
           buttonStyle='zoom-out'

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import Formsy from 'formsy-react'
+import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 const ValidatedInput = React.createClass({
 
@@ -22,15 +23,28 @@ const ValidatedInput = React.createClass({
   },
 
   render () {
-    const className = 'form-group' + (this.props.className || ' ') +
-      (this.showRequired() ? ' has-warning' : this.showError() ? ' has-error' : ' has-success')
     const name = 'form-control-' + this.props.name
 
+    let className = [bootstrap['form-group']]
+
+    // User defined class
+    if (this.props.className) {
+      className.push(this.props.className)
+    }
+
+    // Input state class
+    if (this.showRequired()) {
+      className.push(bootstrap['has-warning'])
+    } else if (this.showError()) {
+      className.push(bootstrap['has-error'])
+    } else {
+      className.push(bootstrap['has-success'])
+    }
     // const errorMessage = this.getErrorMessage()
     return (
-      <div className={className} name={name}>
+      <div className={className.join([' '])} name={name}>
         <input
-          className='form-control'
+          className={bootstrap['form-control']}
           {...this.props}
           onChange={this.onValueChange}
           type={this.props.type || 'text'}

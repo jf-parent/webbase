@@ -1,5 +1,6 @@
 import React from 'react'
 import { expect } from 'chai'
+import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import TestHelper from 'helpers/TestHelper'
 import RegisterContainer from '../containers/RegisterContainer'
@@ -54,52 +55,52 @@ describe('<Register />', () => {
 
   it('Have the empty email field with the has-warning class', () => {
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass('has-warning')).to.be.true
+    expect(emailFormGroup.hasClass(bootstrap['has-warning'])).to.be.true
   })
 
   it('Have the email field with the has-success class after typing a valid email', () => {
     let emailInput = wrapper.find('input[name="email"]')
     emailInput.simulate('change', {target: {value: 'test@test.com'}})
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass('has-success')).to.be.true
+    expect(emailFormGroup.hasClass(bootstrap['has-success'])).to.be.true
   })
 
   it('Have the email field with the has-error class after typing a invalid email', () => {
     let emailInput = wrapper.find('input[name="email"]')
     emailInput.simulate('change', {target: {value: 'test'}})
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass('has-error')).to.be.true
+    expect(emailFormGroup.hasClass(bootstrap['has-error'])).to.be.true
   })
 
   it('Have the empty name field with the has-warning class', () => {
     let nameFormGroup = wrapper.find('div[name="form-control-name"]')
-    expect(nameFormGroup.hasClass('has-warning')).to.be.true
+    expect(nameFormGroup.hasClass(bootstrap['has-warning'])).to.be.true
   })
 
   it('Have the name field with the has-success class after typing a valid name', () => {
     let nameInput = wrapper.find('input[name="name"]')
     nameInput.simulate('change', {target: {value: 'test'}})
     let nameFormGroup = wrapper.find('div[name="form-control-name"]')
-    expect(nameFormGroup.hasClass('has-success')).to.be.true
+    expect(nameFormGroup.hasClass(bootstrap['has-success'])).to.be.true
   })
 
   it('Have the empty password field with the has-warning class', () => {
     let passwordFormGroup = wrapper.find('div[name="form-control-password"]')
-    expect(passwordFormGroup.hasClass('has-warning')).to.be.true
+    expect(passwordFormGroup.hasClass(bootstrap['has-warning'])).to.be.true
   })
 
   it('Have the password field with the has-success class after typing a valid password', () => {
     let passwordInput = wrapper.find('input[name="password"]')
     passwordInput.simulate('change', {target: {value: 'test@test.com'}})
     let passwordFormGroup = wrapper.find('div[name="form-control-password"]')
-    expect(passwordFormGroup.hasClass('has-success')).to.be.true
+    expect(passwordFormGroup.hasClass(bootstrap['has-success'])).to.be.true
   })
 
   it('Have the password field with the has-error class after typing a invalid password', () => {
     let passwordInput = wrapper.find('input[name="password"]')
     passwordInput.simulate('change', {target: {value: 'test'}})
     let passwordFormGroup = wrapper.find('div[name="form-control-password"]')
-    expect(passwordFormGroup.hasClass('has-error')).to.be.true
+    expect(passwordFormGroup.hasClass(bootstrap['has-error'])).to.be.true
     expect(wrapper.find('div[name="error-msg-password"]')).to.exist
   })
 

@@ -14,9 +14,8 @@ const history = InitStoreHistory.history
 
 import AppContainer from './containers/AppContainer'
 
-import 'ladda/dist/ladda-themeless.min.css'
-require('bootstrap-webpack!./bootstrap.config.js')
-require('font-awesome-webpack')
+// require('bootstrap-webpack!./bootstrap.config.js')
+require('bootstrap/dist/css/bootstrap.css')
 require('jquery')
 
 // ========================================================

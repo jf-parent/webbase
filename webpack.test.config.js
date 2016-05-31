@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var BUILD_DIR = path.resolve(__dirname, 'dist');
 var APP_DIR = path.resolve(__dirname, 'client');
@@ -32,6 +33,7 @@ var config = {
 
   plugins: [
 //      new webpack.HotModuleReplacementPlugin(),
+      new ExtractTextPlugin('style.css', { allChunks: true }),
       new HtmlWebpackPlugin({
         inject: true,
         filename: BUILD_DIR + '/index.html',
@@ -54,7 +56,12 @@ var config = {
       { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
       { test: /\.json$/, loader: 'json' },
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract(
+            'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
+        )
+      },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
     ]
