@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import ErrorMsgStyle from './ErrorMsg.css'
 

@@ -15,7 +15,7 @@ export const LOGIN_RESET_STATE = 'LOGIN_RESET_STATE'
 // ====================================
 
 const logger = require('loglevel').getLogger('Login')
-logger.setLevel('debug')
+logger.setLevel(debugLevel)
 
 export function doLogin (data) {
   return dispatch => {

@@ -27,15 +27,11 @@ class BaseComponent extends Component {
     this._logger.error(`[${this._loggerName}] `, ...msg)
   }
 
-  _initLogger (level = 'debug') {
+  _initLogger () {
     this._loggerName = this.constructor.name
     this._logger = require('loglevel').getLogger(this._loggerName)
 
-    if (__DEV__) {
-      this._logger.setLevel(level)
-    } else {
-      this._logger.setLevel('error')
-    }
+    this._logger.setLevel(debugLevel)
   }
 }
 

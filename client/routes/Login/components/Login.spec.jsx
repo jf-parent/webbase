@@ -88,7 +88,6 @@ describe('<Login />', () => {
 
   it('Have the submit button stay disable when every field have value but some value are invalid', () => {
     let emailInput = wrapper.find('input[name="email"]')
-    let nameInput = wrapper.find('input[name="name"]')
     let passwordInput = wrapper.find('input[name="password"]')
     let submitBtn = wrapper.find('button')
 

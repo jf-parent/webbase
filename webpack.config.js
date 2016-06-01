@@ -9,7 +9,8 @@ definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,
   __TEST__: isTest,
   __PROD__: isProd,
-  __DEBUG__: isDev
+  __DEBUG__: isDev,
+ 'process.env.NODE_ENV': "'" + process.env.NODE_ENV + "'"
 });
 
 var config;

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import CoreLayoutStyle from './CoreLayoutStyle.css'
 import BaseComponent from 'core/BaseComponent'

@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import Ladda from 'react-ladda'
 // import laddaStyle from 'ladda/dist/ladda-themeless.min.css'
-import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 class LaddaButton extends Component {
   static propTypes = {

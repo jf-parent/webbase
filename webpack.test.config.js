@@ -16,10 +16,6 @@ var config = {
       alias: { sinon: 'sinon/pkg/sinon' }
    },
 
-   debug: false,
-
-   profile: false,
-
    entry: [
        APP_DIR + '/entry.jsx'
    ],

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 import fontAwesome from 'font-awesome/css/font-awesome.css'
 
 var config = require('!json!../../configs/social_media.json')

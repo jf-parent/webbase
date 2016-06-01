@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { getSessionSuccess } from '../../../actions/AuthActions'
+import { getSessionSuccess } from 'actions/AuthActions'
 
 // ====================================
 // Constants
@@ -15,7 +15,7 @@ export const REGISTER_RESET_STATE = 'REGISTER_RESET_STATE'
 // ====================================
 
 const logger = require('loglevel').getLogger('Register')
-logger.setLevel('debug')
+logger.setLevel(debugLevel)
 
 export function doRegister (data) {
   return dispatch => {

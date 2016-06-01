@@ -14,7 +14,12 @@ export const AUTH_RESET_SESSION = 'AUTH_RESET_SESSION'
 // ====================================
 
 const logger = require('loglevel').getLogger('AuthAction')
-logger.setLevel('debug')
+
+const debugLevel = 'error'
+if (__DEBUG__) {
+  const debugLevel = 'debug'
+}
+logger.setLevel(debugLevel)
 
 // ====================================
 // Actions

@@ -4,7 +4,7 @@ var path = require('path');
 var serverConfig = require('./configs/server');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BUILD_DIR = path.resolve(__dirname, 'dist');
+var BUILD_DIR = path.resolve(__dirname, 'dist-dev');
 var APP_DIR = path.resolve(__dirname, 'client');
 var serverAddr = serverConfig['SERVER_HOST'] + ':' + serverConfig['SERVER_PORT'];
 var clientPort = '8080';
@@ -19,12 +19,6 @@ var config = {
       root: path.resolve('./client'),
       extensions: ['', '.js', '.jsx']
    },
-
-   debug: true,
-
-   //devtool: 'eval-source-map',
-
-   profile: true,
 
    entry: [
        'webpack-dev-server/client?http://' + clientAddr,

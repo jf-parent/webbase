@@ -1,0 +1,9 @@
+{
+    "LOG_LEVEL": "ERROR",
+    "DEBUG": false,
+    "MONGO_DATABASE_NAME": "webbase-prod",
+    "MONGO_HOST": "127.0.0.1",
+    "SERVER_PORT": 80,
+    "SERVER_HOST": "0.0.0.0",
+    "MASTER_PASSWORD": "" #CHANGEME
+}

@@ -7,6 +7,19 @@ import log from 'loglevel'
 
 require('./polyfills')
 
+// ========================================================
+// Developer Tools Setup
+// ========================================================
+
+global.debugLevel = 'error'
+
+if (__DEBUG__) {
+  global.debugLevel = 'debug'
+  if (window.devToolsExtension) {
+    window.devToolsExtension.open()
+  }
+}
+
 import InitStoreHistory from 'helpers/InitStoreHistory'
 
 const store = InitStoreHistory.store
@@ -14,25 +27,16 @@ const history = InitStoreHistory.history
 
 import AppContainer from './containers/AppContainer'
 
-// require('bootstrap-webpack!./bootstrap.config.js')
-require('bootstrap/dist/css/bootstrap.css')
+// NOTE needed by bootstrap
 require('jquery')
+
+global.bootstrap = require('bootstrap/dist/css/bootstrap.css')
 
 // ========================================================
 // Logger
 // ========================================================
 
 let logger = log.getLogger('entry')
-
-// ========================================================
-// Developer Tools Setup
-// ========================================================
-if (__DEBUG__) {
-  logger.setLevel('debug')
-  if (window.devToolsExtension) {
-    window.devToolsExtension.open()
-  }
-}
 
 // ========================================================
 // AUTH SUBSCRIBERS

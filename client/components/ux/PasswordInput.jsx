@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import Formsy from 'formsy-react'
-import bootstrap from 'bootstrap/dist/css/bootstrap.css'
 
 import ErrorMsg from './ErrorMsg'
 import PasswordInputStyle from './PasswordInputStyle.css'

@@ -101,7 +101,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 ## Install node global package
 
 ```bash
-$ npm install webpack -g
+$ npm install webpack webpack-dev-server -g
 ```
 
 # CONFIGURATION
@@ -125,4 +125,31 @@ wget https://github.com/prometheus/prometheus/releases/download/0.18.0/prometheu
 tar xvf prometheus-0.18.0.linux-amd64.tar.gz
 cd prometheus-0.18.0.linux-amd64
 ./prometheus --version
+```
+
+# USAGE
+
+## LINT / FLAKE8
+
+```bash
+$ make lint
+```
+
+## TESTING
+
+```bash
+$ npm run test
+$ npm run test:watch
+```
+
+## DEV
+
+```bash
+$ webpack-dev-server
+```
+
+## BUILD-PROD
+
+```bash
+$ npm run build
 ```

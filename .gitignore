@@ -25,10 +25,8 @@ build
 cover
 coverage
 develop-eggs
-client-dev
-client-prod
 logs
-dist
+dist-dev
 docs/_build/
 eggs
 include/

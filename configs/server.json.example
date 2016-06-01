@@ -1,9 +1,0 @@
-{
-    "LOG_LEVEL": "DEBUG",
-    "DEBUG": true,
-    "MONGO_DATABASE_NAME": "webbase",
-    "MONGO_HOST": "127.0.0.1",
-    "SERVER_PORT": 8000,
-    "SERVER_HOST": "0.0.0.0",
-    "MASTER_PASSWORD": "" #CHANGEME
-}
