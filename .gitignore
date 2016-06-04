@@ -44,3 +44,4 @@ __pycache__
 .develop
 .env
 configs/*.json
+data

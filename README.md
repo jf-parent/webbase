@@ -117,14 +117,97 @@ $ npm install
 ## PROMETHEUS
 
 ```bash
-su
-cd $PROG
-git clone https://github.com/hynek/prometheus_async
-python setup.py install
-wget https://github.com/prometheus/prometheus/releases/download/0.18.0/prometheus-0.18.0.linux-amd64.tar.gz
-tar xvf prometheus-0.18.0.linux-amd64.tar.gz
-cd prometheus-0.18.0.linux-amd64
-./prometheus --version
+$ su
+$ cd $PROG
+$ git clone https://github.com/hynek/prometheus_async
+$ python setup.py install
+$ wget https://github.com/prometheus/prometheus/releases/download/0.18.0/prometheus-0.18.0.linux-amd64.tar.gz
+$ tar xvf prometheus-0.18.0.linux-amd64.tar.gz
+$ mv prometheus-0.18.0.linux-amd64 prometheus
+$ mv prometheus /opt
+```
+
+### GRAFANA
+
+Ref: 
+
+* http://docs.grafana.org/installation/rpm/
+* http://vmkdaily.ghost.io/influxdb-and-grafana-on-centos/
+
+```bash
+$ wget https://grafanarel.s3.amazonaws.com/builds/grafana-3.0.4-1464167696.x86_64.rpm
+$ sudo yum install https://grafanarel.s3.amazonaws.com/builds/grafana-3.0.4-1464167696.x86_64.rpm
+$ firewall-cmd --permanent --zone=public --add-port=3000/tcp
+$ firewall-cmd --reload
+$ sudo systemctl enable grafana-server.service
+```
+
+Edit /etc/grafana/grafana.ini
+
+```
+allow_sign_up = false
+allow_org_create = false
+admin_password = yourpassword
+```
+
+```bash
+$ systemctl start grafana-server
+$ systemctl status grafana-server
+```
+
+* Setup Grafana to use Prometheus: https://prometheus.io/docs/visualization/grafana/
+
+### NODE EXPORTER
+
+Ref: https://www.digitalocean.com/community/tutorials/how-to-use-prometheus-to-monitor-your-centos-7-server
+
+```bash
+$ wget https://github.com/prometheus/node_exporter/releases/download/0.12.0/node_exporter-0.12.0.linux-arm64.tar.gz
+$ tar xvf node_exporter-0.12.0.linux-arm64.tar.gz
+$ mv node_exporter-0.12.0.linux-arm64 node_exporter
+$ mv node_exporter /opt/prometheus/
+```
+
+Create the node_exporter.service:
+```bash
+$ sudo vim /etc/systemd/system/node_exporter.service
+```
+
+/etc/systemd/system/node_exporter.service
+```
+[Unit]
+Description=Node Exporter
+
+[Service]
+User=centos
+ExecStart=/opt/prometheus/node_exporter/node_exporter
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable node_exporter.service
+$ sudo systemctl start node_exporter.service
+```
+
+Edit the prometheus config:
+```bash
+$ vim /opt/prometheus/prometheus.yml
+```
+
+/opt/prometheus/prometheus.yml
+```
+scrape_configs:
+  - job_name: "node"
+    scrape_interval: "15s"
+    target_groups:
+    - targets: ['localhost:9100']
+  - job_name: "webserver"
+    scrape_interval: "15s"
+    target_groups:
+    - targets: ['localhost:8001']
 ```
 
 # USAGE

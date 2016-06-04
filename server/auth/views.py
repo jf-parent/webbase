@@ -6,11 +6,13 @@ from aiohttp import web
 from server.exceptions import *  # noqa
 from server.auth.user import User
 from server.server_decorator import require, exception_handler
+from server.prometheus_instruments import active_user_gauge
 
 async def set_session(user, request):
     session = await get_session(request)
     session['email'] = user.email
     session['last_visit'] = time.time()
+    active_user_gauge.inc()
 
 
 class Login(web.View):
@@ -61,6 +63,7 @@ class Logout(web.View):
     async def get(self):
         session = await get_session(self.request)
         del session['email']
+        active_user_gauge.dec()
         data = {'success': True}
         return web.json_response(data)
 

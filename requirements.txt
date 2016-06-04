@@ -10,3 +10,4 @@ commentjson
 MongoAlchemy
 bcrypt
 validate_email
+prometheus_client

@@ -1,6 +1,12 @@
 deps:
 	pip install -r requirements.txt
 
+prometheus-dev:
+	/opt/prometheus/prometheus -config.file /opt/prometheus/prometheus.yml
+
+prometheus-prod:
+	nohup /opt/prometheus/prometheus -config.file /opt/prometheus/prometheus.yml > logs/prometheus.log 2>&1&
+
 lint:
 	@echo "====Python flake8===="
 	flake8 server || true

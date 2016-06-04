@@ -9,11 +9,13 @@ import jinja2
 import aiohttp_jinja2
 from cryptography import fernet
 from aiohttp_session import session_middleware
+from prometheus_client import start_http_server
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from aiohttp import web
 
 sys.path.append('.')
 
+from server.prometheus_instruments import db_session_gauge  # noqa
 from server.routes import routes  # noqa
 from server.middlewares import db_handler  # noqa
 from server.settings import config, logger, ROOT  # noqa
@@ -60,9 +62,10 @@ async def init(loop):
 
     # PREPARE HOOK
     async def after_request(request, response):
-        if hasattr(request, 'session'):
+        if hasattr(request, 'db_session'):
             request.db_session.end()
             request.db_session.db.connection.disconnect()
+            db_session_gauge.dec()
 
     app.on_response_prepare.append(after_request)
 
@@ -80,6 +83,10 @@ async def init(loop):
 loop = uvloop.new_event_loop()
 asyncio.set_event_loop(loop)
 """
+
+# PROMETHEUS CLIENT
+start_http_server(8001)
+
 loop = asyncio.get_event_loop()
 
 serv_generator, handler, app = loop.run_until_complete(init(loop))
