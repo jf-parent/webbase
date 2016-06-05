@@ -15,6 +15,21 @@ $ chkconfig sshd on
 $ systemctl start sshd
 ```
 
+## Install Go
+
+Ref: http://www.starkandwayne.com/blog/how-to-install-go-on-digital-ocean/
+
+```bash
+$ yum install golang
+$ cd /usr/local/bin
+$ ln -s /usr/bin/go
+$ cd ~
+$ #add the $GOPATH to your .bashrc
+$ # export GOPATH=$HOME/$PROG/go
+$ # export PATH=$PATH":/home/$USER/bin/:/home/$USER/.local/bin:$GOPATH/bin"
+$ go version
+```
+
 ## Install Phantomjs
 
 Ref: http://sameerhalai.com/blog/how-to-install-phantomjs-on-a-centos-server/
@@ -101,7 +116,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 ## Install node global package
 
 ```bash
-$ npm install webpack webpack-dev-server -g
+$ npm install webpack webpack-dev-server cloc parker -g
 ```
 
 # CONFIGURATION
@@ -192,12 +207,48 @@ $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
 
-Edit the prometheus config:
+### MONGODB EXPORTER
+
+Ref: https://github.com/dcu/mongodb_exporter
+
 ```bash
-$ vim /opt/prometheus/prometheus.yml
+$ mkdir mongodb_exporter
+$ cd mongodb_exporter
+$ go get -u github.com/dcu/mongodb_exporter
+$ mkdir /opt/prometheus/mongodb_exporter
+$ cp mongodb_exporter/bin/mongodb_exporter /opt/prometheus/mongodb_exporter
 ```
 
-/opt/prometheus/prometheus.yml
+Create the mongodb_exporter.service:
+```bash
+$ sudo vim /etc/systemd/system/mongodb_exporter.service
+```
+
+/etc/systemd/system/mongodb_exporter.service
+```
+[Unit]
+Description=Mongodb Exporter
+
+[Service]
+User=centos
+ExecStart=/opt/prometheus/mongodb_exporter/mongodb_exporter -web.listen-address ":9002"
+
+[Install]
+WantedBy=default.target
+```
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable mongodb_exporter.service
+$ sudo systemctl start mongodb_exporter.service
+```
+
+Edit the prometheus config:
+```bash
+$ vim $WEBBASE_PATH/configs/prometheus.yml
+```
+
+$WEBBASE_PATH/configs/prometheus.yml
 ```
 scrape_configs:
   - job_name: "node"
@@ -208,6 +259,10 @@ scrape_configs:
     scrape_interval: "15s"
     target_groups:
     - targets: ['localhost:8001']
+  - job_name: "mongodb"
+    scrape_interval: "15s"
+    target_groups:
+    - targets: ['localhost:9002']
 ```
 
 # USAGE

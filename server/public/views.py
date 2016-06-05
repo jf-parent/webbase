@@ -7,15 +7,8 @@ from server.server_decorator import exception_handler, require
 from server.auth.user import User
 
 
-from prometheus_client import Counter
-# from prometheus_async.aio import time
-
-c = Counter('index_counter', 'Description of counter')
-
-
 @aiohttp_jinja2.template('index.html')
 async def index(request):
-    c.inc()
     logger.debug('index')
     return {}
 

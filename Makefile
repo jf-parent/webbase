@@ -2,10 +2,10 @@ deps:
 	pip install -r requirements.txt
 
 prometheus-dev:
-	/opt/prometheus/prometheus -config.file /opt/prometheus/prometheus.yml
+	/opt/prometheus/prometheus -config.file configs/prometheus.yml
 
 prometheus-prod:
-	nohup /opt/prometheus/prometheus -config.file /opt/prometheus/prometheus.yml > logs/prometheus.log 2>&1&
+	nohup /opt/prometheus/prometheus -config.file configs/prometheus.yml > logs/prometheus.log 2>&1&
 
 lint:
 	@echo "====Python flake8===="
@@ -24,3 +24,8 @@ server-prod:
 
 query:
 	python scripts/query.py
+
+stats:
+	cloc client
+	cloc server
+	parker dist-prod/static/scripts/style.css
