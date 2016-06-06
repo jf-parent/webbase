@@ -153,22 +153,22 @@ check process mongodb with pidfile /var/run/mongodb/mongod.pid
     stop program = "/usr/bin/systemctl stop mongod"
     if failed port 27017 then restart
     if 5 restarts within 5 cycles then timeout
-    if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Mongodb CPU >60%' 'xoxp-43470446163-43519452757-43530951506-4ea3fc8e8c'"
+    if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Mongodb CPU >60%' 'SLACK_API_KEY'"
 
 check process webserver with pidfile /var/run/webbase/server.pid
    start program = "/root/PROG/PYTHON/webbase/scripts/start_server.sh"
    stop program = "/root/PROG/PYTHON/webbase/scripts/stop_server.sh"
-   if failed port 8000 protocol http then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Webbase server not running' 'xoxp-43470446163-43519452757-43530951506-4ea3fc8e8c'"
+   if failed port 8000 protocol http then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Webbase server not running' 'SLACK_API_KEY'"
    if failed port 8000 protocol http then restart
    if 5 restart within 5 cycles then timeout
-   if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Webbase server CPU >60%' 'xoxp-43470446163-43519452757-43530951506-4ea3fc8e8c'"
+   if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Webbase server CPU >60%' 'SLACK_API_KEY'"
 
 check process prometheus with pidfile /var/run/webbase/prometheus.pid
    start program = "/root/PROG/PYTHON/webbase/scripts/start_prometheus.sh"
    stop program = "/root/PROG/PYTHON/webbase/scripts/stop_prometheus.sh"
    if failed port 9090 protocol http then restart
    if 5 restart within 5 cycles then timeout
-   if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Prometheus CPU >60%' 'xoxp-43470446163-43519452757-43530951506-4ea3fc8e8c'"
+   if cpu is greater than 60% for 2 cycles then exec "/root/.virtualenvs/webbase/bin/slack-notify send_msg 'webbase-bot' 'Prometheus CPU >60%' 'SLACK_API_KEY"
 
 check process sshd with pidfile /var/run/sshd.pid
    start program  "/usr/bin/systemctl start sshd"

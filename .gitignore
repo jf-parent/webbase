@@ -45,3 +45,4 @@ __pycache__
 .env
 configs/*.json
 data
+configs/monitrc

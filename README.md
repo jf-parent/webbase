@@ -274,6 +274,7 @@ scrape_configs:
 $ mkdir /var/run/webbase
 $ yum install epel-release
 $ yum install monit
+$ cp configs/monitrc.example monitrc
 $ cp configs/monitrc configs/mymonitrc
 $ vim configs/mymonicrc # username/password, port, slack_api_key
 $ ln -sf $WEBBASE/configs/mymonitrc /etc/monitrc
