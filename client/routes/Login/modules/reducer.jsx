@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { getSessionSuccess } from '../../../actions/AuthActions'
+import { getSessionLoggedIn } from '../../../actions/AuthActions'
 
 // ====================================
 // Constants
@@ -27,7 +27,7 @@ export function doLogin (data) {
 
         if (response.data.success) {
           dispatch(resetLoginState())
-          dispatch(getSessionSuccess(response.data))
+          dispatch(getSessionLoggedIn(response.data))
         } else {
           dispatch(loginError('Wrong email or password!'))
         }

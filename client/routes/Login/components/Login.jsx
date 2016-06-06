@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { Form } from 'formsy-react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import formStyle from 'components/ux/form.css'
+import SecureFormStyle from 'components/ux/SecureFormStyle.css'
+import SecureForm from 'components/ux/SecureForm'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
 import ValidatedInput from 'components/ux/Input'
@@ -64,8 +64,8 @@ class Login extends BaseComponent {
 
     return (
       <center>
-        <Form ref='form' onValid={this.enableButton} onInvalid={this.disableButton} className={formStyle['form-signin']}>
-          <h2 className={formStyle['form-signin-heading']}>
+        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.session}>
+          <h2 className={SecureFormStyle['form-signin-heading']}>
             <FormattedMessage
               id='login.please-login'
               defaultMessage='Please log in'
@@ -80,7 +80,7 @@ class Login extends BaseComponent {
             />
           </LaddaButton>
           <center>{errorMsg}</center>
-        </Form>
+        </SecureForm>
         <p>
           <Link to='/register'>
             <FormattedMessage

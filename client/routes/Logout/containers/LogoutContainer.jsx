@@ -6,7 +6,8 @@ import Logout from '../components/Logout'
 
 function mapStateToProps (state) {
   return {
-    logout: state.logout
+    logout: state.logout,
+    session: state.session
   }
 }
 

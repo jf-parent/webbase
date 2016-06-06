@@ -21,11 +21,11 @@ logger.setLevel(debugLevel)
 // Actions
 // ====================================
 
-export function doLogout () {
+export function doLogout (token) {
   return dispatch => {
     dispatch({type: LOGOUT_LOADING})
 
-    axios.get('/api/logout')
+    axios.post('/api/logout', {token: token})
       .then((response) => {
         logger.debug('/api/logout (response)', response)
         if (response.data.success) {

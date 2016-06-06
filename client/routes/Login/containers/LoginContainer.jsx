@@ -6,7 +6,8 @@ import Login from '../components/Login'
 
 function mapStateToProps (state) {
   return {
-    login: state.login
+    login: state.login,
+    session: state.session
   }
 }
 

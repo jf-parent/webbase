@@ -16,7 +16,7 @@ class Logout extends BaseComponent {
   logout () {
     this.debug('logout')
 
-    this.props.actions.doLogout()
+    this.props.actions.doLogout(this.props.session.token)
   }
 
   render () {

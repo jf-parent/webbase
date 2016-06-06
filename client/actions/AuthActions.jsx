@@ -8,6 +8,8 @@ export const AUTH_GETTING_SESSION = 'AUTH_GETTING_SESSION'
 export const AUTH_GETTING_SESSION_SUCCESS = 'AUTH_GETTING_SESSION_SUCCESS'
 export const AUTH_GETTING_SESSION_ERROR = 'AUTH_GETTING_SESSION_ERROR'
 export const AUTH_RESET_SESSION = 'AUTH_RESET_SESSION'
+export const AUTH_GETTING_SESSION_REGISTERED = 'AUTH_GETTING_SESSION_REGISTERED'
+export const AUTH_GETTING_SESSION_LOGGED_IN = 'AUTH_GETTING_SESSION_LOGGED_IN'
 
 // ====================================
 // Logger
@@ -15,9 +17,13 @@ export const AUTH_RESET_SESSION = 'AUTH_RESET_SESSION'
 
 const logger = require('loglevel').getLogger('AuthAction')
 
-const debugLevel = 'error'
+let debugLevel
 if (__DEBUG__) {
-  const debugLevel = 'debug'
+  // eslint-disable-next-line
+  debugLevel = 'debug'
+} else {
+  // eslint-disable-next-line
+  debugLevel = 'error'
 }
 logger.setLevel(debugLevel)
 
@@ -35,12 +41,12 @@ export function getSession () {
         if (response.data.success) {
           dispatch(getSessionSuccess(response.data))
         } else {
-          dispatch(getSessionError(response.data.error))
+          dispatch(getSessionError(response.data))
         }
       })
       .catch((response) => {
         logger.debug('/api/get_session error (response)', response)
-        dispatch(getSessionError(response.data.error))
+        dispatch(getSessionError(response.data))
       })
   }
 }
@@ -52,10 +58,24 @@ export function getSessionSuccess (data) {
   }
 }
 
-export function getSessionError (errorAuth) {
+export function getSessionRegistered (data) {
+  return {
+    type: AUTH_GETTING_SESSION_REGISTERED,
+    data
+  }
+}
+
+export function getSessionLoggedIn (data) {
+  return {
+    type: AUTH_GETTING_SESSION_LOGGED_IN,
+    data
+  }
+}
+
+export function getSessionError (data) {
   return {
     type: AUTH_GETTING_SESSION_ERROR,
-    errorAuth
+    data
   }
 }
 

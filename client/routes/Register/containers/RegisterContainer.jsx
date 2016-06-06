@@ -6,7 +6,8 @@ import Register from '../components/Register'
 
 function mapStateToProps (state) {
   return {
-    register: state.register
+    register: state.register,
+    session: state.session
   }
 }
 

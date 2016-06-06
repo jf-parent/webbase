@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { getSessionSuccess } from 'actions/AuthActions'
+import { getSessionRegistered } from 'actions/AuthActions'
 
 // ====================================
 // Constants
@@ -27,7 +27,7 @@ export function doRegister (data) {
 
         if (response.data.success) {
           dispatch(resetRegisterState())
-          dispatch(getSessionSuccess(response.data))
+          dispatch(getSessionRegistered(response.data))
         } else {
           dispatch(registerError('An error has occured: ' + response.data.error))
         }

@@ -3,6 +3,7 @@ from mongoalchemy.document import Document, Index
 from mongoalchemy.fields import *  # noqa
 from validate_email import validate_email
 
+from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server.exceptions import *  # noqa
 
@@ -107,3 +108,8 @@ class User(Document):
         data['role'] = self.role
         data['enable'] = self.enable
         return data
+
+    @staticmethod
+    def logout(session):
+        del session['email']
+        active_user_gauge.dec()

@@ -25,3 +25,7 @@ class InvalidUsernameException(ServerBaseException):
 
 class NotAuthorizedException(ServerBaseException):
     pass
+
+
+class CSRFMismatch(ServerBaseException):
+    pass

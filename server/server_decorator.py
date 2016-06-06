@@ -50,6 +50,11 @@ def exception_handler():
                     return (await func(*args))
                 else:
                     return (await func(args[-1]))
+            except CSRFMismatch as e:
+                security_violation_attempt_counter.inc()
+                data = {'success': False, 'error': 'TokenMismatch'}
+
+                return web.json_response(data)
             except Exception as e:
                 tb = traceback.format_exc()
                 logger.error(
@@ -64,5 +69,32 @@ def exception_handler():
 
                 return web.json_response(data)
 
+        return wrapped
+    return wrapper
+
+
+def csrf_protected():
+    def wrapper(func):
+        @functools.wraps(func)
+        async def wrapped(*args):
+            logger.debug('csrf_protected')
+
+            # Supports class based views see web.View
+            if isinstance(args[0], AbstractView):
+                request = args[0].request
+                params = args[0]  # self
+            else:
+                request = args[-1]
+                params = request  # request
+
+            session = await get_session(request)
+            data = await request.json()
+
+            csrf_token_session = session.get('csrf_token')
+            csrf_token_request = data.get('token')
+            if csrf_token_request != csrf_token_session:
+                raise CSRFMismatch()
+
+            return (await func(params))
         return wrapped
     return wrapper
