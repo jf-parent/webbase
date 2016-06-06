@@ -5,7 +5,7 @@ prometheus-dev:
 	/opt/prometheus/prometheus -config.file configs/prometheus.yml
 
 prometheus-prod:
-	nohup /opt/prometheus/prometheus -config.file configs/prometheus.yml > logs/prometheus.log 2>&1&
+	scripts/start_prometheus.sh
 
 lint:
 	@echo "====Python flake8===="
@@ -20,7 +20,7 @@ server-dev:
 	flake8 server && python server/app.py
 
 server-prod:
-	nohup server/app.py > logs/server.nout 2>&1&
+	scripts/start_server.sh
 
 query:
 	python scripts/query.py
