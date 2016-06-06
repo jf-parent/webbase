@@ -10,6 +10,7 @@ definePlugin = new webpack.DefinePlugin({
   __TEST__: isTest,
   __PROD__: isProd,
   __DEBUG__: isDev,
+  'debugLevel': "'error'",
  'process.env.NODE_ENV': "'" + process.env.NODE_ENV + "'"
 });
 
