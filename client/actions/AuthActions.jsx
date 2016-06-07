@@ -16,16 +16,7 @@ export const AUTH_GETTING_SESSION_LOGGED_IN = 'AUTH_GETTING_SESSION_LOGGED_IN'
 // ====================================
 
 const logger = require('loglevel').getLogger('AuthAction')
-
-let debugLevel
-if (__DEBUG__) {
-  // eslint-disable-next-line
-  debugLevel = 'debug'
-} else {
-  // eslint-disable-next-line
-  debugLevel = 'error'
-}
-logger.setLevel(debugLevel)
+logger.setLevel(__LOGLEVEL__)
 
 // ====================================
 // Actions

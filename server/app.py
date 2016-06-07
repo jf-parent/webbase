@@ -13,7 +13,8 @@ from prometheus_client import start_http_server
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from aiohttp import web
 
-sys.path.append('.')
+HERE = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.join(HERE, '..'))
 
 from server.prometheus_instruments import db_session_gauge  # noqa
 from server.routes import routes  # noqa

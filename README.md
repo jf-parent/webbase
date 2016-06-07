@@ -78,6 +78,17 @@ $ semanage port -a -t mongod_port_t -p tcp 27017
 $ service mongod start
 ```
 
+
+### Backup
+
+```bash
+$ mkdir -p /root/mongo-backups/daily
+```
+
+```crontab
+0 0 * * * mongodump /root/mongo-backups/daily
+```
+
 ## Install Python3.5
 
 Ref: http://ask.xmodulo.com/install-python3-centos.html

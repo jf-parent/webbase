@@ -17,7 +17,7 @@
     "__DEBUG__"    : false,
     "__COVERAGE__" : false,
     "it"           : false,
-    "debugLevel"   : false,
+    "__LOGLEVEL__" : false,
     "beforeEach"   : false,
     "describe"     : false,
     "bootstrap"    : false,

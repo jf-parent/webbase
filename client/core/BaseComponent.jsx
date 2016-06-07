@@ -31,7 +31,7 @@ class BaseComponent extends Component {
     this._loggerName = this.constructor.name
     this._logger = require('loglevel').getLogger(this._loggerName)
 
-    this._logger.setLevel(debugLevel)
+    this._logger.setLevel(__LOGLEVEL__)
   }
 }
 

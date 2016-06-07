@@ -4,8 +4,11 @@ deps:
 prometheus-dev:
 	/opt/prometheus/prometheus -config.file configs/prometheus.yml
 
-prometheus-prod:
+start-prometheus-prod:
 	scripts/start_prometheus.sh
+
+stop-prometheus-prod:
+	scripts/stop_prometheus.sh
 
 lint:
 	@echo "====Python flake8===="
@@ -19,8 +22,11 @@ deps-dev:
 server-dev:
 	flake8 server && python server/app.py
 
-server-prod:
+start-server-prod:
 	scripts/start_server.sh
+
+stop-server-prod:
+	scripts/stop_server.sh
 
 query:
 	python scripts/query.py

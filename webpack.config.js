@@ -4,13 +4,14 @@ var serverConfig = require('./configs/server');
 var isDev = process.env.NODE_ENV == 'development';
 var isProd = process.env.NODE_ENV == 'production';
 var isTest = process.env.NODE_ENV == 'test';
+var logLevel = isDev ? "'debug'" : "'error'";
 
 definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,
   __TEST__: isTest,
   __PROD__: isProd,
   __DEBUG__: isDev,
-  'debugLevel': "'error'",
+  '__LOGLEVEL__': logLevel,
  'process.env.NODE_ENV': "'" + process.env.NODE_ENV + "'"
 });
 

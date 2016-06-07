@@ -11,10 +11,7 @@ require('./polyfills')
 // Developer Tools Setup
 // ========================================================
 
-global.debugLevel = 'error'
-
 if (__DEBUG__) {
-  global.debugLevel = 'debug'
   if (window.devToolsExtension) {
     window.devToolsExtension.open()
   }
