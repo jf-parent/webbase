@@ -35,7 +35,10 @@ async def shutdown(server, app, handler):
     await app.cleanup()
 
 
-async def init(loop):
+async def init(loop, effective_config = None):
+
+    if not effective_config:
+        effective_config = config
 
     fernet_key = fernet.Fernet.generate_key()
     secret_key = base64.urlsafe_b64decode(fernet_key)
@@ -52,7 +55,7 @@ async def init(loop):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if config.get('DEBUG'):
+    if effective_config.get('DEBUG'):
         static_path = os.path.join(ROOT, 'dist-dev')
     else:
         static_path = os.path.join(ROOT, 'dist-prod')
@@ -75,33 +78,34 @@ async def init(loop):
 
     serv_generator = loop.create_server(
         handler,
-        config.get('SERVER_HOST'),
-        config.get('SERVER_PORT')
+        effective_config.get('SERVER_HOST'),
+        effective_config.get('SERVER_PORT')
     )
     return serv_generator, handler, app
 
-"""
-loop = uvloop.new_event_loop()
-asyncio.set_event_loop(loop)
-"""
+if __name__ == '__main__':
+    """
+    loop = uvloop.new_event_loop()
+    asyncio.set_event_loop(loop)
+    """
 
 # PROMETHEUS CLIENT
-start_http_server(8001)
+    start_http_server(8001)
 
-loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
 
-serv_generator, handler, app = loop.run_until_complete(init(loop))
-serv = loop.run_until_complete(serv_generator)
+    serv_generator, handler, app = loop.run_until_complete(init(loop))
+    serv = loop.run_until_complete(serv_generator)
 
-logger.debug('Server listening at %s' % str(serv.sockets[0].getsockname()))
-try:
-    loop.run_forever()
+    logger.debug('Server listening at %s' % str(serv.sockets[0].getsockname()))
+    try:
+        loop.run_forever()
 
-except KeyboardInterrupt:
-    logger.debug('Server stopping...')
+    except KeyboardInterrupt:
+        logger.debug('Server stopping...')
 
-finally:
-    loop.run_until_complete(shutdown(serv, app, handler))
-    loop.close()
+    finally:
+        loop.run_until_complete(shutdown(serv, app, handler))
+        loop.close()
 
-logger.debug('Server stopped')
+    logger.debug('Server stopped')

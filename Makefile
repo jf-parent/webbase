@@ -1,6 +1,9 @@
 deps:
 	pip install -r requirements.txt
 
+deps-dev:
+	pip install -r requirements-dev.txt
+
 prometheus-dev:
 	/opt/prometheus/prometheus -config.file configs/prometheus.yml
 
@@ -16,8 +19,11 @@ lint:
 	@echo "====Javascript eslin====t"
 	npm run lint
 
-deps-dev:
-	pip install -r requirements-dev.txt
+test:
+	py.test server/tests
+
+test-debug:
+	py.test server/tests --pdb
 
 server-dev:
 	flake8 server && python server/app.py

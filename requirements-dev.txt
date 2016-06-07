@@ -3,3 +3,5 @@ ipdb
 flake8
 pip-save
 tmuxp
+pytest
+webtest-aiohttp
