@@ -11,6 +11,10 @@ class EmailAlreadyExistsException(ServerBaseException):
     pass
 
 
+class InvalidNameException(ServerBaseException):
+    pass
+
+
 class InvalidPasswordException(ServerBaseException):
     pass
 
@@ -28,4 +32,8 @@ class NotAuthorizedException(ServerBaseException):
 
 
 class CSRFMismatch(ServerBaseException):
+    pass
+
+
+class InvalidRequestException(ServerBaseException):
     pass

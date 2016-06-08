@@ -5,6 +5,7 @@ from aiohttp import web
 
 from server.exceptions import *  # noqa
 from server.auth.user import User
+from server.settings import logger
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
 
@@ -21,7 +22,11 @@ class Login(web.View):
     @exception_handler()
     @csrf_protected()
     async def post(self):
-        data = await self.request.json()
+        try:
+            data = await self.request.json()
+        except:
+            raise InvalidRequestException('No json send')
+
         query = self.request.db_session.query(User)\
             .filter(User.email == data.get('email'))
         if query.count():
@@ -49,10 +54,14 @@ class Register(web.View):
     @exception_handler()
     @csrf_protected()
     async def post(self):
-        data = await self.request.json()
+        try:
+            data = await self.request.json()
+        except:
+            raise InvalidRequestException('No json send')
+
         user = User()
         await user.init_and_validate(self.request.db_session, data)
-        self.request.db_session.add(user)
+        self.request.db_session.save(user)
         await set_session(user, self.request)
         data = {'success': True, 'user': await user.serialize()}
 

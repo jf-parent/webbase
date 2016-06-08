@@ -35,11 +35,9 @@ async def shutdown(server, app, handler):
     await app.cleanup()
 
 
-async def init(loop, effective_config = None):
-
-    if not effective_config:
-        effective_config = config
-
+async def init(loop, config_args=None):
+    config.configure(config_args)
+    logger.debug('config: {config}'.format(config=config))
     fernet_key = fernet.Fernet.generate_key()
     secret_key = base64.urlsafe_b64decode(fernet_key)
     app = web.Application(loop=loop, middlewares=[
@@ -55,7 +53,7 @@ async def init(loop, effective_config = None):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if effective_config.get('DEBUG'):
+    if config.get('DEBUG'):
         static_path = os.path.join(ROOT, 'dist-dev')
     else:
         static_path = os.path.join(ROOT, 'dist-prod')
@@ -78,8 +76,8 @@ async def init(loop, effective_config = None):
 
     serv_generator = loop.create_server(
         handler,
-        effective_config.get('SERVER_HOST'),
-        effective_config.get('SERVER_PORT')
+        config.get('SERVER_HOST'),
+        config.get('SERVER_PORT')
     )
     return serv_generator, handler, app
 

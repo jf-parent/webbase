@@ -88,7 +88,10 @@ def csrf_protected():
                 params = request  # request
 
             session = await get_session(request)
-            data = await request.json()
+            try:
+                data = await request.json()
+            except:
+                raise InvalidRequestException('No json send')
 
             csrf_token_session = session.get('csrf_token')
             csrf_token_request = data.get('token')

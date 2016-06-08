@@ -85,11 +85,13 @@ class User(Document):
         # NAME
         name = data.get('name', '')
         if len(name) < NAME_MIN_LEN or len(name) > NAME_MAX_LEN:
-            raise Invalidname(name)
+            raise InvalidNameException(name)
 
         self.name = name
 
         self.role = data.get('role', 'user')
+
+        self.enable = data.get('enable', True)
 
         # PASSWORD
         password = data.get('password', '')

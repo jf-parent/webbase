@@ -19,11 +19,14 @@ lint:
 	@echo "====Javascript eslin====t"
 	npm run lint
 
+serve-cwd:
+	python -m http.server 9010
+
 test:
-	py.test server/tests
+	flake8 server && py.test server/tests --instafail --html=last-report.html
 
 test-debug:
-	py.test server/tests --pdb
+	flake8 server && py.test server/tests --pdb
 
 server-dev:
 	flake8 server && python server/app.py
