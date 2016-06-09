@@ -54,14 +54,14 @@ class CoreLayout extends BaseComponent {
         <div>
           <LocalesMenu />
           {Nav}
-          <div className={bootstrap.container}>
-            <div className={bootstrap.jumbotron + ' ' + CoreLayoutStyle['jumbotron']}>
+          <div className='container'>
+            <div className={'jumbotron ' + CoreLayoutStyle['jumbotron']}>
                 {this.props.children || <Home />}
             </div>
           </div>
           <footer >
-            <div className={bootstrap.container}>
-              <div className={bootstrap.jumbotron}>
+            <div className='container'>
+              <div className='jumbotron'>
                 <h2>Webbase</h2>
               </div>
             </div>

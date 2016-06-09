@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import ErrorMsgStyle from './ErrorMsg.css'
+import ErrorMsgStyle from './ErrorMsgStyle.postcss'
 
 class ErrorMsg extends Component {
 
@@ -11,7 +11,7 @@ class ErrorMsg extends Component {
 
   render () {
     return (
-      <div className={bootstrap['alert'] + ' ' + bootstrap['alert-danger'] + ' ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name} >
+      <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name} >
         <strong>Error:</strong> {this.props.msg}
       </div>
     )

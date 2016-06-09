@@ -24,7 +24,7 @@ const ValidatedInput = React.createClass({
   render () {
     const name = 'form-control-' + this.props.name
 
-    let className = [bootstrap['form-group']]
+    let className = ['form-group']
 
     // User defined class
     if (this.props.className) {
@@ -33,17 +33,17 @@ const ValidatedInput = React.createClass({
 
     // Input state class
     if (this.showRequired()) {
-      className.push(bootstrap['has-warning'])
+      className.push('has-warning')
     } else if (this.showError()) {
-      className.push(bootstrap['has-error'])
+      className.push('has-error')
     } else {
-      className.push(bootstrap['has-success'])
+      className.push('has-success')
     }
     // const errorMessage = this.getErrorMessage()
     return (
       <div className={className.join([' '])} name={name}>
         <input
-          className={bootstrap['form-control']}
+          className='form-control'
           {...this.props}
           onChange={this.onValueChange}
           type={this.props.type || 'text'}

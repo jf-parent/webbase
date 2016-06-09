@@ -21,10 +21,10 @@ var config = {
    ],
 
    output: {
-     path: BUILD_DIR + '/static/scripts/',
+     path: BUILD_DIR + '/static/',
      filename: '[name].js',
      chunkFilename: '[name].chunk.js',
-     publicPath: '/static/scripts/'
+     publicPath: '/static/'
    },
 
   plugins: [
@@ -51,9 +51,11 @@ var config = {
       { test: /sinon.*\.js$/,   loader: "imports?define=>false,require=>false"  },
       { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
       { test: /\.json$/, loader: 'json' },
-      { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {
         test: /\.css$/,
+        loader: "style-loader!css-loader"
+      }, {
+        test: /\.postcss$/,
         loader: ExtractTextPlugin.extract(
             'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
         )

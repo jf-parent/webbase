@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
-import SecureFormStyle from 'components/ux/SecureFormStyle.css'
+import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
 import SecureForm from 'components/ux/SecureForm'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'

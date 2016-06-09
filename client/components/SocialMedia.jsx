@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import fontAwesome from 'font-awesome/css/font-awesome.css'
+
+import 'font-awesome-webpack'
 
 var config = require('!json!../../configs/social_media.json')
 
@@ -7,27 +8,24 @@ class SocialMedia extends Component {
 
   getSocialMediaElement () {
     return Object.keys(config).map((key, i) => {
-      let iconCls = 'fa-' + key
-      let liClassName = [fontAwesome['fa'], fontAwesome[iconCls]]
       let href = config[key]
 
       if (href) {
         return (
-          <li key={i}>
-            <a href={href} target='_blank'>
-              <i className={liClassName.join(' ')} aria-hidden='true' />
-            </a>
-          </li>
+          <a className='btn btn-link' key={i} href={href} target='_blank'>
+            <i className={'fa fa-' + key} aria-hidden='true' />
+          </a>
         )
       }
     })
   }
 
   render () {
-    const navClassName = [bootstrap['nav'], bootstrap['navbar-nav'], bootstrap['navbar-right']]
     return (
-      <ul className={navClassName.join(' ')}>
-        {this.getSocialMediaElement()}
+      <ul className='nav navbar-nav navbar-right'>
+        <center>
+          {this.getSocialMediaElement()}
+        </center>
       </ul>
     )
   }

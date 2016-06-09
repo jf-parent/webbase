@@ -15,7 +15,7 @@ export const REGISTER_RESET_STATE = 'REGISTER_RESET_STATE'
 // ====================================
 
 const logger = require('loglevel').getLogger('Register')
-logger.setLevel(debugLevel)
+logger.setLevel(__LOGLEVEL__)
 
 export function doRegister (data) {
   return dispatch => {

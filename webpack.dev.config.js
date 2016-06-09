@@ -27,10 +27,10 @@ var config = {
    ],
 
    output: {
-     path: BUILD_DIR + '/static/scripts/',
+     path: BUILD_DIR + '/static/',
      filename: '[name].js',
      chunkFilename: '[name].chunk.js',
-     publicPath: '/static/scripts/'
+     publicPath: '/static/'
    },
 
   plugins: [
@@ -54,10 +54,11 @@ var config = {
     ],
     loaders : [
       { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
-      { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
-//      { test: /\.css$/, loader: "style-loader!css-loader" },
       {
         test: /\.css$/,
+        loader: "style-loader!css-loader"
+      }, {
+        test: /\.postcss$/,
         loader: ExtractTextPlugin.extract(
             'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
         )
@@ -68,7 +69,7 @@ var config = {
   },
 
   devServer: {
-      publicPath: '/static/scripts/',
+      publicPath: '/static/',
 
       host: '0.0.0.0',
       port: clientPort,

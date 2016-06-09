@@ -20,11 +20,11 @@ class LaddaButton extends Component {
   }
 
   render () {
-    let buttonClass = [bootstrap['btn'], bootstrap['btn-lg'], bootstrap['btn-primary'], bootstrap['btn-block']]
+    let buttonClass = ['btn', 'btn-lg', 'btn-primary', 'btn-block']
     if (this.state.isDisabled) {
-      buttonClass.push(bootstrap['btn-danger'])
+      buttonClass.push('btn-danger')
     } else {
-      buttonClass.push(bootstrap['btn-success'])
+      buttonClass.push('btn-success')
     }
 
     return (

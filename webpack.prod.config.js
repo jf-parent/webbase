@@ -24,10 +24,10 @@ var config = {
    ],
 
    output: {
-     path: BUILD_DIR + '/static/scripts/',
-     filename: '[name].js',
-     chunkFilename: '[id].chunk.js',
-     publicPath: '/static/scripts/'
+     path: BUILD_DIR + '/static/',
+     filename: 'main.[hash].js',
+     chunkFilename: '[id].[hash].chunk.js',
+     publicPath: '/static/'
    },
 
   plugins: [
@@ -50,6 +50,9 @@ var config = {
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {
         test: /\.css$/,
+        loader: "style-loader!css-loader"
+      }, {
+        test: /\.postcss$/,
         loader: ExtractTextPlugin.extract(
             'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
         )

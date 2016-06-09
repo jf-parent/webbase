@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import Formsy from 'formsy-react'
 
 import ErrorMsg from './ErrorMsg'
-import PasswordInputStyle from './PasswordInputStyle.css'
+import PasswordInputStyle from './PasswordInputStyle.postcss'
 
 const PasswordInput = React.createClass({
 
@@ -59,7 +59,7 @@ const PasswordInput = React.createClass({
   render () {
     const errorMessage = this.getCustomErrorMessage()
 
-    let className = [bootstrap['form-group']]
+    let className = ['form-group']
 
     // User defined class
     if (this.props.className) {
@@ -68,11 +68,11 @@ const PasswordInput = React.createClass({
 
     // Input state class
     if (this.showRequired()) {
-      className.push(bootstrap['has-warning'])
+      className.push('has-warning')
     } else if (this.showError()) {
-      className.push(bootstrap['has-error'])
+      className.push('has-error')
     } else {
-      className.push(bootstrap['has-success'])
+      className.push('has-success')
     }
 
     let errorMsg = null
@@ -87,7 +87,7 @@ const PasswordInput = React.createClass({
     return (
       <div className={className.join(' ')} name={'form-control-' + this.props.name}>
         <input
-          className={bootstrap['form-control']}
+          className='form-control'
           {...this.props}
           type={type}
           onChange={this.onValueChange}
@@ -95,13 +95,15 @@ const PasswordInput = React.createClass({
           onBlur={this.onBlur}
           onFocus={this.onFocus}
         />
-        <span
+        <div
           onMouseOver={this.toggleShowPassword}
           onMouseOut={this.toggleShowPassword}
           onTouchStart={this.toggleShowPassword}
           onTouchEnd={this.toggleShowPassword}
-          className={bootstrap['glyphicon'] + ' ' + bootstrap['glyphicon-eye-open'] + ' ' + PasswordInputStyle['show-password']}
-        />
+          className={PasswordInputStyle['show-password']}
+        >
+          <span className='glyphicon glyphicon-eye-open' />
+        </div>
         <center>{errorMsg}</center>
       </div>
     )

@@ -24,10 +24,12 @@ const history = InitStoreHistory.history
 
 import AppContainer from './containers/AppContainer'
 
-// NOTE needed by bootstrap
-require('jquery')
+// ========================================================
+// BOOTSTRAP
+// ========================================================
 
-global.bootstrap = require('bootstrap/dist/css/bootstrap.css')
+import 'expose?$!expose?jQuery!jquery'
+import 'bootstrap-webpack'
 
 // ========================================================
 // Logger

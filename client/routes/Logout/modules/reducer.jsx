@@ -15,7 +15,7 @@ export const LOGOUT_ERROR = 'LOGOUT_ERROR'
 // ====================================
 
 const logger = require('loglevel').getLogger('Logout')
-logger.setLevel(debugLevel)
+logger.setLevel(__LOGLEVEL__)
 
 // ====================================
 // Actions

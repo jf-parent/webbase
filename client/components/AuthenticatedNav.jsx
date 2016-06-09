@@ -10,19 +10,25 @@ class AuthenticatedNav extends Component {
   render () {
     let NavItem = activeComponent('li')
     return (
-      <div className={bootstrap.container}>
-        <nav id='nav-bar' className={bootstrap.navbar + ' ' + bootstrap['navbar-default']} role='navigation'>
-          <div className={bootstrap['container-fluid']}>
-            <div className={bootstrap['navbar-header']}>
-              <Link className={bootstrap['navbar-brand']} to='/'>
+      <div className='container'>
+        <nav id='nav-bar' className='navbar navbar-default' role='navigation'>
+          <div className='container-fluid'>
+            <div className='navbar-header'>
+              <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false'>
+                <span className='sr-only'>Toggle navigation</span>
+                <span className='icon-bar'></span>
+                <span className='icon-bar'></span>
+                <span className='icon-bar'></span>
+              </button>
+              <Link className='navbar-brand' to='/'>
                 <FormattedMessage
                   id='nav.home'
                   defaultMessage='Home'
                 />
               </Link>
             </div>
-            <div className={bootstrap['navbar-collapse'] + ' ' + bootstrap['collapse']}>
-              <ul className={bootstrap['nav'] + ' ' + bootstrap['navbar-nav']}>
+            <div id='navbar-collapse' className='navbar-collapse collapse'>
+              <ul className='nav navbar-nav'>
                 <NavItem to='/profile'>
                   <FormattedMessage
                     id='nav.profile'

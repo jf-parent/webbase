@@ -20,7 +20,6 @@
     "__LOGLEVEL__" : false,
     "beforeEach"   : false,
     "describe"     : false,
-    "bootstrap"    : false,
     "__BASENAME__" : false
   },
   "env": {

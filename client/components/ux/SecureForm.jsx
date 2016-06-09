@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'formsy-react'
 
 import BaseComponent from 'core/BaseComponent'
-import SecureFormStyle from 'components/ux/SecureFormStyle.css'
+import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
 
 class SecureForm extends BaseComponent {
 

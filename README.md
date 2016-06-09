@@ -298,17 +298,28 @@ $ #install it
 
 # USAGE
 
-## LINT / FLAKE8
+## LINT / FLAKE8 / STATS
 
 ```bash
 $ make lint
+$ make stats
 ```
 
 ## TESTING
 
+### CLIENT
+
 ```bash
 $ npm run test
 $ npm run test:watch
+```
+
+### SERVER
+
+```bash
+$ make test
+$ make test-debug
+$ server-cwd => last-report.html
 ```
 
 ## DEV
