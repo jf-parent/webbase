@@ -53,7 +53,7 @@ class Register extends BaseComponent {
     this.debug('render')
 
     const { formatMessage } = this._reactInternalInstance._context.intl
-    const errorMsg = this.props.register.error ? <ErrorMsg msg={this.props.register.error} /> : null
+    const errorMsg = this.props.register.error ? <ErrorMsg msgId={this.props.register.error} /> : null
     const emailPlaceholder = formatMessage(registerMessages.emailPlaceholder)
     const namePlaceholder = formatMessage(registerMessages.namePlaceholder)
     const passwordPlaceholder = formatMessage(registerMessages.passwordPlaceholder)

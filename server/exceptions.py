@@ -23,10 +23,6 @@ class InvalidEmailException(ServerBaseException):
     pass
 
 
-class InvalidUsernameException(ServerBaseException):
-    pass
-
-
 class NotAuthorizedException(ServerBaseException):
     pass
 

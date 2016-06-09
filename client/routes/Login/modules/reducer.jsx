@@ -29,12 +29,12 @@ export function doLogin (data) {
           dispatch(resetLoginState())
           dispatch(getSessionLoggedIn(response.data))
         } else {
-          dispatch(loginError('Wrong email or password!'))
+          dispatch(loginError(response.data.error))
         }
       })
       .catch((response) => {
         logger.debug('/api/login error (data) (response)', data, response)
-        dispatch(loginError('Not such user or wrong password'))
+        dispatch(loginError(response.data.error))
       })
   }
 }

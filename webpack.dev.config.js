@@ -12,6 +12,7 @@ var clientAddr = serverConfig['SERVER_HOST'] + ':' + clientPort;
 
 console.log('[*] BUILD_DIR:', BUILD_DIR);
 console.log('[*] APP_DIR:', APP_DIR);
+console.log('[*] definePlugin:', definePlugin);
 
 var config = {
 

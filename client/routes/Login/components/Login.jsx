@@ -58,7 +58,7 @@ class Login extends BaseComponent {
     this.debug('render')
 
     const { formatMessage } = this.props.intl
-    const errorMsg = this.props.login.error ? <ErrorMsg msg={this.props.login.error} /> : null
+    const errorMsg = this.props.login.error ? <ErrorMsg msgId={this.props.login.error} /> : null
     const emailPlaceholder = formatMessage(loginMessages.emailPlaceholder)
     const passwordPlaceholder = formatMessage(loginMessages.passwordPlaceholder)
 

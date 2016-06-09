@@ -15,8 +15,7 @@ logger.setLevel('debug')
 
 export function doChangeLocale (locale) {
   return dispatch => {
-    // Note use the defaultMessage for English
-    let strings = locale === 'en' ? {} : messages[locale]
+    let strings = messages[locale]
 
     dispatch(changeLocale(locale, strings))
   }
@@ -40,9 +39,7 @@ export const actions = {
 
 const initialState = {
   locale: navigator.language.split('-')[0],
-  messages: {
-    'test': 'ENglish'
-  }
+  messages: messages['en']
 }
 
 export default function locales (state = initialState, action) {

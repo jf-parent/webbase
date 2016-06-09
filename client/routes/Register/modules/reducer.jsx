@@ -29,12 +29,12 @@ export function doRegister (data) {
           dispatch(resetRegisterState())
           dispatch(getSessionRegistered(response.data))
         } else {
-          dispatch(registerError('An error has occured: ' + response.data.error))
+          dispatch(registerError(response.data.error))
         }
       })
       .catch((response) => {
         logger.debug('/api/register error (data) (response)', data, response)
-        dispatch(registerError('An error has occured: ' + response.data.error))
+        dispatch(registerError(response.data.error))
       })
   }
 }

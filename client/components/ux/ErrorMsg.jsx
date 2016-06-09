@@ -1,18 +1,29 @@
 import React, { Component, PropTypes } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import ErrorMsgStyle from './ErrorMsgStyle.postcss'
 
 class ErrorMsg extends Component {
 
   static propTypes = {
-    msg: PropTypes.string.isRequired,
+    msgId: PropTypes.string.isRequired,
     name: PropTypes.string
   }
 
   render () {
     return (
       <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name} >
-        <strong>Error:</strong> {this.props.msg}
+        <FormattedMessage
+          id='error-msg.error'
+          defaultMessage='{error}'
+          values={{
+            error: <strong>Error: </strong>
+          }}
+        />
+        <FormattedMessage
+          id={'error-msg.' + this.props.msgId}
+          defaultMessage={this.props.msgId}
+        />
       </div>
     )
   }

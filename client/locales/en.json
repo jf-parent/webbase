@@ -1,0 +1,11 @@
+{
+    "error-msg.error": "Error: ",
+    "error-msg.WrongEmailOrPasswordException": "wrong email or password",
+    "error-msg.EmailAlreadyExistsException": "email already exists",
+    "error-msg.InvalidNameException": "invalid name",
+    "error-msg.InvalidPasswordException": "invalid password",
+    "error-msg.InvalidEmailException": "invalid email",
+    "error-msg.NotAuthorizedException": "not authorized",
+    "error-msg.CSRFMismatch": "security token mismatch",
+    "error-msg.InvalidRequestException": "invalid request"
+}
