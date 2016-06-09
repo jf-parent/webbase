@@ -1,6 +1,5 @@
 import React from 'react'
 import { expect } from 'chai'
-global.bootstrap = require('bootstrap/dist/css/bootstrap.css')
 
 import TestHelper from 'helpers/TestHelper'
 import LoginContainer from '../containers/LoginContainer'
@@ -40,35 +39,35 @@ describe('<Login />', () => {
 
   it('Have the empty email field with the has-warning class', () => {
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass(bootstrap['has-warning'])).to.be.true
+    expect(emailFormGroup.hasClass('has-warning')).to.be.true
   })
 
   it('Have the email field with the has-success class after typing a valid email', () => {
     let emailInput = wrapper.find('input[name="email"]')
     emailInput.simulate('change', {target: {value: 'test@test.com'}})
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass(bootstrap['has-success'])).to.be.true
+    expect(emailFormGroup.hasClass('has-success')).to.be.true
   })
 
   it('Have the email field with the has-error class after typing a invalid email', () => {
     let emailInput = wrapper.find('input[name="email"]')
     emailInput.simulate('change', {target: {value: 'test'}})
     let emailFormGroup = wrapper.find('div[name="form-control-email"]')
-    expect(emailFormGroup.hasClass(bootstrap['has-error'])).to.be.true
+    expect(emailFormGroup.hasClass('has-error')).to.be.true
   })
 
   it('Have the password field with the has-success class after typing a valid password', () => {
     let passwordInput = wrapper.find('input[name="password"]')
     passwordInput.simulate('change', {target: {value: 'test@test.com'}})
     let passwordFormGroup = wrapper.find('div[name="form-control-password"]')
-    expect(passwordFormGroup.hasClass(bootstrap['has-success'])).to.be.true
+    expect(passwordFormGroup.hasClass('has-success')).to.be.true
   })
 
   it('Have the password field with the has-error class after typing a invalid password', () => {
     let passwordInput = wrapper.find('input[name="password"]')
     passwordInput.simulate('change', {target: {value: 'test'}})
     let passwordFormGroup = wrapper.find('div[name="form-control-password"]')
-    expect(passwordFormGroup.hasClass(bootstrap['has-error'])).to.be.true
+    expect(passwordFormGroup.hasClass('has-error')).to.be.true
   })
 
   it('Have the submit button enabled when every field are valid', () => {
