@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
 
-class Profile extends Component {
+import BaseComponent from 'core/BaseComponent'
+
+class Profile extends BaseComponent {
   constructor (props) {
     super(props)
 

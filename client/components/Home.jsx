@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
 
-class Home extends Component {
+import BaseComponent from 'core/BaseComponent'
+
+class Home extends BaseComponent {
 
   render () {
     return (

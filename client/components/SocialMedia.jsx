@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
-
+import React from 'react'
 import 'font-awesome-webpack'
+
+import BaseComponent from 'core/BaseComponent'
 
 var config = require('!json!../../configs/social_media.json')
 
-class SocialMedia extends Component {
+class SocialMedia extends BaseComponent {
 
   getSocialMediaElement () {
     return Object.keys(config).map((key, i) => {

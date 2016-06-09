@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class Settings extends Component {
+import BaseComponent from 'core/BaseComponent'
+
+class Settings extends BaseComponent {
   render () {
     return (
       <div>

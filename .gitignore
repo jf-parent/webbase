@@ -27,6 +27,7 @@ coverage
 develop-eggs
 logs
 dist-dev
+dist-prod
 docs/_build/
 eggs
 include/
@@ -46,3 +47,4 @@ __pycache__
 configs/*.json
 data
 configs/monitrc
+last-report.html

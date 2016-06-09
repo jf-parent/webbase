@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router'
 import activeComponent from 'react-router-active-component'
 import { FormattedMessage } from 'react-intl'
 
+import BaseComponent from 'core/BaseComponent'
 import SocialMedia from './SocialMedia'
 
-class AuthenticatedNav extends Component {
+class AuthenticatedNav extends BaseComponent {
 
   render () {
     let NavItem = activeComponent('li')

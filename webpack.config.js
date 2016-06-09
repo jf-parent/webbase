@@ -12,7 +12,7 @@ definePlugin = new webpack.DefinePlugin({
   __PROD__: isProd,
   __DEBUG__: isDev,
   '__LOGLEVEL__': logLevel,
- 'process.env.NODE_ENV': "'" + process.env.NODE_ENV + "'"
+ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
 });
 
 var config;

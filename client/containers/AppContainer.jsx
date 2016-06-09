@@ -5,12 +5,13 @@ import { addLocaleData } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import frLocaleData from 'react-intl/locale-data/fr'
 
-import ConnectedIntlProvider from '../locales/ConnectedIntlProvider'
+import ConnectedIntlProvider from 'locales/ConnectedIntlProvider'
+import BaseComponent from 'core/BaseComponent'
 
 addLocaleData(enLocaleData)
 addLocaleData(frLocaleData)
 
-class AppContainer extends React.Component {
+class AppContainer extends BaseComponent {
   static propTypes = {
     history: PropTypes.object.isRequired,
     routes: PropTypes.object.isRequired,
