@@ -16,7 +16,7 @@ class Config(object):
     def __init__(self):
         self.__config__ = None
 
-    def configure(self, config):
+    def configure(self, config=None):
         def configure_from_relative_path(path):
             config_path = os.path.join(ROOT, 'configs', path)
 

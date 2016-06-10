@@ -14,14 +14,14 @@ class ErrorMsg extends Component {
     return (
       <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name} >
         <FormattedMessage
-          id='error-msg.error'
+          id='errorMsg.Error'
           defaultMessage='{error}'
           values={{
             error: <strong>Error: </strong>
           }}
         />
         <FormattedMessage
-          id={'error-msg.' + this.props.msgId}
+          id={'errorMsg.' + this.props.msgId}
           defaultMessage={this.props.msgId}
         />
       </div>

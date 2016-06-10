@@ -26,7 +26,7 @@ class Logout extends BaseComponent {
 
     if (errorMsg) {
       return (
-        <ErrorMsg msg={errorMsg} />
+        <ErrorMsg msgId={errorMsg} />
       )
     } else {
       return (

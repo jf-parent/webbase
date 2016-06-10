@@ -67,7 +67,7 @@ class Login extends BaseComponent {
         <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.session}>
           <h2 className={SecureFormStyle['form-signin-heading']}>
             <FormattedMessage
-              id='login.please-login'
+              id='login.PleaseLogin'
               defaultMessage='Please log in'
             />
           </h2>
@@ -75,7 +75,7 @@ class Login extends BaseComponent {
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} quiet required />
           <LaddaButton ref='button' isDisabled isLoading={this.props.login.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
-              id='login.submit-btn'
+              id='login.SubmitBtn'
               defaultMessage='Login'
             />
           </LaddaButton>
@@ -84,7 +84,7 @@ class Login extends BaseComponent {
         <p>
           <Link to='/register'>
             <FormattedMessage
-              id='login.register-redirect'
+              id='login.RegisterRedirect'
               defaultMessage="Don't have an account yet? Register here"
             />
           </Link>
@@ -92,7 +92,7 @@ class Login extends BaseComponent {
         <p>
           <Link to='/forgotten-password'>
             <FormattedMessage
-              id='login.forgotten-password-btn'
+              id='login.ForgottenPassword-btn'
               defaultMessage='Forgot password?'
             />
           </Link>

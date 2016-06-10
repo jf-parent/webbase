@@ -23,7 +23,7 @@ class UnAuthenticatedNav extends BaseComponent {
               </button>
               <Link className='navbar-brand' to='/'>
                 <FormattedMessage
-                  id='nav.home'
+                  id='nav.Home'
                   defaultMessage='Home'
                 />
               </Link>
@@ -32,13 +32,13 @@ class UnAuthenticatedNav extends BaseComponent {
               <ul className='nav navbar-nav'>
                 <NavItem to='/register'>
                   <FormattedMessage
-                    id='nav.register'
+                    id='nav.Register'
                     defaultMessage='Register'
                   />
                 </NavItem>
                 <NavItem to='/login'>
                   <FormattedMessage
-                    id='nav.login'
+                    id='nav.Login'
                     defaultMessage='Login'
                   />
                 </NavItem>

@@ -10,7 +10,7 @@ class Home extends BaseComponent {
       <div>
         <h1>
           <FormattedMessage
-            id='nav.home'
+            id='nav.Home'
             defaultMessage='Home'
           />
         </h1>

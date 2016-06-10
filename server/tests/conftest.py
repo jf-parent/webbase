@@ -20,6 +20,7 @@ def client():
 
     config = {
         "DEBUG": True,
+        "TEST": True,
         "MONGO_DATABASE_NAME": "webbase_test",
         "MONGO_HOST": "127.0.0.1",
         "SERVER_PORT": 1337,
@@ -39,10 +40,12 @@ def client():
             {
                 'name': 'test',
                 'email': 'test@test.com',
+                'email_validation_token': '123456',
                 'password': '123456'
             }, {
                 'name': 'to.disable',
                 'email': 'to.disable@to.disable.com',
+                'email_validation_token': '1337',
                 'password': '123456'
             }, {
                 'name': 'admin',

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import Ladda from 'react-ladda'
-// import laddaStyle from 'ladda/dist/ladda-themeless.min.css'
+import 'ladda/dist/ladda-themeless.min.css'
 
 class LaddaButton extends Component {
   static propTypes = {
@@ -33,7 +33,7 @@ class LaddaButton extends Component {
           disabled={this.state.isDisabled}
           className={buttonClass.join(' ')}
           onClick={this.props.onSubmit}
-          loading={this.state.isLoading}
+          loading={this.props.isLoading}
           buttonStyle='zoom-out'
           {...this.props}
         >

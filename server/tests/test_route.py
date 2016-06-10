@@ -43,6 +43,13 @@ def test_logout_route(client):
     assert response.content_type == 'application/json'
 
 
+def test_confirm_email_route(client):
+    response = client.post('/api/confirm_email')
+
+    assert response.status_code == 200
+    assert response.content_type == 'application/json'
+
+
 def test_register_route(client):
     response = client.post('/api/register')
 

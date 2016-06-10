@@ -12,7 +12,7 @@ class ErrorPage extends BaseComponent {
         <p>
           <h1 className='text-center'>
             <FormattedMessage
-              id='error-page.page-not-found'
+              id='errorPage.PageNotFound'
               defaultMessage='Page Not Found!'
             />
           </h1>

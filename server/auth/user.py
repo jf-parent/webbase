@@ -6,6 +6,7 @@ from validate_email import validate_email
 from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server.exceptions import *  # noqa
+from server.utils import generate_token
 
 NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa
@@ -16,6 +17,8 @@ class User(Document):
     email = StringField(required=True)
     role = EnumField(StringField(), 'admin', 'user')
     enable = BoolField(default=True)
+    email_validation_token = StringField()
+    email_confirmed = BoolField(default=False)
     # settings =
     # social_id =
     # social_provider =
@@ -30,6 +33,8 @@ class User(Document):
 
     # INDEX
     i_email = Index().ascending('email').unique()
+    i_email_validation_token = Index()\
+        .ascending('email_validation_token').unique()
 
     def __repr__(self):
         _repr = "User <name:'{name}'><email:'{email}'><role:'{role}'><enable:'{enable}'>"  # noqa
@@ -90,6 +95,11 @@ class User(Document):
         self.name = name
 
         self.role = data.get('role', 'user')
+
+        if data.get('email_validation_token'):
+            self.email_validation_token = data.get('email_validation_token')
+        else:
+            self.email_validation_token = generate_token(20)
 
         self.enable = data.get('enable', True)
 

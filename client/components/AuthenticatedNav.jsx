@@ -23,7 +23,7 @@ class AuthenticatedNav extends BaseComponent {
               </button>
               <Link className='navbar-brand' to='/'>
                 <FormattedMessage
-                  id='nav.home'
+                  id='nav.Home'
                   defaultMessage='Home'
                 />
               </Link>
@@ -32,19 +32,19 @@ class AuthenticatedNav extends BaseComponent {
               <ul className='nav navbar-nav'>
                 <NavItem to='/profile'>
                   <FormattedMessage
-                    id='nav.profile'
+                    id='nav.Profile'
                     defaultMessage='Profile'
                   />
                 </NavItem>
                 <NavItem to='/settings'>
                   <FormattedMessage
-                    id='nav.settings'
+                    id='nav.Settings'
                     defaultMessage='Settings'
                   />
                 </NavItem>
                 <NavItem to='/logout'>
                   <FormattedMessage
-                    id='nav.logout'
+                    id='nav.Logout'
                     defaultMessage='Logout'
                   />
                 </NavItem>

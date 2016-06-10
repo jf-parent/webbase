@@ -52,7 +52,7 @@ def exception_handler():
                     return (await func(args[-1]))
             except CSRFMismatch as e:
                 security_violation_attempt_counter.inc()
-                data = {'success': False, 'error': 'TokenMismatch'}
+                data = {'success': False, 'error': 'CSRFMismatch'}
 
                 return web.json_response(data)
             except Exception as e:

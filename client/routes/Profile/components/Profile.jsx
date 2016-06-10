@@ -16,7 +16,7 @@ class Profile extends BaseComponent {
     return (
       <div>
         <FormattedMessage
-          id='nav.profile'
+          id='nav.Profile'
           defaultMessage='Profile'
         />
       </div>

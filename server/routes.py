@@ -8,6 +8,7 @@ routes = [
     # API ROUTES
     ('GET', '/api/get_session', api_get_session, 'get_session'),
     ('GET', '/api/admin', api_admin, 'admin'),
+    ('POST', '/api/confirm_email', api_confirm_email, 'api_confirm_email'),
     ('*', '/api/login', Login, 'api_login'),
     ('*', '/api/register', Register, 'api_register'),
     ('*', '/api/logout', Logout, 'api_logout'),

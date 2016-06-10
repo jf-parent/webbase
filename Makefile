@@ -40,6 +40,9 @@ stop-server-prod:
 query:
 	python scripts/query.py
 
+reset-db:
+	python scripts/reset_db.py
+
 stats:
 	cloc client
 	cloc server

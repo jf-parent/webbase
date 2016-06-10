@@ -72,7 +72,8 @@ export default function login (state = initialState, action) {
       return Object.assign({},
         state,
         {
-          loading: true
+          loading: true,
+          error: null
         }
       )
 

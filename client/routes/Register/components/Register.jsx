@@ -12,15 +12,15 @@ import PasswordInput from 'components/ux/PasswordInput'
 
 const registerMessages = defineMessages({
   emailPlaceholder: {
-    id: 'register.emailPlaceholder',
+    id: 'register.EmailPlaceholder',
     defaultMessage: 'Email address'
   },
   namePlaceholder: {
-    id: 'register.namePlaceholder',
+    id: 'register.NamePlaceholder',
     defaultMessage: 'Name'
   },
   passwordPlaceholder: {
-    id: 'register.passwordPlaceholder',
+    id: 'register.PasswordPlaceholder',
     defaultMessage: 'Password'
   }
 })
@@ -64,7 +64,7 @@ class Register extends BaseComponent {
           <h2 className={SecureFormStyle['form-signin-heading']}>
 
             <FormattedMessage
-              id='register.registration'
+              id='register.Registration'
               defaultMessage='Registration'
             />
           </h2>
@@ -73,7 +73,7 @@ class Register extends BaseComponent {
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} required />
           <LaddaButton ref='button' isDisabled isLoading={this.props.register.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
-              id='register.register-btn'
+              id='register.RegisterBtn'
               defaultMessage='Register'
             />
           </LaddaButton>
@@ -82,7 +82,7 @@ class Register extends BaseComponent {
         <p>
           <Link to='/login'>
             <FormattedMessage
-              id='register.already-have-an-account'
+              id='register.AlreadyHaveAnAccount'
               defaultMessage='Already have an account? Log in here'
             />
           </Link>

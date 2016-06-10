@@ -1,9 +1,21 @@
 {
+    "REST_API_ID" = "", #CHANGEME
+    "REST_API_SECRET" = "", #CHANGEME
     "LOG_LEVEL": "ERROR",
     "DEBUG": false,
+    "TEST": false,
     "MONGO_DATABASE_NAME": "webbase-prod",
     "MONGO_HOST": "127.0.0.1",
     "SERVER_PORT": 80,
     "SERVER_HOST": "0.0.0.0",
-    "MASTER_PASSWORD": "" #CHANGEME
+    "MASTER_PASSWORD": "" #CHANGEME,
+    "email_confirmation_email": {
+        'subject': 'Webbase Email Account Confirmation',
+        'html': '<p>Please click <a href="https://domain.com/confirm-email/{email_validation_token}">here</a> to confirm your email account'</p>',
+        'text': 'Please click here to confirm your email account: https://domain.com/confirm-email/{email_validation_token}',
+        'from': {'name': 'Webbase', 'email': 'no-reply@domain.com'},
+        'to': [{
+            'name': '{user_name}', 'email': '{user_email}'
+        }]
+    }
 }

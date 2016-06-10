@@ -11,11 +11,11 @@ export const requireNotAuth = (store) => {
 
 export const requireAuth = (store) => {
   return function (nextState, replace) {
-    const user = store.getState().session.user
-    if (!user) {
+    const session = store.getState().session
+    if (!session.user) {
       replace({
         pathname: '/login',
-        state: { nextPathname: nextState.location.pathname }
+        state: { nextPath: nextState.location }
       })
     }
   }

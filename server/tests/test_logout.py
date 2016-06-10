@@ -62,4 +62,4 @@ def test_logout_with_wrong_token(client):
     )
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'TokenMismatch'
+    assert response.json['error'] == 'CSRFMismatch'

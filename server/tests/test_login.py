@@ -13,7 +13,7 @@ def test_login_without_token(client):
         {'email': 'test@test.com', 'password': '123456'}
     )
     assert response.status_code == 200
-    assert response.json == {'success': False, 'error': 'TokenMismatch'}
+    assert response.json == {'success': False, 'error': 'CSRFMismatch'}
 
 
 def test_login_with_wrong_token(client):
@@ -22,7 +22,7 @@ def test_login_with_wrong_token(client):
         {'email': 'test@test.com', 'password': '123456', 'token': '1337'}
     )
     assert response.status_code == 200
-    assert response.json == {'success': False, 'error': 'TokenMismatch'}
+    assert response.json == {'success': False, 'error': 'CSRFMismatch'}
 
 
 def test_login_with_disabled_user(client):

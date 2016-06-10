@@ -30,7 +30,7 @@ const PasswordInput = React.createClass({
   validate () {
     let value = this.getValue()
     if (value.length >= 1 & value.length < 6) {
-      this.setState({errorMessage: 'password too short!'})
+      this.setState({errorMessage: 'PasswordTooShort'})
       return false
     }
     return true
@@ -79,7 +79,7 @@ const PasswordInput = React.createClass({
 
     if (!this.state.quiet) {
       if (this.state.showErrMsg) {
-        errorMsg = errorMessage ? <ErrorMsg msg={errorMessage} name={'error-msg-' + this.props.name} /> : null
+        errorMsg = errorMessage ? <ErrorMsg msgId={errorMessage} name={'errorMsg-' + this.props.name} /> : null
       }
     }
     let type = this.state.showPassword ? 'text' : 'password'

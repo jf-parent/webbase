@@ -6,7 +6,8 @@
     "start": "NODE_ENV=development ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
-    "build": "NODE_ENV=production webpack",
+    "build:prod": "NODE_ENV=production webpack",
+    "build:dev": "NODE_ENV=development webpack",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true"
   },
   "engines": {

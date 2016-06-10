@@ -3,9 +3,10 @@ import time
 from aiohttp_session import get_session
 from aiohttp import web
 
+from libs.pysendpulse import PySendPulse
 from server.exceptions import *  # noqa
 from server.auth.user import User
-from server.settings import logger
+from server.settings import logger, config
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
 
@@ -59,10 +60,39 @@ class Register(web.View):
         except:
             raise InvalidRequestException('No json send')
 
+        # INIT USER
         user = User()
         await user.init_and_validate(self.request.db_session, data)
-        self.request.db_session.save(user)
+
+        # SET SESSION
         await set_session(user, self.request)
+
+        if not config.get('TEST'):
+            # FORMAT EMAIL TEMPLATE
+            email = config.get('email_confirmation_email')
+            email['text'] = email['text'].format(
+                email_validation_token=user.email_validation_token
+            )
+            email['html'] = email['html'].format(
+                email_validation_token=user.email_validation_token
+            )
+            email['to'][0]['email'] = email['to'][0]['email'].format(
+                user_email=user.email
+            )
+            email['to'][0]['name'] = email['to'][0]['name'].format(
+                user_name=user.name
+            )
+
+            # TODO run in a queue
+            SPApiProxy = PySendPulse(
+                config.get('REST_API_ID'),
+                config.get('REST_API_SECRET')
+            )
+            SPApiProxy.smtp_send_mail(email)
+
+        # SAVE
+        self.request.db_session.save(user)
+
         data = {'success': True, 'user': await user.serialize()}
 
         return web.json_response(data)
@@ -88,4 +118,59 @@ async def api_admin(request):
     email = session.get('email')
     user = request.db_session.query(User).filter(User.email == email).one()
     data = {'success': True, 'user': await user.serialize()}
+    return web.json_response(data)
+
+
+@exception_handler()
+@require('login')
+async def api_confirm_email(request):
+    logger.debug('confirm_email')
+
+    session = await get_session(request)
+    params = await request.json()
+
+    email_validation_token = params['token']
+
+    user_query = request.db_session.query(User)\
+        .filter(User.email_validation_token == email_validation_token)
+    if user_query.count():
+        user = user_query.one()
+
+        # SESSION EMAIL MISMATCH TOKEN EMAIL
+        if session['email'] != user.email:
+            raise EmailMismatchException(
+                'token email ("{temail}") session email ("{semail}")'
+                .format(
+                    temail=user.email,
+                    semail=session['email']
+                )
+            )
+
+        # EMAIL ALREADY CONFIRMED
+        if user.email_confirmed:
+            raise EmailAlreadyConfirmedException('email already confirmed')
+        else:
+            user.email_confirmed = True
+            request.db_session.save(user)
+
+    # TOKEN NOT FOUND
+    else:
+        raise EmailValidationTokenInvalidException('token not found')
+
+    session = await get_session(request)
+
+    success = False
+    user = None
+
+    email = session.get('email')
+    if email:
+        user = request.db_session.query(User).filter(User.email == email).one()
+        if user.enable:
+            user = await user.serialize()
+            success = True
+        else:
+            User.logout(session)
+            user = None
+
+    data = {'success': success, 'user': user}
     return web.json_response(data)

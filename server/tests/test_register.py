@@ -23,7 +23,7 @@ def test_register_without_token(client):
         {'email': 'test@test.com', 'name': 'test', 'password': '123456'}
     )
     assert response.status_code == 200
-    assert response.json == {'success': False, 'error': 'TokenMismatch'}
+    assert response.json == {'success': False, 'error': 'CSRFMismatch'}
 
 
 def test_register_with_wrong_token(client):
@@ -37,7 +37,7 @@ def test_register_with_wrong_token(client):
         }
     )
     assert response.status_code == 200
-    assert response.json == {'success': False, 'error': 'TokenMismatch'}
+    assert response.json == {'success': False, 'error': 'CSRFMismatch'}
 
 
 def test_register_name_too_short(client):

@@ -47,10 +47,17 @@ function loginLogoutHandler () {
   let currentUser = state.session.user
   logger.debug('[Entry] currentUser (', currentUser, ') previousUser(', previousUser, ')')
   if (previousUser !== currentUser) {
-    let routerState = state.router.locationBeforeTransitions.state
+    let nextPathname = state.router.locationBeforeTransitions
     let nextPath = '/profile'
-    if (routerState) {
-      nextPath = routerState.nextPathname ? routerState.nextPathname : '/profile'
+    if (nextPathname) {
+      // TODO find a better way
+      if (nextPathname.state) {
+        nextPath = nextPathname.state.nextPath
+      } else {
+        if (nextPathname.pathname !== '/login' && nextPathname.pathname !== '/register') {
+          nextPath = nextPathname
+        }
+      }
     }
     previousUser = currentUser
     // Login

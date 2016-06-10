@@ -33,3 +33,15 @@ class CSRFMismatch(ServerBaseException):
 
 class InvalidRequestException(ServerBaseException):
     pass
+
+
+class EmailValidationTokenInvalidException(ServerBaseException):
+    pass
+
+
+class EmailAlreadyConfirmedException(ServerBaseException):
+    pass
+
+
+class EmailMismatchException(ServerBaseException):
+    pass
