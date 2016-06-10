@@ -1,4 +1,4 @@
-from libs.pysendpulse import PySendPulse
+from jobs.send_email import PySendPulse
 
 from server.utils import generate_token
 from server.settings import config

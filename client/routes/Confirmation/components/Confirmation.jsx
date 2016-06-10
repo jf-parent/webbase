@@ -5,7 +5,7 @@ import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
 import ErrorMsg from 'components/ux/ErrorMsg'
 
-class Redirect extends BaseComponent {
+class Confirmation extends BaseComponent {
   constructor (props) {
     super(props)
 
@@ -26,8 +26,8 @@ class Redirect extends BaseComponent {
   render () {
     this.debug('render')
 
-    const errorMsg = this.props.state.redirect.error
-    const msgId = this.props.state.redirect.msgId
+    const errorMsg = this.props.state.confirmation.error
+    const msgId = this.props.state.confirmation.msgId
 
     if (errorMsg) {
       return (
@@ -48,4 +48,4 @@ class Redirect extends BaseComponent {
   }
 }
 
-module.exports = Redirect
+module.exports = Confirmation

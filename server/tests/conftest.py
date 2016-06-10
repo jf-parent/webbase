@@ -19,8 +19,7 @@ def client():
     asyncio.set_event_loop(loop)
 
     config = {
-        "DEBUG": True,
-        "TEST": True,
+        "ENV": "test",
         "MONGO_DATABASE_NAME": "webbase_test",
         "MONGO_HOST": "127.0.0.1",
         "SERVER_PORT": 1337,

@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { actions } from '../modules/reducer'
-import Redirect from '../components/Redirect'
+import Confirmation from '../components/Confirmation'
 
 function mapStateToProps (state) {
   return {
@@ -16,4 +16,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Redirect)
+export default connect(mapStateToProps, mapDispatchToProps)(Confirmation)

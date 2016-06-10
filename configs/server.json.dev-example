@@ -2,8 +2,7 @@
     "REST_API_ID" = "", #CHANGEME
     "REST_API_SECRET" = "", #CHANGEME
     "LOG_LEVEL": "DEBUG",
-    "DEBUG": true,
-    "TEST": false,
+    "ENV": "development",
     "MONGO_DATABASE_NAME": "webbase-dev",
     "MONGO_HOST": "127.0.0.1",
     "SERVER_PORT": 8000,

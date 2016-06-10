@@ -4,6 +4,15 @@ deps:
 deps-dev:
 	pip install -r requirements-dev.txt
 
+start-queue-prod:
+	scripts/start_rqueue.sh
+
+stop-queue-prod:
+	scripts/stop_rqueue.sh
+
+queue-dev:
+	rq worker
+
 prometheus-dev:
 	/opt/prometheus/prometheus -config.file configs/prometheus.yml
 

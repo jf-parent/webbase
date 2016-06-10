@@ -15,6 +15,14 @@ $ chkconfig sshd on
 $ systemctl start sshd
 ```
 
+## Install Redis
+
+```bash
+$ yum install redis
+$ systemctl enable redis
+$ mkdir /var/log/rqueue
+```
+
 ## Install Go
 
 Ref: http://www.starkandwayne.com/blog/how-to-install-go-on-digital-ocean/
@@ -332,4 +340,10 @@ $ webpack-dev-server
 
 ```bash
 $ npm run build
+```
+
+## QUEUE
+
+```bash
+$ rq worker
 ```

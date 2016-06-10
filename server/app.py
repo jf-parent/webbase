@@ -3,14 +3,14 @@
 import os
 import asyncio
 import sys
-import base64
 
+from redis import Redis
+from rq import Queue
+import aioredis
+from aiohttp_session import redis_storage, session_middleware
 import jinja2
 import aiohttp_jinja2
-from cryptography import fernet
-from aiohttp_session import session_middleware
 from prometheus_client import start_http_server
-from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from aiohttp import web
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -21,9 +21,13 @@ from server.routes import routes  # noqa
 from server.middlewares import db_handler  # noqa
 from server.settings import config, logger, ROOT  # noqa
 
+
 async def on_shutdown(app):
+    pass
+    """
     for ws in app['websockets']:
         await ws.close(code=1001, message='Server shutdown')
+    """
 
 
 async def shutdown(server, app, handler):
@@ -33,27 +37,39 @@ async def shutdown(server, app, handler):
     await app.shutdown()
     await handler.finish_connections(10.0)
     await app.cleanup()
+    await app.redis_pool.clear()
 
 
 async def init(loop, config_args=None):
+    # CONFIG
     config.configure(config_args)
     logger.debug('config: {config}'.format(config=config))
-    fernet_key = fernet.Fernet.generate_key()
-    secret_key = base64.urlsafe_b64decode(fernet_key)
+
+    # SESSION
+    redis_pool = await aioredis.create_pool(('localhost', 6379))
+    storage = redis_storage.RedisStorage(redis_pool)
     app = web.Application(loop=loop, middlewares=[
-        session_middleware(EncryptedCookieStorage(secret_key)),
+        session_middleware(storage),
         db_handler
     ])
 
+    app.redis_pool = redis_pool
+
+    # QUEUE
+    app.queue = Queue(connection=Redis())
+
     # WEBSOCKET
+    """
     app['websockets'] = []
+    """
+
     handler = app.make_handler()
 
     # ROUTES
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if config.get('DEBUG'):
+    if config.get('ENV', 'production') == 'development':
         static_path = os.path.join(ROOT, 'dist-dev')
     else:
         static_path = os.path.join(ROOT, 'dist-prod')

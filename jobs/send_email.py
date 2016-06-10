@@ -2,31 +2,23 @@
 
 # patched for python 3.5
 
-""" API wrapper for interacting with SendPulse REST API
-Documentation:
-    https://login.sendpulse.com/manual/rest-api/
-    https://sendpulse.com/api
-"""
-
 import os
+import json
 import memcache
 import requests
 import logging
 import base64
 from hashlib import md5
 
-try:
-    import simplejson as json
-except ImportError:
-    try:
-        import json
-    except ImportError:
-        try:
-            from django.utils import simplejson as json
-        except ImportError:
-            raise ImportError('A json library is required to use this python library')
-
 logging.basicConfig(format='%(levelname)-8s [%(asctime)s]  %(message)s', level=logging.DEBUG)
+
+def send_email_confirmation_email(rest_api_id, rest_api_secret, email):
+    print("Sending confirmation email: {email}".format(email = email))
+    SPApiProxy = PySendPulse(
+        rest_api_id,
+        rest_api_secret
+    )
+    SPApiProxy.smtp_send_mail(email)
 
 
 class PySendPulse:

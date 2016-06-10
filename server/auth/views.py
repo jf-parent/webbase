@@ -3,12 +3,12 @@ import time
 from aiohttp_session import get_session
 from aiohttp import web
 
-from libs.pysendpulse import PySendPulse
 from server.exceptions import *  # noqa
 from server.auth.user import User
 from server.settings import logger, config
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
+from jobs.send_email import send_email_confirmation_email
 
 
 async def set_session(user, request):
@@ -67,7 +67,7 @@ class Register(web.View):
         # SET SESSION
         await set_session(user, self.request)
 
-        if not config.get('TEST'):
+        if config.get('ENV', 'production') == 'production':
             # FORMAT EMAIL TEMPLATE
             email = config.get('email_confirmation_email')
             email['text'] = email['text'].format(
@@ -83,12 +83,12 @@ class Register(web.View):
                 user_name=user.name
             )
 
-            # TODO run in a queue
-            SPApiProxy = PySendPulse(
+            self.request.app.queue.enqueue(
+                send_email_confirmation_email,
                 config.get('REST_API_ID'),
-                config.get('REST_API_SECRET')
+                config.get('REST_API_SECRET'),
+                email
             )
-            SPApiProxy.smtp_send_mail(email)
 
         # SAVE
         self.request.db_session.save(user)

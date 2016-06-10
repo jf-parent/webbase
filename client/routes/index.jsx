@@ -5,7 +5,7 @@ import Profile from 'routes/Profile'
 import ErrorPage from 'routes/ErrorPage'
 import Settings from 'routes/Settings'
 import Register from 'routes/Register'
-import Redirect from 'routes/Redirect'
+import Confirmation from 'routes/Confirmation'
 
 export const createRoutes = (store) => ({
   path: '/',
@@ -16,7 +16,7 @@ export const createRoutes = (store) => ({
     Logout(store),
     Settings(store),
     Register(store),
-    Redirect(store),
+    Confirmation(store),
     ErrorPage(store)
   ]
 })

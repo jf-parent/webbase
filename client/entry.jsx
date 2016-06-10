@@ -25,6 +25,12 @@ const history = InitStoreHistory.history
 import AppContainer from './containers/AppContainer'
 
 // ========================================================
+// IMAGES
+// ========================================================
+
+require.context('./images', true, /^\.\//)
+
+// ========================================================
 // BOOTSTRAP
 // ========================================================
 
@@ -50,13 +56,8 @@ function loginLogoutHandler () {
     let nextPathname = state.router.locationBeforeTransitions
     let nextPath = '/profile'
     if (nextPathname) {
-      // TODO find a better way
       if (nextPathname.state) {
         nextPath = nextPathname.state.nextPath
-      } else {
-        if (nextPathname.pathname !== '/login' && nextPathname.pathname !== '/register') {
-          nextPath = nextPathname
-        }
       }
     }
     previousUser = currentUser
