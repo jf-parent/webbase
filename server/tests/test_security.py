@@ -1,5 +1,3 @@
-
-
 def test_public_api_authorized(client):
     response = client.get('/api/get_session')
     assert response.status_code == 200

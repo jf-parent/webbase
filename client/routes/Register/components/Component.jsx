@@ -12,15 +12,15 @@ import PasswordInput from 'components/ux/PasswordInput'
 
 const registerMessages = defineMessages({
   emailPlaceholder: {
-    id: 'register.EmailPlaceholder',
+    id: 'general.EmailPlaceholder',
     defaultMessage: 'Email address'
   },
   namePlaceholder: {
-    id: 'register.NamePlaceholder',
+    id: 'general.NamePlaceholder',
     defaultMessage: 'Name'
   },
   passwordPlaceholder: {
-    id: 'register.PasswordPlaceholder',
+    id: 'general.PasswordPlaceholder',
     defaultMessage: 'Password'
   }
 })
@@ -33,7 +33,14 @@ class Register extends BaseComponent {
     this._bind('enableButton', 'disableButton', 'onSubmit')
   }
 
-  onSubmit () {
+  componentWillUnmount () {
+    this.debug('componentWillUnmount')
+    this.props.actions.resetRegisterState()
+  }
+
+  onSubmit (event) {
+    event.preventDefault()
+
     this.debug('onSubmit')
 
     this.props.actions.doRegister(this.refs.form.getModel())
@@ -53,14 +60,14 @@ class Register extends BaseComponent {
     this.debug('render')
 
     const { formatMessage } = this._reactInternalInstance._context.intl
-    const errorMsg = this.props.register.error ? <ErrorMsg msgId={this.props.register.error} /> : null
+    const errorMsg = this.props.state.register.errorMsgId ? <ErrorMsg msgId={this.props.state.register.errorMsgId} /> : null
     const emailPlaceholder = formatMessage(registerMessages.emailPlaceholder)
     const namePlaceholder = formatMessage(registerMessages.namePlaceholder)
     const passwordPlaceholder = formatMessage(registerMessages.passwordPlaceholder)
 
     return (
       <center>
-        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.session}>
+        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
           <h2 className={SecureFormStyle['form-signin-heading']}>
 
             <FormattedMessage
@@ -71,7 +78,7 @@ class Register extends BaseComponent {
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
           <ValidatedInput type='text' name='name' placeholder={namePlaceholder} required validations='minLength:2' maxLength='60' />
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} required />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.register.loading} onSubmit={this.onSubmit}>
+          <LaddaButton ref='button' isDisabled isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='register.RegisterBtn'
               defaultMessage='Register'

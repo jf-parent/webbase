@@ -7,6 +7,7 @@ var APP_DIR = path.resolve(__dirname, 'client');
 
 console.log('[*] BUILD_DIR:', BUILD_DIR);
 console.log('[*] APP_DIR:', APP_DIR);
+console.log('[*]', definePlugin['definitions']);
 
 var config = {
 
@@ -49,7 +50,7 @@ var config = {
     noParse: [/sinon/],
     loaders : [
       { test: /sinon.*\.js$/,   loader: "imports?define=>false,require=>false"  },
-      { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
+      { test : /\.(js|jsx)$/, include : APP_DIR, loader : 'babel' },
       { test: /\.json$/, loader: 'json' },
       {
         test: /\.css$/,

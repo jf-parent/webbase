@@ -21,7 +21,7 @@ class ErrorMsg extends Component {
           }}
         />
         <FormattedMessage
-          id={'errorMsg.' + this.props.msgId}
+          id={this.props.msgId}
           defaultMessage={this.props.msgId}
         />
       </div>

@@ -2,12 +2,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import { actions } from '../modules/reducer'
-import Register from '../components/Register'
+import Component from '../components/Component'
 
 function mapStateToProps (state) {
   return {
-    register: state.register,
-    session: state.session
+    state
   }
 }
 
@@ -17,4 +16,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default connect(mapStateToProps, mapDispatchToProps)(Component)

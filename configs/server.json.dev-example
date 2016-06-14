@@ -16,5 +16,14 @@
         "to": [{
             "name": "{user_name}", "email": "{user_email}"
         }]
+    },
+    "reset_password_email": {
+        "subject": "Webbase Reset Password",
+        "html": "<p>Please click <a href='http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}'>here</a> to reset your password.</p>",
+        "text": "Please click here to reset your password: http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}",
+        "from": {"name": "Webbase", "email": "parent.j.f@gmail.com"},
+        "to": [{
+            "name": "{user_name}", "email": "{user_email}"
+        }]
     }
 }

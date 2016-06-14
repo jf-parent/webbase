@@ -17,13 +17,13 @@ definePlugin = new webpack.DefinePlugin({
 
 var config;
 if (isProd) {
-    console.log('[*] Prod config');
+    console.log('[*] Using PROD config');
     config = require('./webpack.prod.config.js');
 } else if (isTest) {
-    console.log('[*] Test config');
+    console.log('[*] Using TEST config');
     config = require('./webpack.test.config.js');
 } else {
-    console.log('[*] Dev config');
+    console.log('[*] Using DEV config');
     config = require('./webpack.dev.config.js');
 }
 

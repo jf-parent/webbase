@@ -1,11 +1,11 @@
-import { requireAuth } from '../../Auth'
-import { injectReducer } from '../../store/reducers'
+import { injectReducer } from 'store/reducers'
+import { requireNotAuth } from 'Auth'
 
-const routeName = 'logout'
+const routeName = 'forgottenpassword'
 
 export default (store) => ({
   path: routeName,
-  onEnter: requireAuth(store),
+  onEnter: requireNotAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const Container = require('./containers/Container').default

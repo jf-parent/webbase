@@ -12,8 +12,8 @@ from hashlib import md5
 
 logging.basicConfig(format='%(levelname)-8s [%(asctime)s]  %(message)s', level=logging.DEBUG)
 
-def send_email_confirmation_email(rest_api_id, rest_api_secret, email):
-    print("Sending confirmation email: {email}".format(email = email))
+def send_email(rest_api_id, rest_api_secret, email):
+    print("Sending email: {email}".format(email = email))
     SPApiProxy = PySendPulse(
         rest_api_id,
         rest_api_secret

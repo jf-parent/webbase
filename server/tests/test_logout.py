@@ -1,4 +1,16 @@
 
+def test_logout_not_authorized(client):
+    response = client.post_json(
+        '/api/logout',
+        {
+            'token': client.__token__
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'NotAuthorizedException'
+
+
 def test_logout_with_right_token(client):
     # LOGIN
     response = client.post_json(

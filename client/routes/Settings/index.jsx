@@ -7,6 +7,6 @@ export default (store) => ({
     require.ensure([], (require) => {
       const Settings = require('./containers/SettingsContainer').default
       cb(null, Settings)
-    }, 'settings')
+    })
   }
 })

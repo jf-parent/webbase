@@ -1,3 +1,15 @@
+def test_confirm_email_not_authorized(client):
+    response = client.post_json(
+        '/api/confirm_email',
+        {
+            'token': client.__token__
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'NotAuthorizedException'
+
+
 def test_confirm_email_invalid_request(client):
     # LOGIN
     response = client.post_json(
@@ -12,7 +24,7 @@ def test_confirm_email_invalid_request(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    response = client.post('/api/confirm_email')
+    response = client.post_json('/api/confirm_email')
 
     assert response.status_code == 200
     assert not response.json['success']

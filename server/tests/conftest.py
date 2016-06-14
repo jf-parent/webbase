@@ -62,7 +62,7 @@ def client():
         for user_data in users:
             user = User()
             loop.run_until_complete(user.init_and_validate(session, user_data))
-            session.save(user)
+            session.save(user, safe=True)
 
     client = TestApp(app)
 

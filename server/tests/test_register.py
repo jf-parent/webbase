@@ -9,7 +9,7 @@ DEFAULT_PASSWORD = '123456'
 
 
 def test_register_empty_post(client):
-    response = client.post('/api/register')
+    response = client.post_json('/api/register')
     assert response.status_code == 200
     assert response.json == {
         'success': False,

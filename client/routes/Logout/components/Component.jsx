@@ -16,17 +16,17 @@ class Logout extends BaseComponent {
   logout () {
     this.debug('logout')
 
-    this.props.actions.doLogout(this.props.session.token)
+    this.props.actions.doLogout(this.props.state.session.token)
   }
 
   render () {
     this.debug('render')
 
-    const errorMsg = this.props.logout.error
+    const errorMsgId = this.props.state.logout.errorMsgId
 
-    if (errorMsg) {
+    if (errorMsgId) {
       return (
-        <ErrorMsg msgId={errorMsg} />
+        <ErrorMsg msgId={errorMsgId} />
       )
     } else {
       return (

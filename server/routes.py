@@ -9,6 +9,19 @@ routes = [
     ('GET', '/api/get_session', api_get_session, 'get_session'),
     ('GET', '/api/admin', api_admin, 'admin'),
     ('POST', '/api/confirm_email', api_confirm_email, 'api_confirm_email'),
+    ('POST', '/api/reset_password', api_reset_password, 'api_reset_password'),
+    (
+        'POST',
+        '/api/validate_reset_password_token',
+        api_validate_reset_password_token,
+        'api_validate_reset_password_token'
+    ),
+    (
+        'POST',
+        '/api/send_reset_password_token',
+        api_send_reset_password_token,
+        'api_send_reset_password_token'
+    ),
     ('*', '/api/login', Login, 'api_login'),
     ('*', '/api/register', Register, 'api_register'),
     ('*', '/api/logout', Logout, 'api_logout'),

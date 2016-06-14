@@ -3,7 +3,7 @@ import 'font-awesome-webpack'
 
 import BaseComponent from 'core/BaseComponent'
 
-var config = require('!json!../../configs/social_media.json')
+var config = require('../../configs/social_media.json')
 
 class SocialMedia extends BaseComponent {
 

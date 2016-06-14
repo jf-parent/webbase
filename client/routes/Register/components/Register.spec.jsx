@@ -2,16 +2,16 @@ import React from 'react'
 import { expect } from 'chai'
 
 import TestHelper from 'helpers/TestHelper'
-import RegisterContainer from '../containers/RegisterContainer'
-import registerReducer from 'routes/Register/modules/reducer'
+import Container from '../containers/Container'
+import reducer from '../modules/reducer'
 
 describe('<Register />', () => {
   let wrapper
 
   beforeEach(() => {
-    TestHelper.injectRequiredReducer('register', registerReducer)
+    TestHelper.injectRequiredReducer('register', reducer)
     wrapper = TestHelper.mountWithContext(
-      <RegisterContainer />
+      <Container />
     )
   })
 
@@ -125,5 +125,4 @@ describe('<Register />', () => {
     expect(wrapper.find('input:not([type="hidden"])')).to.have.lengthOf(3)
   })
   */
-
 })

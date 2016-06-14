@@ -40,9 +40,10 @@ export function doRegister (data) {
 }
 
 function registerError (error) {
+  const errorMsgId = 'register.' + error
   return {
     type: REGISTER_ERROR,
-    error
+    errorMsgId
   }
 }
 
@@ -63,36 +64,29 @@ export const actions = {
 
 const initialState = {
   loading: false,
-  error: null
+  errorMsgId: null
 }
 
 export default function register (state = initialState, action) {
   switch (action.type) {
     case REGISTER_LOADING:
       return Object.assign({},
-        state,
+        initialState,
         {
-          loading: true,
-          error: null
+          loading: true
         }
       )
 
     case REGISTER_ERROR:
       return Object.assign({},
-        state,
+        initialState,
         {
-          loading: false,
-          error: action.error
+          errorMsgId: action.errorMsgId
         }
       )
     case REGISTER_RESET_STATE:
-      return Object.assign({},
-        state,
-        {
-          loading: false,
-          error: null
-        }
-      )
+      return initialState
+
     default:
       return state
   }

@@ -8,7 +8,11 @@ from server.auth.user import User
 from server.settings import logger, config
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
-from jobs.send_email import send_email_confirmation_email
+from jobs.send_email import send_email
+
+
+def get_user_from_session(session, db_session):
+    return db_session.query(User).filter(User.email == session['email']).one()
 
 
 async def set_session(user, request):
@@ -25,29 +29,31 @@ class Login(web.View):
     async def post(self):
         try:
             data = await self.request.json()
+            email = data['email']
+            password = data['password']
         except:
             raise InvalidRequestException('No json send')
 
         query = self.request.db_session.query(User)\
-            .filter(User.email == data.get('email'))
+            .filter(User.email == email)
         if query.count():
             user = query.one()
-            is_password_valid = await user.check_password(data.get('password'))
+            is_password_valid = await user.check_password(password)
             is_enable = user.enable
             if is_password_valid and is_enable:
                 await set_session(user, self.request)
-                data = {'success': True, 'user': await user.serialize()}
+                resp_data = {'success': True, 'user': await user.serialize()}
             else:
                 raise WrongEmailOrPasswordException(
                     "Wrong password: '{password}'"
-                    .format(password=data['password'])
+                    .format(password=password)
                 )
         else:
             raise WrongEmailOrPasswordException(
-                "Wrong email: '{email}'".format(email=data['email'])
+                "Wrong email: '{email}'".format(email=email)
             )
 
-        return web.json_response(data)
+        return web.json_response(resp_data)
 
 
 class Register(web.View):
@@ -83,19 +89,19 @@ class Register(web.View):
                 user_name=user.name
             )
 
+            # ADD THE SEND EMAIL TO THE QUEUE
             self.request.app.queue.enqueue(
-                send_email_confirmation_email,
+                send_email,
                 config.get('REST_API_ID'),
                 config.get('REST_API_SECRET'),
                 email
             )
 
         # SAVE
-        self.request.db_session.save(user)
+        self.request.db_session.save(user, safe=True)
 
-        data = {'success': True, 'user': await user.serialize()}
-
-        return web.json_response(data)
+        resp_data = {'success': True, 'user': await user.serialize()}
+        return web.json_response(resp_data)
 
 
 class Logout(web.View):
@@ -106,8 +112,8 @@ class Logout(web.View):
     async def post(self):
         session = await get_session(self.request)
         User.logout(session)
-        data = {'success': True}
-        return web.json_response(data)
+        resp_data = {'success': True}
+        return web.json_response(resp_data)
 
 
 @exception_handler()
@@ -117,8 +123,8 @@ async def api_admin(request):
     session = await get_session(request)
     email = session.get('email')
     user = request.db_session.query(User).filter(User.email == email).one()
-    data = {'success': True, 'user': await user.serialize()}
-    return web.json_response(data)
+    resp_data = {'success': True, 'user': await user.serialize()}
+    return web.json_response(resp_data)
 
 
 @exception_handler()
@@ -151,26 +157,39 @@ async def api_confirm_email(request):
             raise EmailAlreadyConfirmedException('email already confirmed')
         else:
             user.email_confirmed = True
-            request.db_session.save(user)
+            request.db_session.save(user, safe=True)
+            resp_data = {'success': True, 'user': await user.serialize()}
+            return web.json_response(resp_data)
 
     # TOKEN NOT FOUND
     else:
         raise EmailValidationTokenInvalidException('token not found')
 
+
+@exception_handler()
+@csrf_protected()
+@require('login')
+async def api_reset_password(request):
+    logger.debug('reset_password')
+
+    try:
+        data = await request.json()
+        new_password = data['password']
+        reset_password_token = data['reset_password_token']
+    except:
+        raise InvalidRequestException('Missing json data')
+
     session = await get_session(request)
 
-    success = False
-    user = None
+    user = get_user_from_session(session, request.db_session)
 
-    email = session.get('email')
-    if email:
-        user = request.db_session.query(User).filter(User.email == email).one()
-        if user.enable:
-            user = await user.serialize()
-            success = True
-        else:
-            User.logout(session)
-            user = None
+    if reset_password_token == user.reset_password_token:
+        user.reset_password_token = ''
+        await user.set_password(new_password)
+        request.db_session.save(user, safe=True)
 
-    data = {'success': success, 'user': user}
-    return web.json_response(data)
+        resp_data = {'success': True}
+        return web.json_response(resp_data)
+
+    else:
+        raise ResetPasswordTokenInvalidException('Token mismatch')

@@ -1,3 +1,6 @@
+import urllib
+import hashlib
+
 import bcrypt
 from mongoalchemy.document import Document, Index
 from mongoalchemy.fields import *  # noqa
@@ -17,8 +20,10 @@ class User(Document):
     email = StringField(required=True)
     role = EnumField(StringField(), 'admin', 'user')
     enable = BoolField(default=True)
-    email_validation_token = StringField()
+    email_validation_token = StringField(default="")
     email_confirmed = BoolField(default=False)
+    reset_password_token = StringField(default="")
+    gravatar_url = StringField(default="")
     # settings =
     # social_id =
     # social_provider =
@@ -33,8 +38,6 @@ class User(Document):
 
     # INDEX
     i_email = Index().ascending('email').unique()
-    i_email_validation_token = Index()\
-        .ascending('email_validation_token').unique()
 
     def __repr__(self):
         _repr = "User <name:'{name}'><email:'{email}'><role:'{role}'><enable:'{enable}'>"  # noqa
@@ -96,6 +99,15 @@ class User(Document):
 
         self.role = data.get('role', 'user')
 
+        # GRAVATAR
+        default_url = "/static/img/default_profile_icon.jpg"
+        gravatar_url = "{base_url}{md5_hash}?{params}".format(
+            base_url="https://www.gravatar.com/avatar/",
+            md5_hash=hashlib.md5(self.email.lower().encode('utf')).hexdigest(),
+            params=urllib.parse.urlencode({'d': default_url, 's': '40'})
+        )
+        self.gravatar_url = gravatar_url
+
         if data.get('email_validation_token'):
             self.email_validation_token = data.get('email_validation_token')
         else:
@@ -103,15 +115,21 @@ class User(Document):
 
         self.enable = data.get('enable', True)
 
-        # PASSWORD
-        password = data.get('password', '')
-        if len(password) < 6:
+        await self.set_password(data.get('password'))
+
+    async def set_password(self, password):
+        if await self.is_password_valid(password):
+            hashed_password, salt = await self.gen_hashed_password(password)
+            self.hashed_password = hashed_password
+            self.salt = salt
+        else:
             raise InvalidPasswordException(password)
 
-        # HASHED PASSWORD
-        hashed_password, salt = await self.gen_hashed_password(password)
-        self.hashed_password = hashed_password
-        self.salt = salt
+    async def is_password_valid(self, password):
+        if len(password) < 6:
+            return False
+        else:
+            return True
 
     async def serialize(self):
         data = {}

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
 
-var url = require('file!../assets/images/404.png')
+const url = require('file!../assets/images/404.png')
 
 class ErrorPage extends BaseComponent {
   render () {

@@ -8,7 +8,7 @@ var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 console.log('[*] BUILD_DIR:', BUILD_DIR);
 console.log('[*] APP_DIR:', APP_DIR);
-console.log('[*] definePlugin:', definePlugin);
+console.log('[*]', definePlugin['definitions']);
 
 var config = {
 
@@ -46,7 +46,7 @@ var config = {
 
   module : {
     loaders : [
-      { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
+      { test : /\.(js|jsx)$/, include : APP_DIR, loader : 'babel' },
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {
         test: /\.css$/,
@@ -58,7 +58,13 @@ var config = {
         )
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+      {
+        test: /\.(jpg|jpeg|gif|png|ico)$/,
+        exclude: /node_modules/,
+        loader:'file-loader?name=img/[path][name].[ext]&context=./client/images'
+      },
+      { test: /\.(ttf|eot|svg|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   }
 };

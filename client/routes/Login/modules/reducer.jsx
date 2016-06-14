@@ -40,9 +40,10 @@ export function doLogin (data) {
 }
 
 function loginError (error) {
+  const errorMsgId = 'login.' + error
   return {
     type: LOGIN_ERROR,
-    error
+    errorMsgId
   }
 }
 
@@ -63,36 +64,30 @@ export const actions = {
 
 const initialState = {
   loading: false,
-  error: null
+  errorMsgId: null
 }
 
 export default function login (state = initialState, action) {
   switch (action.type) {
     case LOGIN_LOADING:
       return Object.assign({},
-        state,
+        initialState,
         {
-          loading: true,
-          error: null
+          loading: true
         }
       )
 
     case LOGIN_ERROR:
       return Object.assign({},
-        state,
+        initialState,
         {
-          loading: false,
-          error: action.error
+          errorMsgId: action.errorMsgId
         }
       )
+
     case LOGIN_RESET_STATE:
-      return Object.assign({},
-        state,
-        {
-          loading: false,
-          error: null
-        }
-      )
+      return initialState
+
     default:
       return state
   }

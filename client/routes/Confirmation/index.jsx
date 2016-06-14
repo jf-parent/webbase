@@ -1,15 +1,17 @@
 import { injectReducer } from 'store/reducers'
 import { requireAuth } from 'Auth'
 
+const routeName = 'confirmation'
+
 export default (store) => ({
-  path: 'confirmation',
+  path: routeName,
   onEnter: requireAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const Confirmation = require('./containers/ConfirmationContainer').default
+      const Container = require('./containers/Container').default
       const reducer = require('./modules/reducer').default
-      injectReducer(store, { key: 'confirmation', reducer })
-      cb(null, Confirmation)
-    }, 'confirmation')
+      injectReducer(store, { key: routeName, reducer })
+      cb(null, Container)
+    })
   }
 })

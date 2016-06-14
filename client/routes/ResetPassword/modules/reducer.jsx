@@ -4,58 +4,58 @@ import axios from 'axios'
 // Constants
 // ====================================
 
-export const CONFIRMING_EMAIL = 'CONFIRMING_EMAIL'
-export const CONFIRM_EMAIL_SUCCESS = 'CONFIRM_EMAIL_SUCCESS'
-export const CONFIRM_EMAIL_ERROR = 'CONFIRM_EMAIL_ERROR'
+export const RESET_PASSWORD_LOADING = 'RESET_PASSWORD_LOADING'
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
+export const RESET_PASSWORD_ERROR = 'RESET_PASSWORD_ERROR'
 
 // ====================================
 // Logger
 // ====================================
 
-const logger = require('loglevel').getLogger('Confirmation')
+const logger = require('loglevel').getLogger('ResetPassword')
 logger.setLevel(__LOGLEVEL__)
 
 // ====================================
 // Actions
 // ====================================
 
-export function doConfirmEmail (token) {
+export function doResetPassword (data) {
   return dispatch => {
-    dispatch({type: CONFIRMING_EMAIL})
+    dispatch({type: RESET_PASSWORD_LOADING})
 
-    axios.post('/api/confirm_email', {token: token})
+    axios.post('/api/reset_password', data)
       .then((response) => {
-        logger.debug('/api/confirm_email (response)', response)
+        logger.debug('/api/reset_password (response)', response)
         if (response.data.success) {
-          dispatch(confirmEmailSuccess())
+          dispatch(resetPasswordSuccess())
         } else {
-          dispatch(confirmEmailError(response.data.error))
+          dispatch(resetPasswordError(response.data.error))
         }
       })
       .catch((response) => {
-        logger.debug('/api/confirm_email error (response)', response)
-        dispatch(confirmEmailError(response.data.error))
+        logger.debug('/api/reset_password error (response)', response)
+        dispatch(resetPasswordError(response.data.error))
       })
   }
 }
 
-export function confirmEmailSuccess () {
+export function resetPasswordSuccess () {
   return {
-    type: CONFIRM_EMAIL_SUCCESS,
-    successMsgId: 'confirmation.EmailConfirmationSuccessful'
+    type: RESET_PASSWORD_SUCCESS,
+    successMsgId: 'resetPassword.ResetPasswordSuccess'
   }
 }
 
-export function confirmEmailError (error) {
-  const errorMsgId = 'confirmation' + error
+export function resetPasswordError (error) {
+  const errorMsgId = 'forgottenPassword.' + error
   return {
-    type: CONFIRM_EMAIL_ERROR,
+    type: RESET_PASSWORD_ERROR,
     errorMsgId
   }
 }
 
 export const actions = {
-  doConfirmEmail
+  doResetPassword
 }
 
 // ====================================
@@ -68,9 +68,9 @@ const initialState = {
   errorMsgId: null
 }
 
-export default function confirmation (state = initialState, action) {
+export default function resetPassword (state = initialState, action) {
   switch (action.type) {
-    case CONFIRMING_EMAIL:
+    case RESET_PASSWORD_LOADING:
       return Object.assign({},
         initialState,
         {
@@ -78,7 +78,7 @@ export default function confirmation (state = initialState, action) {
         }
       )
 
-    case CONFIRM_EMAIL_SUCCESS:
+    case RESET_PASSWORD_SUCCESS:
       return Object.assign({},
         initialState,
         {
@@ -86,13 +86,14 @@ export default function confirmation (state = initialState, action) {
         }
       )
 
-    case CONFIRM_EMAIL_ERROR:
+    case RESET_PASSWORD_ERROR:
       return Object.assign({},
         initialState,
         {
           errorMsgId: action.errorMsgId
         }
       )
+
     default:
       return state
   }

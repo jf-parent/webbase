@@ -45,3 +45,11 @@ class EmailAlreadyConfirmedException(ServerBaseException):
 
 class EmailMismatchException(ServerBaseException):
     pass
+
+
+class ResetPasswordTokenInvalidException(ServerBaseException):
+    pass
+
+
+class EmailNotFound(ServerBaseException):
+    pass

@@ -12,11 +12,11 @@ import LaddaButton from 'components/ux/LaddaButton'
 
 const loginMessages = defineMessages({
   emailPlaceholder: {
-    id: 'login.emailPlaceholder',
+    id: 'general.EmailPlaceholder',
     defaultMessage: 'Email address'
   },
   passwordPlaceholder: {
-    id: 'login.passwordPlaceholder',
+    id: 'general.PasswordPlaceholder',
     defaultMessage: 'Password'
   }
 })
@@ -33,7 +33,8 @@ class Login extends BaseComponent {
     )
   }
 
-  onSubmit () {
+  onSubmit (event) {
+    event.preventDefault()
     this.debug('onSubmit()')
 
     this.props.actions.doLogin(this.refs.form.getModel())
@@ -58,13 +59,13 @@ class Login extends BaseComponent {
     this.debug('render')
 
     const { formatMessage } = this.props.intl
-    const errorMsg = this.props.login.error ? <ErrorMsg msgId={this.props.login.error} /> : null
+    const errorMsg = this.props.state.login.errorMsgId ? <ErrorMsg msgId={this.props.state.login.errorMsgId} /> : null
     const emailPlaceholder = formatMessage(loginMessages.emailPlaceholder)
     const passwordPlaceholder = formatMessage(loginMessages.passwordPlaceholder)
 
     return (
       <center>
-        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.session}>
+        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
           <h2 className={SecureFormStyle['form-signin-heading']}>
             <FormattedMessage
               id='login.PleaseLogin'
@@ -73,7 +74,7 @@ class Login extends BaseComponent {
           </h2>
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} quiet required />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.login.loading} onSubmit={this.onSubmit}>
+          <LaddaButton ref='button' isDisabled isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='login.SubmitBtn'
               defaultMessage='Login'
@@ -90,7 +91,7 @@ class Login extends BaseComponent {
           </Link>
         </p>
         <p>
-          <Link to='/forgotten-password'>
+          <Link to='/forgottenpassword'>
             <FormattedMessage
               id='login.ForgottenPassword-btn'
               defaultMessage='Forgot password?'

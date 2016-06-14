@@ -2,16 +2,16 @@ import React from 'react'
 import { expect } from 'chai'
 
 import TestHelper from 'helpers/TestHelper'
-import LoginContainer from '../containers/LoginContainer'
-import loginReducer from 'routes/Login/modules/reducer'
+import Container from '../containers/Container'
+import reducer from '../modules/reducer'
 
 describe('<Login />', () => {
   let wrapper
 
   beforeEach(() => {
-    TestHelper.injectRequiredReducer('login', loginReducer)
+    TestHelper.injectRequiredReducer('login', reducer)
     wrapper = TestHelper.mountWithContext(
-      <LoginContainer />
+      <Container />
     )
   })
 
@@ -98,5 +98,4 @@ describe('<Login />', () => {
     expect(wrapper.find('input:not([type="hidden"]))').to.have.lengthOf(2)
   })
   */
-
 })

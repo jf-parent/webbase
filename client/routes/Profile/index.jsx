@@ -1,13 +1,15 @@
 import { requireAuth } from '../../Auth'
 
+const routeName = 'profile'
+
 export default (store) => ({
-  path: 'profile',
+  path: routeName,
   onEnter: requireAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const Profile = require('./containers/ProfileContainer').default
-      cb(null, Profile)
-    }, 'profile')
+      const Container = require('./containers/Container').default
+      cb(null, Container)
+    })
   }
 })
 

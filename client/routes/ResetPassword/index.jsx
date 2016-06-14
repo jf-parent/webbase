@@ -1,7 +1,7 @@
-import { requireAuth } from '../../Auth'
-import { injectReducer } from '../../store/reducers'
+import { injectReducer } from 'store/reducers'
+import { requireAuth } from 'Auth'
 
-const routeName = 'logout'
+const routeName = 'resetpassword'
 
 export default (store) => ({
   path: routeName,

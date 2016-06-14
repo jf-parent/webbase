@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { resetSession } from '../../../actions/AuthActions'
+import { resetSession } from 'actions/AuthActions'
 
 // ====================================
 // Constants
@@ -49,9 +49,10 @@ export function logoutSuccess () {
 }
 
 export function logoutError (error) {
+  const errorMsgId = 'logout' + error
   return {
     type: LOGOUT_ERROR,
-    error
+    errorMsgId
   }
 }
 
@@ -65,38 +66,31 @@ export const actions = {
 
 const initialState = {
   loading: false,
-  error: null
+  errorMsgId: null
 }
 
 export default function logout (state = initialState, action) {
   switch (action.type) {
     case LOGOUT_LOADING:
       return Object.assign({},
-        state,
+        initialState,
         {
           loading: true
         }
       )
 
     case LOGOUT_SUCCESS:
-      return Object.assign({},
-        state,
-        {
-          loading: false,
-          error: null
-        }
-      )
+      return initialState
 
     case LOGOUT_ERROR:
       return Object.assign({},
-        state,
+        initialState,
         {
-          loading: false,
-          error: action.error
+          errorMsgId: action.errorMsgId
         }
       )
+
     default:
       return state
   }
 }
-

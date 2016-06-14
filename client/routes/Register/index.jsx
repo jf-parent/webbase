@@ -1,15 +1,17 @@
 import { requireNotAuth } from '../../Auth'
 import { injectReducer } from '../../store/reducers'
 
+const routeName = 'register'
+
 export default (store) => ({
-  path: 'register',
+  path: routeName,
   onEnter: requireNotAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const Register = require('./containers/RegisterContainer').default
+      const Container = require('./containers/Container').default
       const reducer = require('./modules/reducer').default
-      injectReducer(store, { key: 'register', reducer })
-      cb(null, Register)
+      injectReducer(store, { key: routeName, reducer })
+      cb(null, Container)
     }, 'register')
   }
 })

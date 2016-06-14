@@ -43,7 +43,7 @@ async def shutdown(server, app, handler):
 async def init(loop, config_args=None):
     # CONFIG
     config.configure(config_args)
-    logger.debug('config: {config}'.format(config=config))
+    logger.debug('Env: {env}'.format(env=config.get('ENV')))
 
     # SESSION
     redis_pool = await aioredis.create_pool(('localhost', 6379))

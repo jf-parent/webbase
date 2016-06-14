@@ -12,7 +12,7 @@ var clientAddr = serverConfig['SERVER_HOST'] + ':' + clientPort;
 
 console.log('[*] BUILD_DIR:', BUILD_DIR);
 console.log('[*] APP_DIR:', APP_DIR);
-console.log('[*] definePlugin:', definePlugin);
+console.log('[*]', definePlugin['definitions']);
 
 var config = {
 
@@ -48,13 +48,13 @@ var config = {
   module : {
     preLoaders: [
       {
-        test: /\.jsx$/,
+        test: /\.(js|jsx)$/,
         loaders: ['eslint'],
         include: APP_DIR
       }
     ],
     loaders : [
-      { test : /\.jsx?/, include : APP_DIR, loader : 'babel' },
+      { test : /\.(js|jsx)$/, include : APP_DIR, loader : 'babel' },
       {
         test: /\.css$/,
         loader: "style-loader!css-loader"
@@ -70,7 +70,8 @@ var config = {
         exclude: /node_modules/,
         loader:'file-loader?name=img/[path][name].[ext]&context=./client/images'
       },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      { test: /\.json$/, loader: 'json' }
     ]
   },
 

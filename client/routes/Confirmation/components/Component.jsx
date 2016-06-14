@@ -1,9 +1,9 @@
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
 import ErrorMsg from 'components/ux/ErrorMsg'
+import SuccessMsg from 'components/ux/SuccessMsg'
 
 class Confirmation extends BaseComponent {
   constructor (props) {
@@ -26,19 +26,16 @@ class Confirmation extends BaseComponent {
   render () {
     this.debug('render')
 
-    const errorMsg = this.props.state.confirmation.error
-    const msgId = this.props.state.confirmation.msgId
+    const errorMsgId = this.props.state.confirmation.errorMsgId
+    const successMsgId = this.props.state.confirmation.successMsgId
 
-    if (errorMsg) {
+    if (errorMsgId) {
       return (
-        <ErrorMsg msgId={errorMsg} />
+        <ErrorMsg msgId={errorMsgId} />
       )
-    } else if (msgId) {
+    } else if (successMsgId) {
       return (
-        <FormattedMessage
-          id={msgId}
-          defaultMessage={msgId}
-        />
+        <SuccessMsg msgId={successMsgId} />
       )
     } else {
       return (

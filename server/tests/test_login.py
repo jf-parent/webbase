@@ -1,5 +1,5 @@
 def test_login_empty_post(client):
-    response = client.post('/api/login')
+    response = client.post_json('/api/login')
     assert response.status_code == 200
     assert response.json == {
         'success': False,
