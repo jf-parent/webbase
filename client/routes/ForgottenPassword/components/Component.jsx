@@ -90,7 +90,7 @@ class ForgottenPassword extends BaseComponent {
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
           <LaddaButton ref='button' isDisabled isLoading={this.props.state.forgottenpassword.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
-              id='general.submit'
+              id='general.SubmitBtn'
               defaultMessage='Submit'
             />
           </LaddaButton>

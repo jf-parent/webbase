@@ -8,12 +8,13 @@
   "errorMsg.InvalidRequestException": "invalid request",
   "errorMsg.PasswordTooShort": "password too short",
   "errorMsg.Error": "Error: ",
+  "errorMsg.EmailAlreadyExistsException": "email already exists",
+  "errorMsg.InvalidNameException": "invalid name",
+  "errorMsg.InvalidPasswordException": "invalid password",
+  "errorMsg.InvalidEmailException": "invalid email",
+  "errorMsg.WrongEmailOrPasswordException": "wrong email or password",
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Reset password email send successfully!",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Reset password token invalid",
-  "login.WrongEmailOrPasswordException": "wrong email or password",
-  "register.EmailAlreadyExistsException": "email already exists",
-  "register.InvalidNameException": "invalid name",
-  "register.InvalidPasswordException": "invalid password",
-  "register.InvalidEmailException": "invalid email",
-  "resetPassword.ResetPasswordSuccess": "Your password has been changed successfully"
+  "profile.settingsSaveSuccessfully": "Profile settings save successfully!",
+  "resetPassword.ResetPasswordSuccess": "Your password has been changed successfully!"
 }

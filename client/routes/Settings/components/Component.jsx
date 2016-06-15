@@ -6,7 +6,9 @@ class Settings extends BaseComponent {
   render () {
     return (
       <div>
-        Settings
+        <h1>
+          Settings
+        </h1>
       </div>
     )
   }

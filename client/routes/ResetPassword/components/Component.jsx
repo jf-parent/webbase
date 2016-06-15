@@ -84,7 +84,7 @@ class ResetPassword extends BaseComponent {
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} required />
           <LaddaButton ref='button' isDisabled isLoading={this.props.state.resetpassword.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
-              id='general.submit'
+              id='general.SubmitBtn'
               defaultMessage='Submit'
             />
           </LaddaButton>

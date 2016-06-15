@@ -54,7 +54,7 @@ function loginLogoutHandler () {
   logger.debug('[Entry] currentUser (', currentUser, ') previousUser(', previousUser, ')')
   if (previousUser !== currentUser) {
     let nextPathname = state.router.locationBeforeTransitions
-    let nextPath = '/profile'
+    let nextPath = '/dashboard'
     if (nextPathname) {
       if (nextPathname.state) {
         nextPath = nextPathname.state.nextPath

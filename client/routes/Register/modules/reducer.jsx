@@ -40,7 +40,7 @@ export function doRegister (data) {
 }
 
 function registerError (error) {
-  const errorMsgId = 'register.' + error
+  const errorMsgId = 'errorMsg.' + error
   return {
     type: REGISTER_ERROR,
     errorMsgId

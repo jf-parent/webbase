@@ -53,3 +53,7 @@ class ResetPasswordTokenInvalidException(ServerBaseException):
 
 class EmailNotFound(ServerBaseException):
     pass
+
+
+class ModelImportException(ServerBaseException):
+    pass

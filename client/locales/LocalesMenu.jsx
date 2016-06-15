@@ -35,16 +35,14 @@ class LocalesMenu extends BaseComponent {
     this.debug('Render')
 
     return (
-      <div className='container'>
-        <ul className='list-inline pull-right'>
-          <li>
-            <a className='btn btn-link' onClick={this.onClick} value='en'>English</a>
-          </li>
-          <li>
-            <a className='btn btn-link' onClick={this.onClick} value='fr' >Français</a>
-          </li>
-        </ul>
-      </div>
+      <ul className='list-inline pull-right'>
+        <li>
+          <a className='btn btn-link' onClick={this.onClick} value='en'>English</a>
+        </li>
+        <li>
+          <a className='btn btn-link' onClick={this.onClick} value='fr' >Français</a>
+        </li>
+      </ul>
     )
   }
 }

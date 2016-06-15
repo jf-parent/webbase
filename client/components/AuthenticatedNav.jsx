@@ -4,7 +4,8 @@ import activeComponent from 'react-router-active-component'
 import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
-import SocialMedia from './SocialMedia'
+import CoreLayoutStyle from 'layouts/CoreLayout/CoreLayoutStyle.postcss'
+import UserNav from 'components/UserNav'
 
 class AuthenticatedNav extends BaseComponent {
 
@@ -12,7 +13,7 @@ class AuthenticatedNav extends BaseComponent {
     let NavItem = activeComponent('li')
     return (
       <div className='container'>
-        <nav id='nav-bar' className='navbar navbar-default' role='navigation'>
+        <nav className={'navbar navbar-default ' + CoreLayoutStyle['nav-bar']} role='navigation'>
           <div className='container-fluid'>
             <div className='navbar-header'>
               <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false'>
@@ -30,10 +31,10 @@ class AuthenticatedNav extends BaseComponent {
             </div>
             <div id='navbar-collapse' className='navbar-collapse collapse'>
               <ul className='nav navbar-nav'>
-                <NavItem to='/profile'>
+                <NavItem to='/dashboard'>
                   <FormattedMessage
-                    id='nav.Profile'
-                    defaultMessage='Profile'
+                    id='nav.Dashboard'
+                    defaultMessage='Dashboard'
                   />
                 </NavItem>
                 <NavItem to='/settings'>
@@ -42,14 +43,8 @@ class AuthenticatedNav extends BaseComponent {
                     defaultMessage='Settings'
                   />
                 </NavItem>
-                <NavItem to='/logout'>
-                  <FormattedMessage
-                    id='nav.Logout'
-                    defaultMessage='Logout'
-                  />
-                </NavItem>
               </ul>
-              <SocialMedia />
+              <UserNav />
             </div>
           </div>
         </nav>

@@ -9,7 +9,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(HERE, '..', '..'))
 
 from server.app import init  # noqa
-from server.auth.user import User  # noqa
+from server.model.user import User  # noqa
 from server.utils import DbSessionContext  # noqa
 
 
@@ -61,8 +61,7 @@ def client():
 
         for user_data in users:
             user = User()
-            loop.run_until_complete(user.init_and_validate(session, user_data))
-            session.save(user, safe=True)
+            loop.run_until_complete(user.validate_and_save(session, user_data))
 
     client = TestApp(app)
 

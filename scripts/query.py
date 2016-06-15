@@ -9,7 +9,7 @@ sys.path.append('.')
 from IPython import embed
 from mongoalchemy.session import Session
 
-from server.auth.user import User
+from server.model.user import User
 from server.settings import config
 
 config.configure()

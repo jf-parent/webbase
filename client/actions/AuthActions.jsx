@@ -4,6 +4,7 @@ import axios from 'axios'
 // Constants
 // ====================================
 
+export const UPDATE_SESSION_USER = 'UPDATE_SESSION_USER'
 export const AUTH_GETTING_SESSION = 'AUTH_GETTING_SESSION'
 export const AUTH_GETTING_SESSION_SUCCESS = 'AUTH_GETTING_SESSION_SUCCESS'
 export const AUTH_GETTING_SESSION_ERROR = 'AUTH_GETTING_SESSION_ERROR'
@@ -39,6 +40,13 @@ export function getSession () {
         logger.debug('/api/get_session error (response)', response)
         dispatch(getSessionError(response.data))
       })
+  }
+}
+
+export function updateSessionUser (data) {
+  return {
+    type: UPDATE_SESSION_USER,
+    data
   }
 }
 

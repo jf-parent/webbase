@@ -1,17 +1,24 @@
-from server.auth.user import User
+from server.model.user import User
 
 
 def permits(request, session, permission):
-    if permission == 'login':
-        return session.get('email', False)
+    # GET THE USER
+    uid = session.get('uid')
+    if not uid:
+        return False
 
-    if permission == 'admin':
-        email = session.get('email')
-        if not email:
-            return False
+    user_query = request.db_session.query(User).filter(User.mongo_id == uid)
+    if user_query.count():
+        user = user_query.one()
+        if user.enable:
+            # LOGIN
+            if permission == 'login':
+                return True
 
-        user = request.db_session.query(User).filter(User.email == email).one()
-        if user.role == 'admin':
-            return True
-        else:
-            return False
+            # ADMIN
+            elif permission == 'admin':
+                if user.role == 'admin':
+                    return True
+
+    # BY DEFAUlT
+    return False

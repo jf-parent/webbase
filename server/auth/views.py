@@ -1,10 +1,10 @@
-import time
+import importlib
 
 from aiohttp_session import get_session
 from aiohttp import web
 
 from server.exceptions import *  # noqa
-from server.auth.user import User
+from server.model.user import User
 from server.settings import logger, config
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
@@ -12,13 +12,16 @@ from jobs.send_email import send_email
 
 
 def get_user_from_session(session, db_session):
-    return db_session.query(User).filter(User.email == session['email']).one()
+    try:
+        return db_session.query(User)\
+            .filter(User.mongo_id == session['uid']).one()
+    except:
+        return False
 
 
 async def set_session(user, request):
     session = await get_session(request)
-    session['email'] = user.email
-    session['last_visit'] = time.time()
+    session['uid'] = user.get_uid()
     active_user_gauge.inc()
 
 
@@ -44,10 +47,7 @@ class Login(web.View):
                 await set_session(user, self.request)
                 resp_data = {'success': True, 'user': await user.serialize()}
             else:
-                raise WrongEmailOrPasswordException(
-                    "Wrong password: '{password}'"
-                    .format(password=password)
-                )
+                raise WrongEmailOrPasswordException()
         else:
             raise WrongEmailOrPasswordException(
                 "Wrong email: '{email}'".format(email=email)
@@ -68,7 +68,7 @@ class Register(web.View):
 
         # INIT USER
         user = User()
-        await user.init_and_validate(self.request.db_session, data)
+        await user.validate_and_save(self.request.db_session, data)
 
         # SET SESSION
         await set_session(user, self.request)
@@ -97,9 +97,6 @@ class Register(web.View):
                 email
             )
 
-        # SAVE
-        self.request.db_session.save(user, safe=True)
-
         resp_data = {'success': True, 'user': await user.serialize()}
         return web.json_response(resp_data)
 
@@ -121,8 +118,8 @@ class Logout(web.View):
 async def api_admin(request):
     logger.debug('admin')
     session = await get_session(request)
-    email = session.get('email')
-    user = request.db_session.query(User).filter(User.email == email).one()
+    uid = session.get('uid')
+    user = request.db_session.query(User).filter(User.mongo_id == uid).one()
     resp_data = {'success': True, 'user': await user.serialize()}
     return web.json_response(resp_data)
 
@@ -143,12 +140,12 @@ async def api_confirm_email(request):
         user = user_query.one()
 
         # SESSION EMAIL MISMATCH TOKEN EMAIL
-        if session['email'] != user.email:
+        if session['uid'] != user.get_uid():
             raise EmailMismatchException(
                 'token email ("{temail}") session email ("{semail}")'
                 .format(
-                    temail=user.email,
-                    semail=session['email']
+                    temail=user.get_uid(),
+                    semail=session['uid']
                 )
             )
 
@@ -156,8 +153,11 @@ async def api_confirm_email(request):
         if user.email_confirmed:
             raise EmailAlreadyConfirmedException('email already confirmed')
         else:
-            user.email_confirmed = True
-            request.db_session.save(user, safe=True)
+            await user.validate_and_save(
+                request.db_session,
+                {'email_confirmed': True}
+            )
+
             resp_data = {'success': True, 'user': await user.serialize()}
             return web.json_response(resp_data)
 
@@ -184,12 +184,59 @@ async def api_reset_password(request):
     user = get_user_from_session(session, request.db_session)
 
     if reset_password_token == user.reset_password_token:
-        user.reset_password_token = ''
-        await user.set_password(new_password)
-        request.db_session.save(user, safe=True)
+        await user.validate_and_save(
+            request.db_session,
+            {
+                'reset_password_token': '',
+                'password': new_password
+            }
+        )
 
         resp_data = {'success': True}
         return web.json_response(resp_data)
 
     else:
         raise ResetPasswordTokenInvalidException('Token mismatch')
+
+
+@exception_handler()
+@csrf_protected()
+@require('login')
+async def api_save_model(request):
+    logger.debug('save_model')
+
+    try:
+        resq_data = await request.json()
+        model = resq_data['model']
+        data = resq_data['data']
+    except:
+        raise InvalidRequestException('Missing json data')
+
+    try:
+        m = importlib.import_module('server.model.{model}'.format(model=model))
+        model_class = getattr(m, model.title())
+    except ImportError:
+        raise ModelImportException('{model} not found'.format(model=model))
+
+    session = await get_session(request)
+
+    model_obj = request.db_session.query(model_class)\
+        .filter(model_class.mongo_id == data['uid']).one()
+
+    user = get_user_from_session(session, request.db_session)
+    if await model_obj.edition_autorized(user):
+        sane_data = await model_obj.sanitize_data(data, user)
+        await model_obj.validate_and_save(
+            request.db_session,
+            sane_data
+        )
+    else:
+        raise NotAuthorizedException(
+            'User ({user}) not authorized to edit {model_obj}'.format(
+                user=user,
+                model_obj=model_obj
+            )
+        )
+
+    resp_data = {'success': True, model: await model_obj.serialize()}
+    return web.json_response(resp_data)

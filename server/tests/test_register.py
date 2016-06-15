@@ -1,6 +1,6 @@
 from server.settings import config
 from server.utils import DbSessionContext
-from server.auth.user import User, NAME_MAX_LEN
+from server.model.user import User, NAME_MAX_LEN
 
 
 DEFAULT_EMAIL = 'test.new@test.com'

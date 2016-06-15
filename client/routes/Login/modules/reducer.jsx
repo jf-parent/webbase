@@ -40,7 +40,7 @@ export function doLogin (data) {
 }
 
 function loginError (error) {
-  const errorMsgId = 'login.' + error
+  const errorMsgId = 'errorMsg.' + error
   return {
     type: LOGIN_ERROR,
     errorMsgId

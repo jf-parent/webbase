@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import Settings from '../components/Settings'
+import Component from '../components/Component'
 
 function mapStateToProps (state) {
   return {
@@ -8,5 +8,5 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(Settings)
+export default connect(mapStateToProps)(Component)
 

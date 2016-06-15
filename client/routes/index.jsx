@@ -8,11 +8,13 @@ import Settings from 'routes/Settings'
 import Register from 'routes/Register'
 import Confirmation from 'routes/Confirmation'
 import ResetPassword from 'routes/ResetPassword'
+import Dashboard from 'routes/Dashboard'
 
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
   childRoutes: [
+    Dashboard(store),
     ResetPassword(store),
     Login(store),
     Profile(store),

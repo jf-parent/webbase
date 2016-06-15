@@ -5,8 +5,8 @@ from aiohttp_session import get_session
 from server.exceptions import *  # noqa
 from server.settings import logger, config
 from server.server_decorator import exception_handler, csrf_protected
-from server.auth.user import User
-from server.auth.views import set_session
+from server.model.user import User
+from server.auth.views import set_session, get_user_from_session
 from server.utils import generate_token
 from jobs.send_email import send_email
 
@@ -33,9 +33,9 @@ async def api_get_session(request):
     token = session['csrf_token']
     user = None
 
-    email = session.get('email')
-    if email:
-        user = request.db_session.query(User).filter(User.email == email).one()
+    uid = session.get('uid')
+    if uid:
+        user = get_user_from_session(session, request.db_session)
         if user.enable:
             user = await user.serialize()
             success = True
@@ -119,8 +119,12 @@ async def api_send_reset_password_token(request):
                 email
             )
 
-        user.reset_password_token = reset_password_token
-        request.db_session.save(user, safe=True)
+        await user.validate_and_save(
+            request.db_session,
+            {
+                'reset_password_token': reset_password_token
+            }
+        )
         resp_data = {'success': True}
 
         # TEST

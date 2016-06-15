@@ -1,6 +1,7 @@
 'use strict'
 
 import {
+  UPDATE_SESSION_USER,
   AUTH_GETTING_SESSION,
   AUTH_GETTING_SESSION_SUCCESS,
   AUTH_GETTING_SESSION_ERROR,
@@ -10,18 +11,17 @@ import {
 } from '../actions/AuthActions'
 
 const initialState = {
-  loading: true,
+  loading: false,
   error: null,
   user: null,
-  token: null,
-  email: null
+  token: null
 }
 
 export default function session (state = initialState, action) {
   switch (action.type) {
     case AUTH_GETTING_SESSION:
       return Object.assign({},
-        state,
+        initialState,
         {
           loading: true
         }
@@ -33,8 +33,7 @@ export default function session (state = initialState, action) {
         {
           loading: false,
           user: action.data.user,
-          token: action.data.token,
-          email: action.data.email
+          token: action.data.token
         }
       )
 
@@ -43,8 +42,7 @@ export default function session (state = initialState, action) {
         state,
         {
           loading: false,
-          user: action.data.user,
-          email: action.data.email
+          user: action.data.user
         }
       )
 
@@ -53,8 +51,7 @@ export default function session (state = initialState, action) {
         state,
         {
           loading: false,
-          user: action.data.user,
-          email: action.data.email
+          user: action.data.user
         }
       )
 
@@ -73,6 +70,14 @@ export default function session (state = initialState, action) {
         state,
         {
           user: null
+        }
+      )
+
+    case UPDATE_SESSION_USER:
+      return Object.assign({},
+        state,
+        {
+          user: action.data
         }
       )
 

@@ -8,3 +8,4 @@ pytest
 pytest-xdist
 pytest-instafail
 pytest-html
+q

@@ -1,6 +1,6 @@
 from server.settings import config
 from server.utils import DbSessionContext
-from server.auth.user import User
+from server.model.user import User
 
 
 def test_get_session_return_token(client):
@@ -27,6 +27,8 @@ def test_get_session_with_logged_user(client):
 
     # Get session
     response = client.get('/api/get_session')
+    assert response.status_code == 200
+    assert response.json['success']
     assert response.json['user']['email'] == email
     assert response.json['user']['name'] == name
     assert response.status_code == 200
@@ -51,6 +53,8 @@ def test_get_session_with_logged_disabled_user(client):
 
     # Get session
     response = client.get('/api/get_session')
+    assert response.status_code == 200
+    assert response.json['success']
     assert response.json['user']['email'] == email
     assert response.json['user']['name'] == name
     assert response.status_code == 200

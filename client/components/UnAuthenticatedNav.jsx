@@ -4,7 +4,7 @@ import activeComponent from 'react-router-active-component'
 import { FormattedMessage } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
-import SocialMedia from './SocialMedia'
+import CoreLayoutStyle from 'layouts/CoreLayout/CoreLayoutStyle.postcss'
 
 class UnAuthenticatedNav extends BaseComponent {
 
@@ -12,7 +12,7 @@ class UnAuthenticatedNav extends BaseComponent {
     let NavItem = activeComponent('li')
     return (
       <div className='container'>
-        <nav id='nav-bar' className='navbar navbar-default' role='navigation'>
+        <nav className={'navbar navbar-default ' + CoreLayoutStyle['nav-bar']} role='navigation'>
           <div className='container-fluid'>
             <div className='navbar-header'>
               <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false'>
@@ -43,7 +43,6 @@ class UnAuthenticatedNav extends BaseComponent {
                   />
                 </NavItem>
               </ul>
-              <SocialMedia />
             </div>
           </div>
         </nav>

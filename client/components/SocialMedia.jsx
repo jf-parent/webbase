@@ -23,10 +23,8 @@ class SocialMedia extends BaseComponent {
 
   render () {
     return (
-      <ul className='nav navbar-nav navbar-right'>
-        <center>
-          {this.getSocialMediaElement()}
-        </center>
+      <ul className='nav navbar-nav navbar-left'>
+        {this.getSocialMediaElement()}
       </ul>
     )
   }
