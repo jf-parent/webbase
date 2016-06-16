@@ -342,8 +342,14 @@ $ webpack-dev-server
 $ npm run build
 ```
 
-## QUEUE
+## QUEUE-DEV
 
 ```bash
-$ rq worker
+$ make queue-dev
+```
+
+## QUEUE-PROD
+
+```bash
+$ make start-queue-prod
 ```
