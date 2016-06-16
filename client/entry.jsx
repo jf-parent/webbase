@@ -7,6 +7,8 @@ import log from 'loglevel'
 
 require('./polyfills')
 
+import { notAuthRoutes, createRoutes } from 'routes/index'
+
 // ========================================================
 // Developer Tools Setup
 // ========================================================
@@ -53,22 +55,21 @@ function loginLogoutHandler () {
   let currentUser = state.session.user
   logger.debug('[Entry] currentUser (', currentUser, ') previousUser(', previousUser, ')')
   if (previousUser !== currentUser) {
-    let nextPathname = state.router.locationBeforeTransitions
-    let nextPath = '/dashboard'
-    if (nextPathname) {
-      if (nextPathname.state) {
-        nextPath = nextPathname.state.nextPath
-      }
-    }
-    previousUser = currentUser
-    // Login
+    // Enforce NotAuthRoute
+    let nextPath = state.router.locationBeforeTransitions
+    let nextPathname
     if (currentUser) {
-      logger.debug(`[Entry] Redirect to /${nextPath}`)
-      store.dispatch(push(nextPath))
-    // Logout
-    } else {
-      logger.debug('[Entry] Redirect to /')
-      store.dispatch(push('/'))
+      if (notAuthRoutes.indexOf(nextPath.pathname) !== -1) {
+        if (nextPath.state) {
+          nextPathname = nextPath.state.nextPath
+          logger.debug(`[Entry] Redirect to state /${nextPathname}`)
+          store.dispatch(push(nextPathname))
+        } else {
+          nextPathname = '/dashboard'
+          logger.debug(`[Entry] Redirect to /${nextPathname}`)
+          store.dispatch(push(nextPathname))
+        }
+      }
     }
   }
 }
@@ -81,7 +82,7 @@ store.subscribe(loginLogoutHandler)
 const MOUNT_NODE = document.getElementById('root')
 
 let render = (routerKey = null) => {
-  const routes = require('./routes/index').default(store)
+  const routes = createRoutes(store)
 
   ReactDOM.render(
     <AppContainer

@@ -2,6 +2,7 @@
 
 import {
   UPDATE_SESSION_USER,
+  UPDATE_SESSION_NOTIFICATIONS,
   AUTH_GETTING_SESSION,
   AUTH_GETTING_SESSION_SUCCESS,
   AUTH_GETTING_SESSION_ERROR,
@@ -11,7 +12,8 @@ import {
 } from '../actions/AuthActions'
 
 const initialState = {
-  loading: false,
+  loading: true,
+  notifications: [],
   error: null,
   user: null,
   token: null
@@ -70,6 +72,14 @@ export default function session (state = initialState, action) {
         state,
         {
           user: null
+        }
+      )
+
+    case UPDATE_SESSION_NOTIFICATIONS:
+      return Object.assign({},
+        state,
+        {
+          notifications: action.data
         }
       )
 

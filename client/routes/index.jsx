@@ -27,4 +27,4 @@ export const createRoutes = (store) => ({
   ]
 })
 
-export default createRoutes
+export const notAuthRoutes = ['/login', '/register', '/forgottenpassword']

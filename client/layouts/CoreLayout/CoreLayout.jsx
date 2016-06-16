@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+import GrowlNotification from 'components/ux/GrowlNotification'
 import CoreLayoutStyle from './CoreLayoutStyle.postcss'
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
@@ -14,7 +15,7 @@ import SocialMedia from 'components/SocialMedia'
 
 function mapStateToProps (state) {
   return {
-    session: state.session
+    state
   }
 }
 
@@ -41,11 +42,11 @@ class CoreLayout extends BaseComponent {
   render () {
     this.debug('render')
 
-    if (this.props.session.loading) {
+    if (this.props.state.session.loading) {
       return <Loading />
     } else {
       let Nav
-      if (this.props.session.user) {
+      if (this.props.state.session.user) {
         Nav = <AuthenticatedNav />
       } else {
         Nav = <UnAuthenticatedNav />
@@ -53,6 +54,7 @@ class CoreLayout extends BaseComponent {
 
       return (
         <div>
+          <GrowlNotification notifications={this.props.state.session.notifications} />
           {Nav}
           <div className='container'>
             <div className={'jumbotron ' + CoreLayoutStyle['jumbotron']}>

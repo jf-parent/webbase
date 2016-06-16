@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { routerActions } from 'react-router-redux'
 
 import { resetSession } from 'actions/AuthActions'
 
@@ -31,6 +32,7 @@ export function doLogout (token) {
         if (response.data.success) {
           dispatch(logoutSuccess())
           dispatch(resetSession())
+          dispatch(routerActions.push('/'))
         } else {
           dispatch(logoutError(response.data.error))
         }

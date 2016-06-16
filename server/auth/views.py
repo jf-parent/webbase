@@ -5,10 +5,9 @@ from aiohttp import web
 
 from server.exceptions import *  # noqa
 from server.model.user import User
-from server.settings import logger, config
+from server.settings import logger
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
-from jobs.send_email import send_email
 
 
 def get_user_from_session(session, db_session):
@@ -68,34 +67,15 @@ class Register(web.View):
 
         # INIT USER
         user = User()
-        await user.validate_and_save(self.request.db_session, data)
+        sane_data = await user.sanitize_data(data)
+        await user.validate_and_save(
+            self.request.db_session,
+            sane_data,
+            queue=self.request.app.queue
+        )
 
         # SET SESSION
         await set_session(user, self.request)
-
-        if config.get('ENV', 'production') == 'production':
-            # FORMAT EMAIL TEMPLATE
-            email = config.get('email_confirmation_email')
-            email['text'] = email['text'].format(
-                email_validation_token=user.email_validation_token
-            )
-            email['html'] = email['html'].format(
-                email_validation_token=user.email_validation_token
-            )
-            email['to'][0]['email'] = email['to'][0]['email'].format(
-                user_email=user.email
-            )
-            email['to'][0]['name'] = email['to'][0]['name'].format(
-                user_name=user.name
-            )
-
-            # ADD THE SEND EMAIL TO THE QUEUE
-            self.request.app.queue.enqueue(
-                send_email,
-                config.get('REST_API_ID'),
-                config.get('REST_API_SECRET'),
-                email
-            )
 
         resp_data = {'success': True, 'user': await user.serialize()}
         return web.json_response(resp_data)
@@ -228,7 +208,8 @@ async def api_save_model(request):
         sane_data = await model_obj.sanitize_data(data, user)
         await model_obj.validate_and_save(
             request.db_session,
-            sane_data
+            sane_data,
+            queue=request.app.queue
         )
     else:
         raise NotAuthorizedException(

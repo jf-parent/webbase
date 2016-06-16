@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { updateSessionUser } from 'actions/AuthActions'
+
 // ====================================
 // Constants
 // ====================================
@@ -28,6 +30,7 @@ export function doConfirmEmail (token) {
         logger.debug('/api/confirm_email (response)', response)
         if (response.data.success) {
           dispatch(confirmEmailSuccess())
+          dispatch(updateSessionUser(response.data.user))
         } else {
           dispatch(confirmEmailError(response.data.error))
         }

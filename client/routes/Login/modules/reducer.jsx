@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { routerActions } from 'react-router-redux'
 
-import { getSessionLoggedIn } from '../../../actions/AuthActions'
+import { getSessionLoggedIn } from 'actions/AuthActions'
 
 // ====================================
 // Constants
@@ -17,7 +18,7 @@ export const LOGIN_RESET_STATE = 'LOGIN_RESET_STATE'
 const logger = require('loglevel').getLogger('Login')
 logger.setLevel(__LOGLEVEL__)
 
-export function doLogin (data) {
+export function doLogin (data, nextPath) {
   return dispatch => {
     dispatch({type: LOGIN_LOADING})
 
@@ -28,6 +29,7 @@ export function doLogin (data) {
         if (response.data.success) {
           dispatch(resetLoginState())
           dispatch(getSessionLoggedIn(response.data))
+          dispatch(routerActions.push(nextPath))
         } else {
           dispatch(loginError(response.data.error))
         }

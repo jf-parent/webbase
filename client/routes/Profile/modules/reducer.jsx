@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 import { updateSessionUser } from 'actions/AuthActions'
-import { displaySuccessMsg } from 'routes/Dashboard/modules/reducer'
 
 // ====================================
 // Constants
 // ====================================
 
 export const PROFILE_LOADING = 'PROFILE_LOADING'
+export const PROFILE_SUCCESS = 'PROFILE_SUCCESS'
 export const PROFILE_ERROR = 'PROFILE_ERROR'
 export const PROFILE_RESET_STATE = 'PROFILE_RESET_STATE'
 
@@ -28,7 +28,7 @@ export function doSave (data) {
 
         if (response.data.success) {
           dispatch(updateSessionUser(response.data.user))
-          dispatch(displaySuccessMsg('profile.settingsSaveSuccessfully'))
+          dispatch(profileSuccess())
         } else {
           dispatch(profileError(response.data.error))
         }
@@ -37,6 +37,13 @@ export function doSave (data) {
         logger.debug('/api/save_model error (data) (response)', data, response)
         dispatch(profileError(response.data.error))
       })
+  }
+}
+
+function profileSuccess () {
+  return {
+    type: PROFILE_SUCCESS,
+    successMsgId: 'profile.settingsSaveSuccessfully'
   }
 }
 
@@ -65,6 +72,7 @@ export const actions = {
 
 const initialState = {
   loading: false,
+  successMsgId: null,
   errorMsgId: null
 }
 
@@ -75,6 +83,16 @@ export default function profile (state = initialState, action) {
         initialState,
         {
           loading: true
+        }
+      )
+
+    case PROFILE_SUCCESS:
+      return Object.assign({},
+        initialState,
+        {
+          loading: false,
+          successMsgId: action.successMsgId,
+          errorMsgId: null
         }
       )
 

@@ -37,7 +37,12 @@ class Login extends BaseComponent {
     event.preventDefault()
     this.debug('onSubmit()')
 
-    this.props.actions.doLogin(this.refs.form.getModel())
+    let nextPath = '/dashboard'
+    if (this.props.state.router.locationBeforeTransitions.state) {
+      nextPath = this.props.state.router.locationBeforeTransitions.state.nextPath
+    }
+
+    this.props.actions.doLogin(this.refs.form.getModel(), nextPath)
   }
 
   componentWillUnmount () {

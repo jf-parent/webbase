@@ -7,13 +7,14 @@ const ValidatedInput = React.createClass({
 
   propTypes: {
     type: PropTypes.string,
+    _value: PropTypes.string,
     name: PropTypes.string,
     className: PropTypes.string
   },
 
   getInitialState () {
     return {
-      _value: ''
+      _value: this.props._value || ''
     }
   },
 
