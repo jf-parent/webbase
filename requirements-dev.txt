@@ -9,3 +9,4 @@ pytest-xdist
 pytest-instafail
 pytest-html
 q
+freezegun

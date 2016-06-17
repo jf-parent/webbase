@@ -1,3 +1,9 @@
+from server.settings import config
+from server.utils import DbSessionContext
+from server.model.user import User
+from server.model.email_confirmation_token import EmailConfirmationToken
+
+
 def test_confirm_email_not_authorized(client):
     response = client.post_json(
         '/api/confirm_email',
@@ -44,10 +50,15 @@ def test_confirm_email_right_token(client):
     assert response.status_code == 200
     assert response.json['success']
 
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User).filter(User.email == 'test@test.com').one()
+        token = session.query(EmailConfirmationToken)\
+            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+
     response = client.post_json(
         '/api/confirm_email',
         {
-            'token': '123456'
+            'token': token.token
         }
     )
 
@@ -79,7 +90,7 @@ def test_confirm_email_wrong_token(client):
 
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'EmailValidationTokenInvalidException'
+    assert response.json['error'] == 'TokenInvalidException'
 
 
 def test_confirm_email_right_token_wrong_user(client):
@@ -96,16 +107,22 @@ def test_confirm_email_right_token_wrong_user(client):
     assert response.status_code == 200
     assert response.json['success']
 
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User)\
+            .filter(User.email == 'admin@admin.com').one()
+        token = session.query(EmailConfirmationToken)\
+            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+
     response = client.post_json(
         '/api/confirm_email',
         {
-            'token': '1337'
+            'token': token.token
         }
     )
 
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'EmailMismatchException'
+    assert response.json['error'] == 'TokenViolationException'
 
 
 def test_confirm_email_already_confirmed(client):
@@ -122,10 +139,15 @@ def test_confirm_email_already_confirmed(client):
     assert response.status_code == 200
     assert response.json['success']
 
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User).filter(User.email == 'test@test.com').one()
+        token = session.query(EmailConfirmationToken)\
+            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+
     response = client.post_json(
         '/api/confirm_email',
         {
-            'token': '123456'
+            'token': token.token
         }
     )
 
@@ -135,10 +157,10 @@ def test_confirm_email_already_confirmed(client):
     response = client.post_json(
         '/api/confirm_email',
         {
-            'token': '123456'
+            'token': token.token
         }
     )
 
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'EmailAlreadyConfirmedException'
+    assert response.json['error'] == 'TokenAlreadyUsedException'

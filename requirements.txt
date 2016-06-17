@@ -1,4 +1,5 @@
 aiohttp==0.21.6
+python-dateutil==2.5.3
 cchardet==1.0.0
 uvloop==0.4.25
 aiohttp-debugtoolbar==0.1.1

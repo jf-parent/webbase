@@ -10,7 +10,7 @@ from jobs.send_email import send_email
 from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server.exceptions import *  # noqa
-from server.utils import generate_token
+from server.model.email_confirmation_token import EmailConfirmationToken
 
 NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa
@@ -21,9 +21,7 @@ class User(Document):
     email = StringField(required=True)
     role = EnumField(StringField(), 'admin', 'user', default="user")
     enable = BoolField(default=True)
-    email_validation_token = StringField(default="")
     email_confirmed = BoolField(default=False)
-    reset_password_token = StringField(default="")
     gravatar_url = StringField(default="")
     # settings =
     # social_id =
@@ -146,11 +144,6 @@ class User(Document):
             else:
                 raise InvalidRequestException('Missing old password')
 
-        # RESET PASSWORD TOKEN
-        reset_password_token = data.get('reset_password_token')
-        if reset_password_token is not None:
-            self.reset_password_token = reset_password_token
-
         # EMAIL
         email = data.get('email')
         if email:
@@ -168,34 +161,36 @@ class User(Document):
                 if email_uniqueness_query.count():
                     raise EmailAlreadyExistsException(email)
 
-                # EMAIL VALIDATION TOKEN
-                email_validation_token = data.get('email_validation_token')
-                if email_validation_token is not None:
-                    self.email_validation_token = email_validation_token
-                else:
-                    self.email_validation_token = generate_token(20)
-
                 self.email = email
                 self.email_confirmed = False
-                if config.get('ENV', 'production') == 'production':
-                    if queue is not None:
-                        self.send_email_confirmation_email(
-                            queue
-                        )
 
-            # GRAVATAR
-            gravatar_url = "{base_url}{md5_hash}?{params}".format(
-                base_url="https://www.gravatar.com/avatar/",
-                md5_hash=hashlib.md5(email.lower().encode('utf')).hexdigest(),
-                params=urllib.parse.urlencode({'d': "identicon", 's': '40'})
-            )
-            self.gravatar_url = gravatar_url
+                # GRAVATAR
+                gravatar_url = "{base_url}{md5_hash}?{params}".format(
+                    base_url="https://www.gravatar.com/avatar/",
+                    md5_hash=hashlib.md5(
+                        email.lower().encode('utf')
+                    ).hexdigest(),
+                    params=urllib.parse.urlencode(
+                        {'d': "identicon", 's': '40'}
+                    )
+                )
+                self.gravatar_url = gravatar_url
 
         else:
             if is_new:
                 raise InvalidEmailException('empty email')
 
         db_session.save(self, safe=True)
+
+        if not self.email_confirmed:
+            email_confirmation_token = EmailConfirmationToken()
+            email_confirmation_token.init(db_session, self)
+            if config.get('ENV', 'production') == 'production':
+                if queue is not None:
+                    self.send_email_confirmation_email(
+                        queue,
+                        email_confirmation_token
+                    )
 
     async def set_password(self, password):
         if await self.is_password_valid(password):
@@ -231,15 +226,15 @@ class User(Document):
     def get_uid(self):
         return str(self.mongo_id)
 
-    def send_email_confirmation_email(self, queue):
+    def send_email_confirmation_email(self, queue, email_confirmation_token):
         # FORMAT EMAIL TEMPLATE
         email = config.get('email_confirmation_email')
         email = email.copy()
         email['text'] = email['text'].format(
-            email_validation_token=self.email_validation_token
+            email_validation_token=self.email_validation_token.token
         )
         email['html'] = email['html'].format(
-            email_validation_token=self.email_validation_token
+            email_validation_token=self.email_validation_token.token
         )
         email['to'][0]['email'] = email['to'][0]['email'].format(
             user_email=self.email

@@ -10,6 +10,8 @@ sys.path.append(os.path.join(HERE, '..', '..'))
 
 from server.app import init  # noqa
 from server.model.user import User  # noqa
+from server.model.email_confirmation_token import EmailConfirmationToken  # noqa
+from server.model.reset_password_token import ResetPasswordToken  # noqa
 from server.utils import DbSessionContext  # noqa
 
 
@@ -33,6 +35,8 @@ def client():
 
         # CLEAR
         session.clear_collection(User)
+        session.clear_collection(EmailConfirmationToken)
+        session.clear_collection(ResetPasswordToken)
 
         # INSERT DUMMY DATA
         users = [

@@ -5,6 +5,8 @@ from aiohttp import web
 
 from server.exceptions import *  # noqa
 from server.model.user import User
+from server.model.email_confirmation_token import EmailConfirmationToken
+from server.model.reset_password_token import ResetPasswordToken
 from server.settings import logger
 from server.server_decorator import require, exception_handler, csrf_protected
 from server.prometheus_instruments import active_user_gauge
@@ -110,29 +112,25 @@ async def api_confirm_email(request):
     logger.debug('confirm_email')
 
     session = await get_session(request)
-    params = await request.json()
+    user = get_user_from_session(session, request.db_session)
 
-    email_validation_token = params['token']
+    try:
+        data = await request.json()
+        email_confirmation_token = data['token']
+    except:
+        raise InvalidRequestException('Missing json data')
 
-    user_query = request.db_session.query(User)\
-        .filter(User.email_validation_token == email_validation_token)
-    if user_query.count():
-        user = user_query.one()
+    token_query = request.db_session.query(EmailConfirmationToken)\
+        .filter(EmailConfirmationToken.token == email_confirmation_token)
+    if token_query.count():
+        email_confirmation_token = token_query.one()
 
-        # SESSION EMAIL MISMATCH TOKEN EMAIL
-        if session['uid'] != user.get_uid():
-            raise EmailMismatchException(
-                'token email ("{temail}") session email ("{semail}")'
-                .format(
-                    temail=user.get_uid(),
-                    semail=session['uid']
-                )
-            )
-
-        # EMAIL ALREADY CONFIRMED
-        if user.email_confirmed:
-            raise EmailAlreadyConfirmedException('email already confirmed')
-        else:
+        ret = email_confirmation_token.use(
+            request.db_session,
+            user,
+            email_confirmation_token
+        )
+        if ret:
             await user.validate_and_save(
                 request.db_session,
                 {'email_confirmed': True}
@@ -143,7 +141,7 @@ async def api_confirm_email(request):
 
     # TOKEN NOT FOUND
     else:
-        raise EmailValidationTokenInvalidException('token not found')
+        raise TokenInvalidException('token not found')
 
 
 @exception_handler()
@@ -155,28 +153,33 @@ async def api_reset_password(request):
     try:
         data = await request.json()
         new_password = data['password']
-        reset_password_token = data['reset_password_token']
+        token = data['reset_password_token']
     except:
         raise InvalidRequestException('Missing json data')
 
     session = await get_session(request)
-
     user = get_user_from_session(session, request.db_session)
 
-    if reset_password_token == user.reset_password_token:
-        await user.validate_and_save(
-            request.db_session,
-            {
-                'reset_password_token': '',
-                'password': new_password
-            }
-        )
+    token_query = request.db_session.query(ResetPasswordToken)\
+        .filter(ResetPasswordToken.token == token)
+    if token_query.count():
+        reset_password_token = token_query.one()
+        if reset_password_token.token == token:
+            await user.validate_and_save(
+                request.db_session,
+                {
+                    'password': new_password
+                }
+            )
 
-        resp_data = {'success': True}
-        return web.json_response(resp_data)
+            resp_data = {'success': True}
+            return web.json_response(resp_data)
+
+        else:
+            raise TokenInvalidException('Token mismatch')
 
     else:
-        raise ResetPasswordTokenInvalidException('Token mismatch')
+        raise TokenInvalidException('Token not found')
 
 
 @exception_handler()

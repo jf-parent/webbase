@@ -35,10 +35,6 @@ class InvalidRequestException(ServerBaseException):
     pass
 
 
-class EmailValidationTokenInvalidException(ServerBaseException):
-    pass
-
-
 class EmailAlreadyConfirmedException(ServerBaseException):
     pass
 
@@ -47,7 +43,19 @@ class EmailMismatchException(ServerBaseException):
     pass
 
 
-class ResetPasswordTokenInvalidException(ServerBaseException):
+class TokenExpiredException(ServerBaseException):
+    pass
+
+
+class TokenViolationException(ServerBaseException):
+    pass
+
+
+class TokenAlreadyUsedException(ServerBaseException):
+    pass
+
+
+class TokenInvalidException(ServerBaseException):
     pass
 
 

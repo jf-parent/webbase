@@ -1,3 +1,11 @@
+from dateutil import parser as dateutil_parser
+
+from server.settings import config
+from server.utils import DbSessionContext
+from server.model.user import User
+from server.model.reset_password_token import ResetPasswordToken
+
+
 def test_reset_password_not_authorized(client):
     response = client.post_json(
         '/api/reset_password',
@@ -64,6 +72,31 @@ def test_send_reset_password_token_error_not_existing_email(client):
     assert response.json['error'] == 'EmailNotFound'
 
 
+def test_validate_reset_password_token_expired(client):
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        old_datetime = dateutil_parser.parse('2012 12 22 00:00:00')
+        user = session.query(User).filter(User.email == 'test@test.com').one()
+        reset_password_token = ResetPasswordToken()
+        reset_password_token.init(
+            session,
+            user,
+            mock_expiration_date=old_datetime
+        )
+        old_token = reset_password_token.token
+
+    response = client.post_json(
+        '/api/validate_reset_password_token',
+        {
+            'token': client.__token__,
+            'reset_password_token': old_token
+        }
+    )
+
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'TokenExpiredException'
+
+
 def test_validate_reset_password_token_success(client):
     response = client.post_json(
         '/api/send_reset_password_token',
@@ -125,7 +158,7 @@ def test_validate_reset_password_token_error(client):
 
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'ResetPasswordTokenInvalidException'
+    assert response.json['error'] == 'TokenInvalidException'
 
 
 def test_reset_password_token_success(client):
@@ -263,7 +296,7 @@ def test_reset_password_token_error(client):
 
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'ResetPasswordTokenInvalidException'
+    assert response.json['error'] == 'TokenInvalidException'
 
 
 def test_reset_password_token_invalid_request(client):
