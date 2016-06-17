@@ -4,11 +4,29 @@ import ReactModal from 'react-modal'
 import BaseComponent from 'core/BaseComponent'
 import ModalStyle from './ModalStyle.postcss'
 
+/* Examples
+  openModal () {
+    this.refs.modal.setState({'isOpen': true})
+  }
+
+  render () {
+    return (
+      <Modal ref='modal' title='modal'>
+        <content />
+        <content />
+      </Modal>
+      <button onClick={this.openModal}>OpenModal</button>
+    )
+  }
+*/
+
 class Modal extends BaseComponent {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
     isOpen: PropTypes.bool,
+    overlayStyle: PropTypes.object,
+    contentStyle: PropTypes.object,
     onAfterOpen: PropTypes.func,
     onRequestClose: PropTypes.func,
     children: PropTypes.any
@@ -46,6 +64,7 @@ class Modal extends BaseComponent {
         onAfterOpen={this.props.onAfterOpen}
         onRequestClose={this.props.onRequestClose}
         overlayClassName={ModalStyle.overlay}
+        style={{overlay: this.props.overlayStyle, content: this.props.contentStyle}}
         className={ModalStyle.content} >
 
         <h2 ref='title'>{this.props.title}</h2>
@@ -60,21 +79,5 @@ Modal.defaultProps = {
   onAfterOpen: Modal.onAfterOpen,
   onRequestClose: Modal.onRequestClose
 }
-
-/* Examples
-  openModal () {
-    this.refs.modal.setState({'isOpen': true})
-  }
-
-  render () {
-    return (
-      <Modal ref='modal' title='modal'>
-        <content />
-        <content />
-      </Modal>
-      <button onClick={this.openModal}>OpenModal</button>
-    )
-  }
-*/
 
 export default Modal

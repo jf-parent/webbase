@@ -215,13 +215,19 @@ class User(Document):
             return False
 
     async def serialize(self):
+        notifications, new_notification_number = self.get_notification()
         data = {}
         data['name'] = self.name
         data['email'] = self.email
+        data['notifications'] = notifications
+        data['new_notification_number'] = new_notification_number
         data['email_confirmed'] = self.email_confirmed
         data['uid'] = str(self.mongo_id)
         data['gravatar_url'] = self.gravatar_url
         return data
+
+    def get_notification(self):
+        return [{'message': 'You are welcome'}], 1
 
     def get_uid(self):
         return str(self.mongo_id)

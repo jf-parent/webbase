@@ -37,10 +37,6 @@ export function getSession () {
           dispatch(getSessionError(response.data))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/get_session error (response)', response)
-        dispatch(getSessionError(response.data))
-      })
   }
 }
 

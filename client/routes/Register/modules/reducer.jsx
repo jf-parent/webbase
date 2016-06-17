@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { routerActions } from 'react-router-redux'
 
 import { getSessionRegistered } from 'actions/AuthActions'
 
@@ -17,7 +18,7 @@ export const REGISTER_RESET_STATE = 'REGISTER_RESET_STATE'
 const logger = require('loglevel').getLogger('Register')
 logger.setLevel(__LOGLEVEL__)
 
-export function doRegister (data) {
+export function doRegister (data, nextPath) {
   return dispatch => {
     dispatch({type: REGISTER_LOADING})
 
@@ -28,6 +29,7 @@ export function doRegister (data) {
         if (response.data.success) {
           dispatch(resetRegisterState())
           dispatch(getSessionRegistered(response.data))
+          dispatch(routerActions.push(nextPath))
         } else {
           dispatch(registerError(response.data.error))
         }
