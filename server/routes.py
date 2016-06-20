@@ -8,7 +8,6 @@ routes = [
     # API ROUTES
     ('GET', '/api/get_session', api_get_session, 'get_session'),
     ('GET', '/api/admin', api_admin, 'admin'),
-    ('POST', '/api/save_model', api_save_model, 'api_save_model'),
     ('POST', '/api/confirm_email', api_confirm_email, 'api_confirm_email'),
     ('POST', '/api/reset_password', api_reset_password, 'api_reset_password'),
     (
@@ -23,6 +22,10 @@ routes = [
         api_send_reset_password_token,
         'api_send_reset_password_token'
     ),
+    ('*', '/api/crud/c', CRUDCreate, 'api_crud_create'),
+    ('*', '/api/crud/r', CRUDRead, 'api_crud_read'),
+    ('*', '/api/crud/u', CRUDUpdate, 'api_crud_update'),
+    ('*', '/api/crud/d', CRUDDelete, 'api_crud_delete'),
     ('*', '/api/login', Login, 'api_login'),
     ('*', '/api/register', Register, 'api_register'),
     ('*', '/api/logout', Logout, 'api_logout'),

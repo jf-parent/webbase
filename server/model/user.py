@@ -2,11 +2,12 @@ import urllib
 import hashlib
 
 import bcrypt
-from mongoalchemy.document import Document, Index
+from mongoalchemy.document import Index
 from mongoalchemy.fields import *  # noqa
 from validate_email import validate_email
 
 from jobs.send_email import send_email
+from server.model.base_model import BaseModel
 from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server.exceptions import *  # noqa
@@ -16,7 +17,7 @@ NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa
 
 
-class User(Document):
+class User(BaseModel):
     name = StringField(required=True, min_length=NAME_MIN_LEN, max_length=NAME_MAX_LEN)  # noqa
     email = StringField(required=True)
     role = EnumField(StringField(), 'admin', 'user', default="user")
@@ -31,21 +32,21 @@ class User(Document):
     hashed_password = StringField(required=True)
     salt = StringField(required=True)
 
-    # TIMESTAMP
-    created_ts = CreatedField()
-    modified_ts = ModifiedField()
-
     # INDEX
     i_email = Index().ascending('email').unique()
 
     def __repr__(self):
-        _repr = "User <name:'{name}'><email:'{email}'><role:'{role}'><enable:'{enable}'>"  # noqa
-        return _repr.format(
-                name=self.name,
-                email=self.email,
-                enable=self.enable,
-                role=self.role
-            )
+        try:
+            _repr = "User <uid: '{uid}'><name:'{name}'><email:'{email}'><role:'{role}'><enable:'{enable}'>"  # noqa
+            return _repr.format(
+                    name=self.name,
+                    uid=self.get_uid(),
+                    email=self.email,
+                    enable=self.enable,
+                    role=self.role
+                )
+        except AttributeError:
+            return "User uninitialized"
 
 ##############################################################################
 # FUNC
@@ -83,7 +84,7 @@ class User(Document):
     def get_editable_new_user_fields(self):
         return ['name', 'email', 'password']
 
-    async def sanitize_data(self, data, user=False):
+    async def sanitize_data(self, method, data, user=False):
         if user:
             if user.role == 'admin':
                 return data
@@ -94,8 +95,11 @@ class User(Document):
             editable_fields = self.get_editable_new_user_fields()
             return {k: data[k] for k in data if k in editable_fields}
 
-    async def validate_and_save(self, db_session, data, queue=None):
-        is_new = not hasattr(self, 'mongo_id')
+    async def validate_and_save(self, db_session, data, **kwargs):
+        if kwargs.get('request'):
+            queue = kwargs.get('request').app.queue
+
+        is_new = await self.is_new()
 
         # EMAIL CONFIRMED
         email_confirmed = data.get('email_confirmed')
@@ -206,31 +210,32 @@ class User(Document):
         else:
             return True
 
-    async def edition_autorized(self, user):
-        if user == self:
-            return True
-        elif user.role == 'admin':
-            return True
+    async def method_autorized(self, method, user):
+        if method == 'update':
+            if user == self:
+                return True
+            elif user.role == 'admin':
+                return True
+            else:
+                return False
         else:
-            return False
+            # TODO others methods
+            return True
 
-    async def serialize(self):
+    async def serialize(self, method, user=False):
         notifications, new_notification_number = self.get_notification()
         data = {}
+        data['uid'] = self.get_uid()
         data['name'] = self.name
         data['email'] = self.email
         data['notifications'] = notifications
         data['new_notification_number'] = new_notification_number
         data['email_confirmed'] = self.email_confirmed
-        data['uid'] = str(self.mongo_id)
         data['gravatar_url'] = self.gravatar_url
         return data
 
     def get_notification(self):
         return [{'message': 'You are welcome'}], 1
-
-    def get_uid(self):
-        return str(self.mongo_id)
 
     def send_email_confirmation_email(self, queue, email_confirmation_token):
         # FORMAT EMAIL TEMPLATE

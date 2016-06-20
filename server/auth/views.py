@@ -26,6 +26,212 @@ async def set_session(user, request):
     active_user_gauge.inc()
 
 
+class CRUDBase(web.View):
+    async def get_json_data(self):
+        try:
+            resq_data = await self.request.json()
+            datum = resq_data['data']
+            model = resq_data['model']
+
+            # Convert datum to list if necessary
+            if not type(datum) == list:
+                datum = [datum]
+            logger.debug('datum = {datum}'.format(
+                datum=datum
+            ))
+
+            return datum, model
+        except:
+            raise InvalidRequestException(
+                'No json send or missing data parameters'
+            )
+
+    def import_model(self, model):
+        try:
+            m = importlib.import_module(
+                'server.model.{model}'.format(model=model)
+            )
+            return getattr(m, model.title())
+        except ImportError:
+            raise ModelImportException('{model} not found'.format(model=model))
+
+
+class CRUDCreate(CRUDBase):
+
+    @exception_handler()
+    @csrf_protected()
+    @require('login')
+    async def post(self):
+        datum, model = await self.get_json_data()
+        model_class = self.import_model(model)
+
+        session = await get_session(self.request)
+        user = get_user_from_session(session, self.request.db_session)
+
+        resp_datum = []
+        for data in datum:
+            model_obj = model_class()
+
+            if not await model_obj.method_autorized('create', user):
+                raise NotAuthorizedException(
+                    '{user} not authorized to create {model_obj}'
+                    .format(
+                        user=user,
+                        model_obj=model_obj
+                    )
+                )
+
+            sane_data = await model_obj.sanitize_data('create', data, user)
+            await model_obj.validate_and_save(
+                self.request.db_session,
+                sane_data,
+                request=self.request
+            )
+
+            resp_datum.append(await model_obj.serialize('read'))
+
+        resp_data = {'success': True, 'results': resp_datum}
+        return web.json_response(resp_data)
+
+
+class CRUDRead(CRUDBase):
+
+    @exception_handler()
+    @csrf_protected()
+    @require('login')
+    async def post(self):
+        datum, model = await self.get_json_data()
+        model_class = self.import_model(model)
+
+        session = await get_session(self.request)
+        user = get_user_from_session(session, self.request.db_session)
+
+        resp_datum = []
+        for data in datum:
+            uid = data.get('uid')
+
+            # READ SPECIFIC RECORD
+            if uid:
+                results = self.request.db_session.query(model_class)\
+                    .filter(model_class.mongo_id == uid).all()
+
+            else:
+                filters = data.get('filters')
+                limit = data.get('limit')
+                skip = data.get('skip')
+
+                base_query = self.request.db_session.query(model_class)
+
+                if limit:
+                    base_query = base_query.limit(limit)
+
+                if skip:
+                    base_query = base_query.skip(skip)
+
+                if filters:
+                    if 'uid' in filters:
+                        filters['mongo_id'] = filters['uid']
+                        del filters['uid']
+
+                    base_query = base_query.filter_by(**filters)
+
+                results = base_query.all()
+
+            for result in results:
+                if not await result.method_autorized('read', user):
+                    raise NotAuthorizedException(
+                        '{user} not authorized to read {model_obj}'
+                        .format(
+                            user=user,
+                            model_obj=result
+                        )
+                    )
+
+                resp_datum.append(await result.serialize('read'))
+
+        resp_data = {'success': True, 'results': resp_datum}
+        return web.json_response(resp_data)
+
+
+class CRUDUpdate(CRUDBase):
+
+    @exception_handler()
+    @csrf_protected()
+    @require('login')
+    async def post(self):
+        datum, model = await self.get_json_data()
+        model_class = self.import_model(model)
+
+        session = await get_session(self.request)
+        user = get_user_from_session(session, self.request.db_session)
+
+        resp_datum = []
+        for data in datum:
+            uid = data.get('uid')
+            if not uid:
+                raise InvalidRequestException('Missing uid in request json')
+
+            model_obj = self.request.db_session.query(model_class)\
+                .filter(model_class.mongo_id == uid).one()
+
+            if not await model_obj.method_autorized('update', user):
+                raise NotAuthorizedException(
+                    '{user} not authorized to update {model_obj}'
+                    .format(
+                        user=user,
+                        model_obj=model_obj
+                    )
+                )
+
+            sane_data = await model_obj.sanitize_data('update', data, user)
+            await model_obj.validate_and_save(
+                self.request.db_session,
+                sane_data,
+                request=self.request
+            )
+            resp_datum.append(await model_obj.serialize('read'))
+
+        resp_data = {'success': True, 'updated': resp_datum}
+        return web.json_response(resp_data)
+
+
+class CRUDDelete(CRUDBase):
+
+    @exception_handler()
+    @csrf_protected()
+    @require('login')
+    async def post(self):
+        datum, model = await self.get_json_data()
+        model_class = self.import_model(model)
+
+        session = await get_session(self.request)
+        user = get_user_from_session(session, self.request.db_session)
+
+        resp_datum = []
+        for data in datum:
+            uid = data.get('uid')
+            if not uid:
+                raise InvalidRequestException('Missing uid in request json')
+
+            model_obj = self.request.db_session.query(model_class)\
+                .filter(model_class.mongo_id == uid).one()
+
+            if not await model_obj.method_autorized('delete', user):
+                raise NotAuthorizedException(
+                    '{user} not authorized to delete {model_obj}'
+                    .format(
+                        user=user,
+                        model_obj=model_obj
+                    )
+                )
+
+            self.request.db_session.remove(model_obj, safe=True)
+            resp_datum.append({'uid': uid})
+
+        resp_data = {'success': True, 'deleted': resp_datum}
+        return web.json_response(resp_data)
+
+
 class Login(web.View):
 
     @exception_handler()
@@ -46,7 +252,10 @@ class Login(web.View):
             is_enable = user.enable
             if is_password_valid and is_enable:
                 await set_session(user, self.request)
-                resp_data = {'success': True, 'user': await user.serialize()}
+                resp_data = {
+                    'success': True,
+                    'user': await user.serialize('read')
+                }
             else:
                 raise WrongEmailOrPasswordException()
         else:
@@ -69,17 +278,17 @@ class Register(web.View):
 
         # INIT USER
         user = User()
-        sane_data = await user.sanitize_data(data)
+        sane_data = await user.sanitize_data('create', data)
         await user.validate_and_save(
             self.request.db_session,
             sane_data,
-            queue=self.request.app.queue
+            request=self.request
         )
 
         # SET SESSION
         await set_session(user, self.request)
 
-        resp_data = {'success': True, 'user': await user.serialize()}
+        resp_data = {'success': True, 'user': await user.serialize('read')}
         return web.json_response(resp_data)
 
 
@@ -102,7 +311,7 @@ async def api_admin(request):
     session = await get_session(request)
     uid = session.get('uid')
     user = request.db_session.query(User).filter(User.mongo_id == uid).one()
-    resp_data = {'success': True, 'user': await user.serialize()}
+    resp_data = {'success': True, 'user': await user.serialize('read')}
     return web.json_response(resp_data)
 
 
@@ -136,7 +345,7 @@ async def api_confirm_email(request):
                 {'email_confirmed': True}
             )
 
-            resp_data = {'success': True, 'user': await user.serialize()}
+            resp_data = {'success': True, 'user': await user.serialize('read')}
             return web.json_response(resp_data)
 
     # TOKEN NOT FOUND
@@ -180,47 +389,3 @@ async def api_reset_password(request):
 
     else:
         raise TokenInvalidException('Token not found')
-
-
-@exception_handler()
-@csrf_protected()
-@require('login')
-async def api_save_model(request):
-    logger.debug('save_model')
-
-    try:
-        resq_data = await request.json()
-        model = resq_data['model']
-        data = resq_data['data']
-    except:
-        raise InvalidRequestException('Missing json data')
-
-    try:
-        m = importlib.import_module('server.model.{model}'.format(model=model))
-        model_class = getattr(m, model.title())
-    except ImportError:
-        raise ModelImportException('{model} not found'.format(model=model))
-
-    session = await get_session(request)
-
-    model_obj = request.db_session.query(model_class)\
-        .filter(model_class.mongo_id == data['uid']).one()
-
-    user = get_user_from_session(session, request.db_session)
-    if await model_obj.edition_autorized(user):
-        sane_data = await model_obj.sanitize_data(data, user)
-        await model_obj.validate_and_save(
-            request.db_session,
-            sane_data,
-            queue=request.app.queue
-        )
-    else:
-        raise NotAuthorizedException(
-            'User ({user}) not authorized to edit {model_obj}'.format(
-                user=user,
-                model_obj=model_obj
-            )
-        )
-
-    resp_data = {'success': True, model: await model_obj.serialize()}
-    return web.json_response(resp_data)

@@ -37,7 +37,7 @@ async def api_get_session(request):
     if uid:
         user = get_user_from_session(session, request.db_session)
         if user.enable:
-            user = await user.serialize()
+            user = await user.serialize('read')
             success = True
         else:
             User.logout(session)
@@ -72,7 +72,7 @@ async def api_validate_reset_password_token(request):
         )
         if ret:
             await set_session(user, request)
-            resp_data = {'success': True, 'user': await user.serialize()}
+            resp_data = {'success': True, 'user': await user.serialize('read')}
             return web.json_response(resp_data)
 
     # TOKEN NOT FOUND
@@ -102,8 +102,12 @@ async def api_send_reset_password_token(request):
                 '{email} belong to a disabled user'.format(email=email)
                 )
 
-        reset_password_token = ResetPasswordToken(queue = request.app.queue)
-        reset_password_token.init(request.db_session, user)
+        reset_password_token = ResetPasswordToken()
+        reset_password_token.init(
+            request.db_session,
+            user,
+            queue=request.app.queue
+        )
 
         resp_data = {'success': True}
 

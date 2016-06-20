@@ -2,80 +2,16 @@ from server.settings import config
 from server.utils import DbSessionContext
 from server.model.user import User
 
-
-def test_save_model_not_authorized(client):
-    response = client.post_json(
-        '/api/save_model',
-        {
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert not response.json['success']
-    assert response.json['error'] == 'NotAuthorizedException'
+###############################################################################
+# UPDATE
+###############################################################################
 
 
-def test_save_model_invalid_request(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
+def test_crud_invalid_request_missing_data(client):
+    client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
-        {
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert not response.json['success']
-    assert response.json['error'] == 'InvalidRequestException'
-
-
-def test_save_model_invalid_model(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    response = client.post_json(
-        '/api/save_model',
-        {
-            'token': client.__token__,
-            'model': 'invalid'
-        }
-    )
-    assert response.status_code == 200
-    assert not response.json['success']
-    assert response.json['error'] == 'InvalidRequestException'
-
-
-def test_save_model_invalid_request_missing_data(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user'
@@ -86,24 +22,15 @@ def test_save_model_invalid_request_missing_data(client):
     assert response.json['error'] == 'InvalidRequestException'
 
 
-def test_save_model_normal_user_not_authorized(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
+def test_crud_normal_user_not_authorized(client):
+    client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         admin = session.query(User) \
             .filter(User.email == 'admin@admin.com').one()
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -118,24 +45,15 @@ def test_save_model_normal_user_not_authorized(client):
     assert response.json['error'] == 'NotAuthorizedException'
 
 
-def test_save_model_admin_edit_other_user(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'admin@admin.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
+def test_crud_admin_edit_other_user(client):
+    client.login('admin@admin.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -154,24 +72,11 @@ def test_save_model_admin_edit_other_user(client):
         assert user.name == 'new_name'
 
 
-def test_save_model_edit_email(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_edit_email(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -196,25 +101,12 @@ def test_save_model_edit_email(client):
         assert not user.email_confirmed
 
 
-def test_save_model_invalid_data(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_invalid_data(client):
+    user = client.login('test@test.com')
 
     # INVALID EMAIL
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -230,7 +122,7 @@ def test_save_model_invalid_data(client):
 
     # INVALID NAME
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -246,25 +138,12 @@ def test_save_model_invalid_data(client):
     assert response.json['error'] == 'InvalidNameException'
 
 
-def test_save_model_sanitize_data(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_sanitize_data(client):
+    user = client.login('test@test.com')
 
     # CHANGING ROLE IS NOT ALLOWED FOR NORMAL USER
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -283,24 +162,11 @@ def test_save_model_sanitize_data(client):
         assert user.role == 'user'
 
 
-def test_save_model_edit_name_with_same_email(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_edit_name_with_same_email(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -320,17 +186,8 @@ def test_save_model_edit_name_with_same_email(client):
         assert user.name == 'new_name'
 
 
-def test_save_model_sanitize_data_admin(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'admin@admin.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
+def test_crud_sanitize_data_admin(client):
+    client.login('admin@admin.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         user = session.query(User) \
@@ -338,7 +195,7 @@ def test_save_model_sanitize_data_admin(client):
 
     # CHANGING ROLE IS ALLOWED FOR ADMIN
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -357,24 +214,11 @@ def test_save_model_sanitize_data_admin(client):
         assert user.role == 'admin'
 
 
-def test_save_model_new_password_success(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_new_password_success(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -419,24 +263,11 @@ def test_save_model_new_password_success(client):
     assert response.json['success']
 
 
-def test_save_model_new_password_invalid(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_new_password_invalid(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -452,24 +283,11 @@ def test_save_model_new_password_invalid(client):
     assert response.json['error'] == 'InvalidPasswordException'
 
 
-def test_save_model_new_password_old_password_incorrect(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_new_password_old_password_incorrect(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',
@@ -485,24 +303,11 @@ def test_save_model_new_password_old_password_incorrect(client):
     assert response.json['error'] == 'WrongEmailOrPasswordException'
 
 
-def test_save_model_new_password_missing_old_password(client):
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-    assert response.status_code == 200
-    assert response.json['success']
-
-    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User) \
-            .filter(User.email == 'test@test.com').one()
+def test_crud_new_password_missing_old_password(client):
+    user = client.login('test@test.com')
 
     response = client.post_json(
-        '/api/save_model',
+        '/api/crud/u',
         {
             'token': client.__token__,
             'model': 'user',

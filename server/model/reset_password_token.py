@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from mongoalchemy.document import Index
 from mongoalchemy.fields import *  # noqa
 
 from server.model.base_token import BaseToken

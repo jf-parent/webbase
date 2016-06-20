@@ -1,7 +1,6 @@
-
-def test_logout_not_authorized(client):
+def test_crud_not_authorized(client):
     response = client.post_json(
-        '/api/logout',
+        '/api/crud/r',
         {
             'token': client.__token__
         }
@@ -11,37 +10,30 @@ def test_logout_not_authorized(client):
     assert response.json['error'] == 'NotAuthorizedException'
 
 
-def test_logout_with_right_token(client):
+def test_crud_invalid_request(client):
     client.login('test@test.com')
 
     response = client.post_json(
-        '/api/logout',
+        '/api/crud/r',
         {
             'token': client.__token__
         }
     )
     assert response.status_code == 200
-    assert response.json['success']
-
-
-def test_logout_without_token(client):
-    client.login('test@test.com')
-
-    response = client.post_json('/api/logout')
-    assert response.status_code == 200
     assert not response.json['success']
     assert response.json['error'] == 'InvalidRequestException'
 
 
-def test_logout_with_wrong_token(client):
+def test_save_model_invalid_model(client):
     client.login('test@test.com')
 
     response = client.post_json(
-        '/api/logout',
+        '/api/crud/r',
         {
-            'token': '1337'
+            'token': client.__token__,
+            'model': 'invalid'
         }
     )
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'CSRFMismatch'
+    assert response.json['error'] == 'InvalidRequestException'

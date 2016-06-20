@@ -1,4 +1,4 @@
-from mongoalchemy.document import Document
+from mongoalchemy.document import Document, Index
 from mongoalchemy.fields import *  # noqa
 
 from server.utils import generate_token

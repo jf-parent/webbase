@@ -17,18 +17,7 @@ def test_confirm_email_not_authorized(client):
 
 
 def test_confirm_email_invalid_request(client):
-    # LOGIN
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['success']
+    client.login('test@test.com')
 
     response = client.post_json('/api/confirm_email')
 
@@ -37,21 +26,9 @@ def test_confirm_email_invalid_request(client):
 
 
 def test_confirm_email_right_token(client):
-    # LOGIN
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['success']
+    user = client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User).filter(User.email == 'test@test.com').one()
         token = session.query(EmailConfirmationToken)\
             .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
 
@@ -68,18 +45,7 @@ def test_confirm_email_right_token(client):
 
 
 def test_confirm_email_wrong_token(client):
-    # LOGIN
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['success']
+    client.login('test@test.com')
 
     response = client.post_json(
         '/api/confirm_email',
@@ -94,18 +60,7 @@ def test_confirm_email_wrong_token(client):
 
 
 def test_confirm_email_right_token_wrong_user(client):
-    # LOGIN
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['success']
+    client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         user = session.query(User)\
@@ -126,21 +81,9 @@ def test_confirm_email_right_token_wrong_user(client):
 
 
 def test_confirm_email_already_confirmed(client):
-    # LOGIN
-    response = client.post_json(
-        '/api/login',
-        {
-            'email': 'test@test.com',
-            'password': '123456',
-            'token': client.__token__
-        }
-    )
-
-    assert response.status_code == 200
-    assert response.json['success']
+    user = client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        user = session.query(User).filter(User.email == 'test@test.com').one()
         token = session.query(EmailConfirmationToken)\
             .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
 

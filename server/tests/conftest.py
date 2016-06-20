@@ -1,4 +1,5 @@
 import asyncio
+import types
 import os
 import sys
 
@@ -10,6 +11,7 @@ sys.path.append(os.path.join(HERE, '..', '..'))
 
 from server.app import init  # noqa
 from server.model.user import User  # noqa
+from server.model.notification import Notification  # noqa
 from server.model.email_confirmation_token import EmailConfirmationToken  # noqa
 from server.model.reset_password_token import ResetPasswordToken  # noqa
 from server.utils import DbSessionContext  # noqa
@@ -28,7 +30,6 @@ def client():
         "SERVER_HOST": "localhost",
         "MASTER_PASSWORD": "Wkjdfkjdfjkdjkj"
     }
-
     _, _, app = loop.run_until_complete(init(loop, config))
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
@@ -63,11 +64,53 @@ def client():
             }
         ]
 
+        notifications = [
+            {
+                'user_uid': None,
+                'message': 'Test 1'
+            }, {
+                'user_uid': None,
+                'message': 'Test 2'
+            }, {
+                'user_uid': None,
+                'message': 'Test 3'
+            }, {
+                'user_uid': None,
+                'message': 'Test 4',
+                'seen': True
+            }
+        ]
+
         for user_data in users:
             user = User()
             loop.run_until_complete(user.validate_and_save(session, user_data))
+            for notification_data in notifications:
+                notification = Notification()
+                notification_data['user_uid'] = user.get_uid()
+                loop.run_until_complete(
+                    notification.validate_and_save(session, notification_data)
+                )
+
+    def login(self, email, password='123456'):
+        self.post_json(
+            '/api/login',
+            {
+                'email': email,
+                'password': password,
+                'token': self.__token__
+            }
+        )
+        with DbSessionContext(
+            self.config.get('MONGO_DATABASE_NAME')
+        ) as session:
+            user = session.query(User)\
+                .filter(User.email == email).one()
+
+        return user
 
     client = TestApp(app)
+    client.config = config
+    client.login = types.MethodType(login, client)
 
     # NOTE Always do an /api/get_session to init the session correctly
     response = client.get('/api/get_session')
