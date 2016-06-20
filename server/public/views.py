@@ -102,7 +102,7 @@ async def api_send_reset_password_token(request):
                 '{email} belong to a disabled user'.format(email=email)
                 )
 
-        reset_password_token = ResetPasswordToken()
+        reset_password_token = ResetPasswordToken(queue = request.app.queue)
         reset_password_token.init(request.db_session, user)
 
         resp_data = {'success': True}

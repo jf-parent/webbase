@@ -7,8 +7,6 @@ from server.model.base_token import BaseToken
 class EmailConfirmationToken(BaseToken):
     user_id = StringField(required=True)
 
-    i_token = Index().ascending('token').unique()
-
     def init(self, db_session, user):
         BaseToken.init(self, db_session, user)
 

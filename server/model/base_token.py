@@ -9,6 +9,8 @@ class BaseToken(Document):
     token = StringField(required=True)
     used = BoolField(default=False)
 
+    i_token = Index().ascending('token').unique()
+
     def init(self, db_session, user):
         self.token = generate_token(20)
 

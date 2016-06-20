@@ -13,9 +13,9 @@ class ResetPasswordToken(BaseToken):
     user_id = StringField(required=True)
     expiration_datetime = DateTimeField(required=True)
 
-    i_token = Index().ascending('token').unique()
-
     def init(self, db_session, user, **kwargs):
+        queue = kwargs.get('queue', False)
+
         BaseToken.init(self, db_session, user)
 
         NOW = datetime.now()
@@ -31,7 +31,7 @@ class ResetPasswordToken(BaseToken):
 
         db_session.save(self, safe=True)
 
-        if config.get('ENV', 'production') == 'production':
+        if config.get('ENV', 'production') == 'production' and queue:
             # FORMAT EMAIL TEMPLATE
             email = config.get('reset_password_email')
             email['text'] = email['text'].format(
@@ -48,7 +48,7 @@ class ResetPasswordToken(BaseToken):
             )
 
             # ADD THE SEND EMAIL TO THE QUEUE
-            request.app.queue.enqueue(
+            queue.enqueue(
                 send_email,
                 config.get('REST_API_ID'),
                 config.get('REST_API_SECRET'),
