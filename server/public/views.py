@@ -37,10 +37,17 @@ async def api_get_session(request):
     if uid:
         user = get_user_from_session(session, request.db_session)
         if user.enable:
-            user = await user.serialize('read')
+            context = {
+                'user': user,
+                'db_session': request.db_session,
+                'method': 'read',
+                'queue': request.app.queue
+            }
+
+            user = await user.serialize(context)
             success = True
         else:
-            User.logout(session)
+            user.logout(session)
             user = None
 
     resp_data = {'success': success, 'user': user, 'token': token}
@@ -63,16 +70,24 @@ async def api_validate_reset_password_token(request):
     if token_query.count():
         reset_password_token = token_query.one()
         user = request.db_session.query(User)\
-            .filter(User.mongo_id == reset_password_token.user_id).one()
+            .filter(User.mongo_id == reset_password_token.user_uid).one()
 
-        ret = reset_password_token.use(
-            request.db_session,
-            user,
-            reset_password_token
-        )
+        context = {
+            'user': user,
+            'db_session': request.db_session,
+            'method': 'update',
+            'target': reset_password_token,
+            'queue': request.app.queue
+        }
+
+        ret = reset_password_token.use(context)
         if ret:
             await set_session(user, request)
-            resp_data = {'success': True, 'user': await user.serialize('read')}
+            context['method'] = 'read'
+            resp_data = {
+                'success': True,
+                'user': await user.serialize(context)
+            }
             return web.json_response(resp_data)
 
     # TOKEN NOT FOUND
@@ -102,12 +117,15 @@ async def api_send_reset_password_token(request):
                 '{email} belong to a disabled user'.format(email=email)
                 )
 
+        context = {
+            'user': user,
+            'db_session': request.db_session,
+            'method': 'create',
+            'queue': request.app.queue
+        }
+
         reset_password_token = ResetPasswordToken()
-        reset_password_token.init(
-            request.db_session,
-            user,
-            queue=request.app.queue
-        )
+        reset_password_token.init(context)
 
         resp_data = {'success': True}
 

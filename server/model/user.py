@@ -8,6 +8,7 @@ from validate_email import validate_email
 
 from jobs.send_email import send_email
 from server.model.base_model import BaseModel
+from server.model.notification import Notification
 from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server.exceptions import *  # noqa
@@ -78,26 +79,29 @@ class User(BaseModel):
         ).decode('utf-8')
         return hashed_password, salt_str
 
-    def get_editable_user_fields(self):
-        return ['name', 'email', 'old_password', 'new_password']
+    async def sanitize_data(self, context):
+        user = context.get('user')
+        data = context.get('data')
 
-    def get_editable_new_user_fields(self):
-        return ['name', 'email', 'password']
-
-    async def sanitize_data(self, method, data, user=False):
         if user:
             if user.role == 'admin':
                 return data
             else:
-                editable_fields = self.get_editable_user_fields()
-                return {k: data[k] for k in data if k in editable_fields}
+                editable_fields = [
+                    'name',
+                    'email',
+                    'old_password',
+                    'new_password'
+                ]
         else:
-            editable_fields = self.get_editable_new_user_fields()
-            return {k: data[k] for k in data if k in editable_fields}
+            editable_fields = ['name', 'email', 'password']
 
-    async def validate_and_save(self, db_session, data, **kwargs):
-        if kwargs.get('request'):
-            queue = kwargs.get('request').app.queue
+        return {k: data[k] for k in data if k in editable_fields}
+
+    async def validate_and_save(self, context):
+        queue = context.get('queue')
+        data = context.get('data')
+        db_session = context.get('db_session')
 
         is_new = await self.is_new()
 
@@ -188,7 +192,8 @@ class User(BaseModel):
 
         if not self.email_confirmed:
             email_confirmation_token = EmailConfirmationToken()
-            email_confirmation_token.init(db_session, self)
+            context['user'] = self
+            email_confirmation_token.init(context)
             if config.get('ENV', 'production') == 'production':
                 if queue is not None:
                     self.send_email_confirmation_email(
@@ -210,7 +215,10 @@ class User(BaseModel):
         else:
             return True
 
-    async def method_autorized(self, method, user):
+    async def method_autorized(self, context):
+        method = context.get('method')
+        user = context.get('user')
+
         if method in ['create', 'read', 'delete']:
             if user.role == 'admin':
                 return True
@@ -224,8 +232,12 @@ class User(BaseModel):
             else:
                 return False
 
-    async def serialize(self, method, user=False):
-        notifications, new_notification_number = self.get_notification()
+    async def serialize(self, context):
+        result = await self.get_notification(
+            context
+        )
+        notifications = result[0]
+        new_notification_number = result[1]
         data = {}
         data['uid'] = self.get_uid()
         data['name'] = self.name
@@ -236,8 +248,35 @@ class User(BaseModel):
         data['gravatar_url'] = self.gravatar_url
         return data
 
-    def get_notification(self):
-        return [{'message': 'You are welcome'}], 1
+    async def get_notification(self, context):
+        db_session = context.get('db_session')
+
+        new_notfications = db_session.query(Notification)\
+            .filter(Notification.user_uid == self.get_uid())\
+            .filter(Notification.seen == False)\
+            .count()  # noqa
+
+        notifications_raw = db_session.query(Notification)\
+            .filter(Notification.user_uid == self.get_uid())\
+            .limit(20)\
+            .all()
+
+        notifications = []
+        for notification_raw in notifications_raw:
+            notifications.append(await notification_raw.serialize(context))
+
+        return notifications, new_notfications
+
+    async def add_notification(self, db_session, message):
+        data = {
+            'message': message,
+            'user_uid': self.get_uid()
+        }
+        notification = Notification()
+        await notification.validate_and_save(
+            db_session,
+            data
+        )
 
     def send_email_confirmation_email(self, queue, email_confirmation_token):
         # FORMAT EMAIL TEMPLATE
@@ -264,7 +303,6 @@ class User(BaseModel):
             email
         )
 
-    @staticmethod
-    def logout(session):
+    def logout(self, session):
         del session['uid']
         active_user_gauge.dec()

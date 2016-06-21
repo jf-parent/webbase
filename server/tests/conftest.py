@@ -83,12 +83,25 @@ def client():
 
         for user_data in users:
             user = User()
-            loop.run_until_complete(user.validate_and_save(session, user_data))
+            context = {
+                'db_session': session,
+                'method': 'create',
+                'data': user_data
+            }
+
+            loop.run_until_complete(user.validate_and_save(context))
             for notification_data in notifications:
                 notification = Notification()
                 notification_data['user_uid'] = user.get_uid()
+
+                context = {
+                    'db_session': session,
+                    'method': 'create',
+                    'data': notification_data
+                }
+
                 loop.run_until_complete(
-                    notification.validate_and_save(session, notification_data)
+                    notification.validate_and_save(context)
                 )
 
     def login(self, email, password='123456'):

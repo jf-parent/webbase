@@ -77,11 +77,12 @@ def test_validate_reset_password_token_expired(client):
         old_datetime = dateutil_parser.parse('2012 12 22 00:00:00')
         user = session.query(User).filter(User.email == 'test@test.com').one()
         reset_password_token = ResetPasswordToken()
-        reset_password_token.init(
-            session,
-            user,
-            mock_expiration_date=old_datetime
-        )
+        context = {
+            'db_session': session,
+            'user': user,
+            'mock_expiration_date': old_datetime
+        }
+        reset_password_token.init(context)
         old_token = reset_password_token.token
 
     response = client.post_json(

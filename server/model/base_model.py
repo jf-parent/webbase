@@ -12,19 +12,19 @@ class BaseModel(Document):
     modified_ts = ModifiedField()
 
     # @abstractmethod
-    async def sanitize_data(self, method, data, user=False):
+    async def sanitize_data(self, context):
         raise NotImplemented()
 
     # @abstractmethod
-    async def serialize(self, method, user=False):
+    async def serialize(self, context):
         raise NotImplemented()
 
     # @abstractmethod
-    async def method_autorized(self, method, user=False):
+    async def method_autorized(self, context):
         raise NotImplemented()
 
     # @abstractmethod
-    async def validate_and_save(self, db_session, data, **kwargs):
+    async def validate_and_save(self, context):
         raise NotImplemented()
 
     async def is_new(self):

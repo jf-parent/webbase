@@ -11,13 +11,17 @@ class BaseToken(Document):
 
     i_token = Index().ascending('token').unique()
 
-    def init(self, db_session, user):
+    def init(self, context):
         self.token = generate_token(20)
 
     def __eq__(self, target):
         return target == self.token
 
-    def use(self, db_session, user, target):
+    def use(self, context):
+        target = context.get('target')
+        user = context.get('user')
+        db_session = context.get('db_session')
+
         if self.used:
             raise TokenAlreadyUsedException(self.token)
 

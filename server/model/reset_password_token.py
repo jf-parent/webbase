@@ -9,23 +9,25 @@ from jobs.send_email import send_email
 
 
 class ResetPasswordToken(BaseToken):
-    user_id = StringField(required=True)
+    user_uid = StringField(required=True)
     expiration_datetime = DateTimeField(required=True)
 
-    def init(self, db_session, user, **kwargs):
-        queue = kwargs.get('queue', False)
+    def init(self, context):
+        queue = context.get('queue')
+        user = context.get('user')
+        db_session = context.get('db_session')
 
-        BaseToken.init(self, db_session, user)
+        BaseToken.init(self, context)
 
         NOW = datetime.now()
         # FOR TEST ONLY
         if config.get('ENV', 'production') == 'test':
-            mock_expiration_date = kwargs.get('mock_expiration_date', NOW)
+            mock_expiration_date = context.get('mock_expiration_date', NOW)
             NOW = mock_expiration_date
 
         TOMORROW = NOW + relativedelta(days=+1)
 
-        self.user_id = user.get_uid()
+        self.user_uid = user.get_uid()
         self.expiration_datetime = TOMORROW
 
         db_session.save(self, safe=True)
@@ -55,7 +57,7 @@ class ResetPasswordToken(BaseToken):
             )
 
     def is_belonging_to_user(self, user):
-        return self.user_id == user.get_uid()
+        return self.user_uid == user.get_uid()
 
     def is_expire(self):
         NOW = datetime.now()

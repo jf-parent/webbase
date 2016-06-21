@@ -30,7 +30,7 @@ def test_confirm_email_right_token(client):
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',
@@ -66,7 +66,7 @@ def test_confirm_email_right_token_wrong_user(client):
         user = session.query(User)\
             .filter(User.email == 'admin@admin.com').one()
         token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',
@@ -85,7 +85,7 @@ def test_confirm_email_already_confirmed(client):
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_id == user.get_uid()).one()
+            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',

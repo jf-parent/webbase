@@ -26,7 +26,9 @@ class Notification(BaseModel):
 # FUNC
 ##############################################################################
 
-    async def sanitize_data(self, method, data, user=False):
+    async def sanitize_data(self, context):
+        user = context.get('user')
+        data = context.get('data')
         if user:
             if user.role == 'admin':
                 return data
@@ -36,7 +38,10 @@ class Notification(BaseModel):
 
         return []
 
-    async def validate_and_save(self, db_session, data, **kwargs):
+    async def validate_and_save(self, context):
+        data = context.get('data')
+        db_session = context.get('db_session')
+
         is_new = await self.is_new()
 
         # USER UID
@@ -62,7 +67,10 @@ class Notification(BaseModel):
 
         db_session.save(self, safe=True)
 
-    async def method_autorized(self, method, user):
+    async def method_autorized(self, context):
+        method = context.get('method')
+        user = context.get('user')
+
         # CREATE
         if method == 'create':
             if user.role == 'admin':
@@ -102,7 +110,7 @@ class Notification(BaseModel):
                 )
             )
 
-    async def serialize(self, method, user=False):
+    async def serialize(self, context):
         data = {}
 
         data['uid'] = self.get_uid()

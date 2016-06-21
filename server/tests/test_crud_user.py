@@ -201,7 +201,7 @@ def test_crud_read_specific_user_with_admin(client):
 
 
 def test_crud_read_skip_and_limit_admin(client):
-    user = client.login('admin@admin.com')
+    client.login('admin@admin.com')
 
     response = client.post_json(
         '/api/crud/r',
@@ -221,7 +221,7 @@ def test_crud_read_skip_and_limit_admin(client):
 
 
 def test_crud_read_limit_admin(client):
-    user = client.login('admin@admin.com')
+    client.login('admin@admin.com')
 
     response = client.post_json(
         '/api/crud/r',
@@ -240,7 +240,7 @@ def test_crud_read_limit_admin(client):
 
 
 def test_crud_read_skip_admin(client):
-    user = client.login('admin@admin.com')
+    client.login('admin@admin.com')
 
     response = client.post_json(
         '/api/crud/r',
@@ -259,7 +259,7 @@ def test_crud_read_skip_admin(client):
 
 
 def test_crud_read_admin(client):
-    user = client.login('admin@admin.com')
+    client.login('admin@admin.com')
 
     response = client.post_json(
         '/api/crud/r',

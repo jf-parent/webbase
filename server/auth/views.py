@@ -17,7 +17,7 @@ def get_user_from_session(session, db_session):
         return db_session.query(User)\
             .filter(User.mongo_id == session['uid']).one()
     except:
-        return False
+        return None
 
 
 async def set_session(user, request):
@@ -68,11 +68,21 @@ class CRUDCreate(CRUDBase):
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
 
+        context = {
+            'user': user,
+            'db_session': self.request.db_session,
+            'method': 'create',
+            'queue': self.request.app.queue
+        }
+
         resp_datum = []
         for data in datum:
             model_obj = model_class()
 
-            if not await model_obj.method_autorized('create', user):
+            context['data'] = data
+            context['method'] = 'create'
+
+            if not await model_obj.method_autorized(context):
                 raise NotAuthorizedException(
                     '{user} not authorized to create {model_class}'
                     .format(
@@ -81,14 +91,14 @@ class CRUDCreate(CRUDBase):
                     )
                 )
 
-            sane_data = await model_obj.sanitize_data('create', data, user)
-            await model_obj.validate_and_save(
-                self.request.db_session,
-                sane_data,
-                request=self.request
+            sane_data = await model_obj.sanitize_data(
+                context
             )
+            context['data'] = sane_data
+            await model_obj.validate_and_save(context)
 
-            resp_datum.append(await model_obj.serialize('read'))
+            context['method'] = 'read'
+            resp_datum.append(await model_obj.serialize(context))
 
         resp_data = {'success': True, 'results': resp_datum}
         return web.json_response(resp_data)
@@ -105,6 +115,13 @@ class CRUDRead(CRUDBase):
 
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
+
+        context = {
+            'user': user,
+            'db_session': self.request.db_session,
+            'method': 'read',
+            'queue': self.request.app.queue
+        }
 
         resp_datum = []
         for data in datum:
@@ -138,7 +155,7 @@ class CRUDRead(CRUDBase):
                 results = base_query.all()
 
             for result in results:
-                if not await result.method_autorized('read', user):
+                if not await result.method_autorized(context):
                     raise NotAuthorizedException(
                         '{user} not authorized to read {model_obj}'
                         .format(
@@ -147,7 +164,7 @@ class CRUDRead(CRUDBase):
                         )
                     )
 
-                resp_datum.append(await result.serialize('read'))
+                resp_datum.append(await result.serialize(context))
 
         resp_data = {'success': True, 'results': resp_datum}
         return web.json_response(resp_data)
@@ -165,6 +182,13 @@ class CRUDUpdate(CRUDBase):
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
 
+        context = {
+            'user': user,
+            'db_session': self.request.db_session,
+            'method': 'update',
+            'queue': self.request.app.queue
+        }
+
         resp_datum = []
         for data in datum:
             uid = data.get('uid')
@@ -174,7 +198,8 @@ class CRUDUpdate(CRUDBase):
             model_obj = self.request.db_session.query(model_class)\
                 .filter(model_class.mongo_id == uid).one()
 
-            if not await model_obj.method_autorized('update', user):
+            context['method'] = 'update'
+            if not await model_obj.method_autorized(context):
                 raise NotAuthorizedException(
                     '{user} not authorized to update {model_obj}'
                     .format(
@@ -183,13 +208,12 @@ class CRUDUpdate(CRUDBase):
                     )
                 )
 
-            sane_data = await model_obj.sanitize_data('update', data, user)
-            await model_obj.validate_and_save(
-                self.request.db_session,
-                sane_data,
-                request=self.request
-            )
-            resp_datum.append(await model_obj.serialize('read'))
+            context['data'] = data
+            sane_data = await model_obj.sanitize_data(context)
+            context['data'] = sane_data
+            await model_obj.validate_and_save(context)
+            context['method'] = 'read'
+            resp_datum.append(await model_obj.serialize(context))
 
         resp_data = {'success': True, 'updated': resp_datum}
         return web.json_response(resp_data)
@@ -207,6 +231,13 @@ class CRUDDelete(CRUDBase):
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
 
+        context = {
+            'user': user,
+            'db_session': self.request.db_session,
+            'method': 'delete',
+            'queue': self.request.app.queue
+        }
+
         resp_datum = []
         for data in datum:
             uid = data.get('uid')
@@ -216,7 +247,7 @@ class CRUDDelete(CRUDBase):
             model_obj = self.request.db_session.query(model_class)\
                 .filter(model_class.mongo_id == uid).one()
 
-            if not await model_obj.method_autorized('delete', user):
+            if not await model_obj.method_autorized(context):
                 raise NotAuthorizedException(
                     '{user} not authorized to delete {model_obj}'
                     .format(
@@ -252,9 +283,16 @@ class Login(web.View):
             is_enable = user.enable
             if is_password_valid and is_enable:
                 await set_session(user, self.request)
+
+                context = {
+                    'db_session': self.request.db_session,
+                    'method': 'read',
+                    'queue': self.request.app.queue
+                }
+
                 resp_data = {
                     'success': True,
-                    'user': await user.serialize('read')
+                    'user': await user.serialize(context)
                 }
             else:
                 raise WrongEmailOrPasswordException()
@@ -276,19 +314,25 @@ class Register(web.View):
         except:
             raise InvalidRequestException('No json send')
 
+        context = {
+            'db_session': self.request.db_session,
+            'method': 'create',
+            'queue': self.request.app.queue
+        }
+
         # INIT USER
         user = User()
-        sane_data = await user.sanitize_data('create', data)
-        await user.validate_and_save(
-            self.request.db_session,
-            sane_data,
-            request=self.request
-        )
+        context['data'] = data
+        sane_data = await user.sanitize_data(context)
+        context['data'] = sane_data
+        await user.validate_and_save(context)
 
         # SET SESSION
         await set_session(user, self.request)
 
-        resp_data = {'success': True, 'user': await user.serialize('read')}
+        context['method'] = 'read'
+        context['user'] = user
+        resp_data = {'success': True, 'user': await user.serialize(context)}
         return web.json_response(resp_data)
 
 
@@ -299,7 +343,8 @@ class Logout(web.View):
     @csrf_protected()
     async def post(self):
         session = await get_session(self.request)
-        User.logout(session)
+        user = get_user_from_session(session, self.request.db_session)
+        user.logout(session)
         resp_data = {'success': True}
         return web.json_response(resp_data)
 
@@ -309,9 +354,16 @@ class Logout(web.View):
 async def api_admin(request):
     logger.debug('admin')
     session = await get_session(request)
-    uid = session.get('uid')
-    user = request.db_session.query(User).filter(User.mongo_id == uid).one()
-    resp_data = {'success': True, 'user': await user.serialize('read')}
+    user = get_user_from_session(session, request.db_session)
+
+    context = {
+        'user': user,
+        'db_session': request.db_session,
+        'method': 'read',
+        'queue': request.app.queue
+    }
+
+    resp_data = {'success': True, 'user': await user.serialize(context)}
     return web.json_response(resp_data)
 
 
@@ -320,32 +372,39 @@ async def api_admin(request):
 async def api_confirm_email(request):
     logger.debug('confirm_email')
 
-    session = await get_session(request)
-    user = get_user_from_session(session, request.db_session)
-
     try:
         data = await request.json()
         email_confirmation_token = data['token']
     except:
         raise InvalidRequestException('Missing json data')
 
+    session = await get_session(request)
+    user = get_user_from_session(session, request.db_session)
+
+    context = {
+        'user': user,
+        'db_session': request.db_session,
+        'method': 'update',
+        'queue': request.app.queue
+    }
+
     token_query = request.db_session.query(EmailConfirmationToken)\
         .filter(EmailConfirmationToken.token == email_confirmation_token)
     if token_query.count():
         email_confirmation_token = token_query.one()
 
-        ret = email_confirmation_token.use(
-            request.db_session,
-            user,
-            email_confirmation_token
-        )
+        context['target'] = email_confirmation_token
+        ret = email_confirmation_token.use(context)
         if ret:
-            await user.validate_and_save(
-                request.db_session,
-                {'email_confirmed': True}
-            )
+            context['data'] = {'email_confirmed': True}
+            del context['target']
+            await user.validate_and_save(context)
 
-            resp_data = {'success': True, 'user': await user.serialize('read')}
+            context['method'] = 'read'
+            resp_data = {
+                'success': True,
+                'user': await user.serialize(context)
+            }
             return web.json_response(resp_data)
 
     # TOKEN NOT FOUND
@@ -369,17 +428,21 @@ async def api_reset_password(request):
     session = await get_session(request)
     user = get_user_from_session(session, request.db_session)
 
+    context = {
+        'user': user,
+        'db_session': request.db_session,
+        'method': 'update',
+        'queue': request.app.queue,
+        'data': {'password': new_password}
+    }
+
     token_query = request.db_session.query(ResetPasswordToken)\
-        .filter(ResetPasswordToken.token == token)
+        .filter(ResetPasswordToken.token == token)\
+        .filter(ResetPasswordToken.user_uid == user.get_uid())
     if token_query.count():
         reset_password_token = token_query.one()
         if reset_password_token.token == token:
-            await user.validate_and_save(
-                request.db_session,
-                {
-                    'password': new_password
-                }
-            )
+            await user.validate_and_save(context)
 
             resp_data = {'success': True}
             return web.json_response(resp_data)
