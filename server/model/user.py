@@ -211,16 +211,18 @@ class User(BaseModel):
             return True
 
     async def method_autorized(self, method, user):
-        if method == 'update':
+        if method in ['create', 'read', 'delete']:
+            if user.role == 'admin':
+                return True
+            else:
+                return False
+        elif method == 'update':
             if user == self:
                 return True
             elif user.role == 'admin':
                 return True
             else:
                 return False
-        else:
-            # TODO others methods
-            return True
 
     async def serialize(self, method, user=False):
         notifications, new_notification_number = self.get_notification()

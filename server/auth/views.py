@@ -74,10 +74,10 @@ class CRUDCreate(CRUDBase):
 
             if not await model_obj.method_autorized('create', user):
                 raise NotAuthorizedException(
-                    '{user} not authorized to create {model_obj}'
+                    '{user} not authorized to create {model_class}'
                     .format(
                         user=user,
-                        model_obj=model_obj
+                        model_class=model_class
                     )
                 )
 

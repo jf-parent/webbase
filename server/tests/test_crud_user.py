@@ -3,6 +3,279 @@ from server.utils import DbSessionContext
 from server.model.user import User
 
 ###############################################################################
+# CREATE
+###############################################################################
+
+
+def test_crud_create_not_allowed_for_normal_user(client):
+    client.login('test@test.com')
+
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'email': 'test1@test.com',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'NotAuthorizedException'
+
+
+def test_crud_create_missing_data(client):
+    client.login('admin@admin.com')
+
+    # Missing name
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'email': 'test1@test.com',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidNameException'
+
+    # Missing email
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidEmailException'
+
+    # Missing password
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'email': 'test1@test.com'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidPasswordException'
+
+
+def test_crud_create_invalid_data(client):
+    client.login('admin@admin.com')
+
+    # Invalid name
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'email': 'test1@test.com',
+                'name': 'a',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidNameException'
+
+    # Invalid email
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'email': 'test',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidEmailException'
+
+    # Invalid password
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'email': 'test1@test.com',
+                'password': 'inv'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidPasswordException'
+
+
+def test_crud_create_success(client):
+    client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/c',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'name': 'test',
+                'email': 'test1@test.com',
+                'password': '123456'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert response.json['results'][0]['name'] == 'test'
+    assert response.json['results'][0]['email'] == 'test1@test.com'
+
+###############################################################################
+# READ
+###############################################################################
+
+
+def test_crud_read_not_allowed_for_normal_user(client):
+    user = client.login('test@test.com')
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'uid': user.get_uid()
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'NotAuthorizedException'
+
+
+def test_crud_read_specific_user_with_admin(client):
+    client.login('admin@admin.com')
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User) \
+                .filter(User.email == 'test@test.com').one()
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'uid': user.get_uid()
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert len(response.json['results']) == 1
+    assert response.json['results'][0]['name'] == 'test'
+
+
+def test_crud_read_skip_and_limit_admin(client):
+    user = client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'limit': 2,
+                'skip': 3
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert len(response.json['results']) == 1
+    assert response.json['results'][0]['name'] == 'disabled'
+
+
+def test_crud_read_limit_admin(client):
+    user = client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'limit': 2
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert len(response.json['results']) == 2
+    assert response.json['results'][0]['name'] == 'test'
+
+
+def test_crud_read_skip_admin(client):
+    user = client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'skip': 2
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert len(response.json['results']) == 2
+    assert response.json['results'][0]['name'] == 'admin'
+
+
+def test_crud_read_admin(client):
+    user = client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/r',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert len(response.json['results']) == 4
+
+
+###############################################################################
 # UPDATE
 ###############################################################################
 
@@ -22,7 +295,7 @@ def test_crud_invalid_request_missing_data(client):
     assert response.json['error'] == 'InvalidRequestException'
 
 
-def test_crud_normal_user_not_authorized(client):
+def test_crud_update_normal_user_not_authorized(client):
     client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
@@ -45,7 +318,7 @@ def test_crud_normal_user_not_authorized(client):
     assert response.json['error'] == 'NotAuthorizedException'
 
 
-def test_crud_admin_edit_other_user(client):
+def test_crud_update_admin_other_user(client):
     client.login('admin@admin.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
@@ -72,7 +345,7 @@ def test_crud_admin_edit_other_user(client):
         assert user.name == 'new_name'
 
 
-def test_crud_edit_email(client):
+def test_crud_update_email(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -101,7 +374,7 @@ def test_crud_edit_email(client):
         assert not user.email_confirmed
 
 
-def test_crud_invalid_data(client):
+def test_crud_update_invalid_data(client):
     user = client.login('test@test.com')
 
     # INVALID EMAIL
@@ -138,7 +411,7 @@ def test_crud_invalid_data(client):
     assert response.json['error'] == 'InvalidNameException'
 
 
-def test_crud_sanitize_data(client):
+def test_crud_update_sanitize_data(client):
     user = client.login('test@test.com')
 
     # CHANGING ROLE IS NOT ALLOWED FOR NORMAL USER
@@ -162,7 +435,7 @@ def test_crud_sanitize_data(client):
         assert user.role == 'user'
 
 
-def test_crud_edit_name_with_same_email(client):
+def test_crud_update_name_with_same_email(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -186,7 +459,7 @@ def test_crud_edit_name_with_same_email(client):
         assert user.name == 'new_name'
 
 
-def test_crud_sanitize_data_admin(client):
+def test_crud_update_sanitize_data_admin(client):
     client.login('admin@admin.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
@@ -214,7 +487,7 @@ def test_crud_sanitize_data_admin(client):
         assert user.role == 'admin'
 
 
-def test_crud_new_password_success(client):
+def test_crud_update_new_password_success(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -263,7 +536,7 @@ def test_crud_new_password_success(client):
     assert response.json['success']
 
 
-def test_crud_new_password_invalid(client):
+def test_crud_update_new_password_invalid(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -283,7 +556,7 @@ def test_crud_new_password_invalid(client):
     assert response.json['error'] == 'InvalidPasswordException'
 
 
-def test_crud_new_password_old_password_incorrect(client):
+def test_crud_update_new_password_old_password_incorrect(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -303,7 +576,7 @@ def test_crud_new_password_old_password_incorrect(client):
     assert response.json['error'] == 'WrongEmailOrPasswordException'
 
 
-def test_crud_new_password_missing_old_password(client):
+def test_crud_update_new_password_missing_old_password(client):
     user = client.login('test@test.com')
 
     response = client.post_json(
@@ -314,6 +587,74 @@ def test_crud_new_password_missing_old_password(client):
             'data': {
                 'uid': user.get_uid(),
                 'new_password': '1asdf!!'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'InvalidRequestException'
+
+
+###############################################################################
+# DELETE
+###############################################################################
+
+
+def test_crud_delete_not_allowed_for_normal_user(client):
+    user = client.login('test@test.com')
+
+    response = client.post_json(
+        '/api/crud/d',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'uid': user.get_uid()
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert not response.json['success']
+    assert response.json['error'] == 'NotAuthorizedException'
+
+
+def test_crud_delete_admin_success(client):
+    client.login('admin@admin.com')
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User) \
+                .filter(User.email == 'test@test.com').one()
+
+    user_uid = user.get_uid()
+
+    response = client.post_json(
+        '/api/crud/d',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
+                'uid': user_uid
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert response.json['deleted'][0]['uid'] == user_uid
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        assert not session.query(User) \
+                .filter(User.email == 'test@test.com').count()
+
+
+def test_crud_delete_admin_missing_uid(client):
+    client.login('admin@admin.com')
+
+    response = client.post_json(
+        '/api/crud/d',
+        {
+            'token': client.__token__,
+            'model': 'user',
+            'data': {
             }
         }
     )
