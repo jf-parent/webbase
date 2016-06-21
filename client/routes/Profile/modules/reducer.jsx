@@ -22,12 +22,12 @@ export function doSave (data) {
   return dispatch => {
     dispatch({type: PROFILE_LOADING})
 
-    axios.post('/api/save_model', data)
+    axios.post('/api/crud/u', data)
       .then((response) => {
-        logger.debug('/api/save_model (data) (response)', data, response)
+        logger.debug('/api/crud/u (data) (response)', data, response)
 
         if (response.data.success) {
-          dispatch(updateSessionUser(response.data.user))
+          dispatch(updateSessionUser(response.data.updated[0]))
           dispatch(profileSuccess())
         } else {
           dispatch(profileError(response.data.error))

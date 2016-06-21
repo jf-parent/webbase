@@ -21,6 +21,8 @@ class NotificationPopup extends BaseComponent {
     let overlayStyle = {
       height: '80%',
       width: '80%',
+      top: '20px',
+      left: '20px',
       marginTop: '10px',
       marginLeft: '10px'
     }
