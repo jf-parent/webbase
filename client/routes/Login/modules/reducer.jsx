@@ -34,10 +34,6 @@ export function doLogin (data, nextPath) {
           dispatch(loginError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/login error (data) (response)', data, response)
-        dispatch(loginError(response.data.error))
-      })
   }
 }
 

@@ -33,10 +33,6 @@ export function doSave (data) {
           dispatch(profileError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/save_model error (data) (response)', data, response)
-        dispatch(profileError(response.data.error))
-      })
   }
 }
 

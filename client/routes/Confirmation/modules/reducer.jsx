@@ -35,10 +35,6 @@ export function doConfirmEmail (token) {
           dispatch(confirmEmailError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/confirm_email error (response)', response)
-        dispatch(confirmEmailError(response.data.error))
-      })
   }
 }
 

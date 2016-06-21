@@ -37,10 +37,6 @@ export function doLogout (token) {
           dispatch(logoutError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/logout error (response)', response)
-        dispatch(logoutError(response.data.error))
-      })
   }
 }
 

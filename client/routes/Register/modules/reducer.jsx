@@ -34,10 +34,6 @@ export function doRegister (data, nextPath) {
           dispatch(registerError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/register error (data) (response)', data, response)
-        dispatch(registerError(response.data.error))
-      })
   }
 }
 

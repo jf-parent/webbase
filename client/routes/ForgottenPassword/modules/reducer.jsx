@@ -37,10 +37,6 @@ export function doSendResetPasswordToken (data) {
           dispatch(sendResetPasswordError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/send_reset_password_token error (response)', response)
-        dispatch(sendResetPasswordError(response.data.error))
-      })
   }
 }
 

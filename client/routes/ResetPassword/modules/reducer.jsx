@@ -32,10 +32,6 @@ export function doResetPassword (data) {
           dispatch(resetPasswordError(response.data.error))
         }
       })
-      .catch((response) => {
-        logger.debug('/api/reset_password error (response)', response)
-        dispatch(resetPasswordError(response.data.error))
-      })
   }
 }
 
