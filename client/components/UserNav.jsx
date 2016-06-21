@@ -21,6 +21,11 @@ class UserNav extends BaseComponent {
   }
 
   render () {
+    let notificationNumber = null
+    if (this.props.state.session.user.new_notification_number > 0) {
+      notificationNumber = <span className={'badge ' + UserNavStyle['badge-notify']}>{this.props.state.session.user.new_notification_number}</span>
+    }
+
     return (
       <div>
         <NotificationPopup ref='notificationPopup' notifications={this.props.state.session.user.notifications} />
@@ -29,7 +34,7 @@ class UserNav extends BaseComponent {
             <button className='btn btn-default btn-lg btn-link' onClick={this.onOpenNotification} style={{'fontSize': '24px'}}>
               <span className='glyphicon glyphicon-bell'></span>
             </button>
-            <span className={'badge ' + UserNavStyle['badge-notify']}>{this.props.state.session.user.new_notification_number}</span>
+            {notificationNumber}
           </span>
           <li role='presentation' className='dropdown'>
             <a className='dropdown-toggle small' data-toggle='dropdown' href='#' role='button' aria-haspopup='true' aria-expanded='false'>

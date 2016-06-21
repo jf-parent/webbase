@@ -52,6 +52,9 @@ query:
 reset-db:
 	python scripts/reset_db.py
 
+init-db-sample-data:
+	python scripts/init_db_sample_data.py
+
 stats:
 	cloc client
 	cloc server

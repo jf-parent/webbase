@@ -9,14 +9,17 @@ from server.exceptions import *  # noqa
 class Notification(BaseModel):
     user_uid = StringField(required=True)
     message = StringField()
+    template_data = DictField(StringField(), default_empty=True)
     seen = BoolField(default=False)
+    target_url = StringField(default='')
     seen_timestamp = DateTimeField(default=None)
 
     def __repr__(self):
         try:
-            _repr = "Notification <message:'{message}'><user_uid:'{user_uid}'>"  # noqa
+            _repr = "Notification <message:'{message}'><user_uid:'{user_uid}'><template_data:'{template_data}'>"  # noqa
             return _repr.format(
                     message=self.message,
+                    template_data=self.template_data,
                     user_uid=self.user_uid
                 )
         except AttributeError:
@@ -54,6 +57,11 @@ class Notification(BaseModel):
         if user_uid:
             self.user_uid = user_uid
 
+        # TARGET URL
+        target_url = data.get('target_url')
+        if target_url:
+            self.target_url = target_url
+
         # SEEN
         seen = data.get('seen')
         if seen:
@@ -64,6 +72,11 @@ class Notification(BaseModel):
         message = data.get('message')
         if message:
             self.message = message
+
+        # TEMPLATE DATA
+        template_data = data.get('template_data')
+        if template_data:
+            self.template_data = template_data
 
         db_session.save(self, safe=True)
 
@@ -115,6 +128,8 @@ class Notification(BaseModel):
 
         data['uid'] = self.get_uid()
         data['message'] = self.message
+        data['template_data'] = self.template_data
+        data['target_url'] = self.target_url
         data['seen'] = self.seen
         if self.seen_timestamp:
             data['seen_timestamp'] = self.seen_timestamp.isoformat()

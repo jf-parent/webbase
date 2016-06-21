@@ -15,6 +15,7 @@
   "errorMsg.WrongEmailOrPasswordException": "wrong email or password",
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Reset password email send successfully!",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Reset password token invalid",
+  "notification.PleaseConfirmYourEmail": "Please confirm your email: {email}",
   "profile.settingsSaveSuccessfully": "Profile settings save successfully!",
   "resetPassword.ResetPasswordSuccess": "Your password has been changed successfully!"
 }

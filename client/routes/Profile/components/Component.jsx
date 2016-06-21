@@ -88,7 +88,12 @@ class Profile extends BaseComponent {
     if (this.props.state.session.user.email_confirmed) {
       emailConfirmed = <i className={'fa fa-check-circle-o ' + ComponentStyle['email-confirmed']} aria-hidden='true'></i>
     } else {
-      emailConfirmed = <i className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'></i>
+      emailConfirmed = <i className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'>
+        &nbsp;<FormattedMessage
+          id='profile.EmailNotVerified'
+          defaultMessage='your email is not verified'
+        />
+      </i>
     }
 
     return (

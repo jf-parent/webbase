@@ -16,3 +16,4 @@ bcrypt
 validate_email
 prometheus_client
 rq
+redis

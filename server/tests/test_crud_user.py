@@ -1,6 +1,7 @@
 from server.settings import config
 from server.utils import DbSessionContext
 from server.model.user import User
+from server.model.notification import Notification
 
 ###############################################################################
 # CREATE
@@ -372,6 +373,14 @@ def test_crud_update_email(client):
 
         assert user.name == 'new_name'
         assert not user.email_confirmed
+
+        last_notification = session.query(Notification)\
+            .filter(Notification.user_uid == user.get_uid())\
+            .descending(Notification.created_ts)\
+            .first()
+
+        assert last_notification.message == \
+            'notification.PleaseConfirmYourEmail'
 
 
 def test_crud_update_invalid_data(client):

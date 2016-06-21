@@ -14,7 +14,7 @@ from server.model.user import User  # noqa
 from server.model.notification import Notification  # noqa
 from server.model.email_confirmation_token import EmailConfirmationToken  # noqa
 from server.model.reset_password_token import ResetPasswordToken  # noqa
-from server.utils import DbSessionContext  # noqa
+from server.utils import DbSessionContext, drop_database  # noqa
 
 
 @pytest.fixture
@@ -30,14 +30,12 @@ def client():
         "SERVER_HOST": "localhost",
         "MASTER_PASSWORD": "Wkjdfkjdfjkdjkj"
     }
+
+    drop_database(config.get('MONGO_DATABASE_NAME'))
+
     _, _, app = loop.run_until_complete(init(loop, config))
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-
-        # CLEAR
-        session.clear_collection(User)
-        session.clear_collection(EmailConfirmationToken)
-        session.clear_collection(ResetPasswordToken)
 
         # INSERT DUMMY DATA
         users = [

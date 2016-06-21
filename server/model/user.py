@@ -109,6 +109,14 @@ class User(BaseModel):
         email_confirmed = data.get('email_confirmed')
         if email_confirmed is not None:
             self.email_confirmed = email_confirmed
+            if email_confirmed:
+                notification_data = {
+                    'message': 'notification.YourEmailHasBeenConfirmed'
+                }
+                await self.add_notification(
+                    db_session,
+                    notification_data
+                )
 
         # NAME
         name = data.get('name')
@@ -171,6 +179,14 @@ class User(BaseModel):
 
                 self.email = email
                 self.email_confirmed = False
+
+                # NOTIFICATON FOR CONFIRMATION EMAIL
+                if not is_new:
+                    notification_data = {
+                        'message': 'notification.PleaseConfirmYourEmail',
+                        'template_data': {'email': email}
+                    }
+                    await self.add_notification(db_session, notification_data)
 
                 # GRAVATAR
                 gravatar_url = "{base_url}{md5_hash}?{params}".format(
@@ -258,7 +274,8 @@ class User(BaseModel):
 
         notifications_raw = db_session.query(Notification)\
             .filter(Notification.user_uid == self.get_uid())\
-            .limit(20)\
+            .descending(Notification.created_ts)\
+            .limit(10)\
             .all()
 
         notifications = []
@@ -267,16 +284,14 @@ class User(BaseModel):
 
         return notifications, new_notfications
 
-    async def add_notification(self, db_session, message):
-        data = {
-            'message': message,
-            'user_uid': self.get_uid()
+    async def add_notification(self, db_session, data):
+        data['user_uid'] = self.get_uid()
+        context = {
+            'data': data,
+            'db_session': db_session
         }
         notification = Notification()
-        await notification.validate_and_save(
-            db_session,
-            data
-        )
+        await notification.validate_and_save(context)
 
     def send_email_confirmation_email(self, queue, email_confirmation_token):
         # FORMAT EMAIL TEMPLATE

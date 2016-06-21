@@ -18,15 +18,23 @@ def test_crud_create_notification_message(client):
             'token': client.__token__,
             'model': 'notification',
             'data': {
-                'message': '{test}',
-                'user_uid': user.get_uid()
+                'message': 'test',
+                'target_url': '/profile',
+                'user_uid': user.get_uid(),
+                'template_data': {
+                    'test': 'test'
+                }
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
     assert type(response.json['results']) == list
-    assert response.json['results'][0]['message'] == '{test}'
+    assert response.json['results'][0]['message'] == 'test'
+    assert response.json['results'][0]['target_url'] == '/profile'
+    assert response.json['results'][0]['template_data'] == {
+        'test': 'test'
+    }
     assert not response.json['results'][0]['seen']
     assert len(response.json['results']) == 1
 
@@ -273,14 +281,14 @@ def test_crud_update_notification_by_admin(client):
             'data': {
                 'uid': notification.get_uid(),
                 'seen': True,
-                'message': '{test}'
+                'message': 'test'
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
     assert response.json['updated'][0]['seen']
-    assert response.json['updated'][0]['message'] == '{test}'
+    assert response.json['updated'][0]['message'] == 'test'
     assert response.json['updated'][0]['seen_timestamp']
 
 

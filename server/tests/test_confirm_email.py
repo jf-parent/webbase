@@ -2,6 +2,7 @@ from server.settings import config
 from server.utils import DbSessionContext
 from server.model.user import User
 from server.model.email_confirmation_token import EmailConfirmationToken
+from server.model.notification import Notification
 
 
 def test_confirm_email_not_authorized(client):
@@ -42,6 +43,15 @@ def test_confirm_email_right_token(client):
     assert response.status_code == 200
     assert response.json['success']
     assert response.json['user']['email'] == 'test@test.com'
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        last_notification = session.query(Notification)\
+            .filter(Notification.user_uid == user.get_uid())\
+            .descending(Notification.created_ts)\
+            .first()
+
+        assert last_notification.message == \
+            'notification.YourEmailHasBeenConfirmed'
 
 
 def test_confirm_email_wrong_token(client):

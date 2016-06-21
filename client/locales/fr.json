@@ -32,6 +32,7 @@
   "nav.Profile": "Profil",
   "nav.Logout": "Se déconnecter",
   "nav.Settings": "Paramètre",
+  "notification.PleaseConfirmYourEmail": "Vous devez confirmer votre courriel: {email}",
   "profile.SubmitBtn": "Sauvegarder",
   "profile.SaveSettingsHeader": "Paramètres profil",
   "profile.settingsSaveSuccessfully": "Paramètres de profil sauvegarder avec succès!",
