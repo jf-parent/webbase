@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { getNotifications } from 'actions/NotificationActions'
+
 // ====================================
 // Constants
 // ====================================
@@ -24,15 +26,18 @@ logger.setLevel(__LOGLEVEL__)
 // Actions
 // ====================================
 
-export function getSession () {
+export function getSession (loadingContext = false) {
   return dispatch => {
-    dispatch({type: AUTH_GETTING_SESSION})
+    if (loadingContext) {
+      dispatch({type: AUTH_GETTING_SESSION})
+    }
 
     axios.get('/api/get_session')
       .then((response) => {
         logger.debug('/api/get_session (response)', response)
         if (response.data.success) {
           dispatch(getSessionSuccess(response.data))
+          dispatch(getNotifications(response.data))
         } else {
           dispatch(getSessionError(response.data))
         }

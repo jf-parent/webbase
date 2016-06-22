@@ -5,13 +5,9 @@ import BaseComponent from 'core/BaseComponent'
 import ModalStyle from './ModalStyle.postcss'
 
 /* Examples
-  openModal () {
-    this.refs.modal.setState({'isOpen': true})
-  }
-
   render () {
     return (
-      <Modal ref='modal' title='modal'>
+      <Modal ref='modal' isOpen={false} onClose={this.onClosePopup} title='modal'>
         <content />
         <content />
       </Modal>
@@ -36,31 +32,12 @@ class Modal extends BaseComponent {
     super(props)
 
     this._initLogger()
-    this._bind('onAfterOpen', 'onRequestClose', 'onClose')
-
-    this.state = {
-      isOpen: false
-    }
-  }
-
-  onRequestClose () {
-    this.debug('onRequestClose')
-  }
-
-  onAfterOpen () {
-    this.debug('onAfterOpen')
-  }
-
-  onClose () {
-    this.debug('onClose')
-
-    this.setState({isOpen: false})
   }
 
   render () {
     return (
       <ReactModal
-        isOpen={this.state.isOpen}
+        isOpen={this.props.isOpen}
         onAfterOpen={this.props.onAfterOpen}
         onRequestClose={this.props.onRequestClose}
         overlayClassName={ModalStyle.overlay}
@@ -68,7 +45,7 @@ class Modal extends BaseComponent {
         className={ModalStyle.content} >
 
         <h2 ref='title'>{this.props.title}</h2>
-        <a className={ModalStyle.close} href='#close' onClick={this.onClose}></a>
+        <a className={ModalStyle.close} onClick={this.props.onClose}></a>
         <div>{this.props.children}</div>
       </ReactModal>
     )

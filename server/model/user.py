@@ -249,40 +249,13 @@ class User(BaseModel):
                 return False
 
     async def serialize(self, context):
-        result = await self.get_notification(
-            context
-        )
-        notifications = result[0]
-        new_notification_number = result[1]
         data = {}
         data['uid'] = self.get_uid()
         data['name'] = self.name
         data['email'] = self.email
-        data['notifications'] = notifications
-        data['new_notification_number'] = new_notification_number
         data['email_confirmed'] = self.email_confirmed
         data['gravatar_url'] = self.gravatar_url
         return data
-
-    async def get_notification(self, context):
-        db_session = context.get('db_session')
-
-        new_notfications = db_session.query(Notification)\
-            .filter(Notification.user_uid == self.get_uid())\
-            .filter(Notification.seen == False)\
-            .count()  # noqa
-
-        notifications_raw = db_session.query(Notification)\
-            .filter(Notification.user_uid == self.get_uid())\
-            .descending(Notification.created_ts)\
-            .limit(10)\
-            .all()
-
-        notifications = []
-        for notification_raw in notifications_raw:
-            notifications.append(await notification_raw.serialize(context))
-
-        return notifications, new_notfications
 
     async def add_notification(self, db_session, data):
         data['user_uid'] = self.get_uid()

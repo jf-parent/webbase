@@ -2,6 +2,7 @@ import axios from 'axios'
 import { routerActions } from 'react-router-redux'
 
 import { getSessionRegistered } from 'actions/AuthActions'
+import { getNotifications } from 'actions/NotificationActions'
 
 // ====================================
 // Constants
@@ -29,6 +30,7 @@ export function doRegister (data, nextPath) {
         if (response.data.success) {
           dispatch(resetRegisterState())
           dispatch(getSessionRegistered(response.data))
+          dispatch(getNotifications(response.data))
           dispatch(routerActions.push(nextPath))
         } else {
           dispatch(registerError(response.data.error))

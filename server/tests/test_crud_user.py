@@ -15,8 +15,8 @@ def test_crud_create_not_allowed_for_normal_user(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'email': 'test1@test.com',
                 'password': '123456'
@@ -36,8 +36,8 @@ def test_crud_create_missing_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'email': 'test1@test.com',
                 'password': '123456'
             }
@@ -52,8 +52,8 @@ def test_crud_create_missing_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'password': '123456'
             }
@@ -68,8 +68,8 @@ def test_crud_create_missing_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'email': 'test1@test.com'
             }
@@ -88,8 +88,8 @@ def test_crud_create_invalid_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'email': 'test1@test.com',
                 'name': 'a',
                 'password': '123456'
@@ -105,8 +105,8 @@ def test_crud_create_invalid_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'email': 'test',
                 'password': '123456'
@@ -122,8 +122,8 @@ def test_crud_create_invalid_data(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'email': 'test1@test.com',
                 'password': 'inv'
@@ -142,8 +142,8 @@ def test_crud_create_success(client):
         '/api/crud/c',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'name': 'test',
                 'email': 'test1@test.com',
                 'password': '123456'
@@ -152,8 +152,8 @@ def test_crud_create_success(client):
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert response.json['results'][0]['name'] == 'test'
-    assert response.json['results'][0]['email'] == 'test1@test.com'
+    assert response.json['results'][0]['results'][0]['name'] == 'test'
+    assert response.json['results'][0]['results'][0]['email'] == 'test1@test.com'  # noqa
 
 ###############################################################################
 # READ
@@ -167,8 +167,8 @@ def test_crud_read_not_allowed_for_normal_user(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid()
             }
         }
@@ -189,16 +189,16 @@ def test_crud_read_specific_user_with_admin(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid()
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert len(response.json['results']) == 1
-    assert response.json['results'][0]['name'] == 'test'
+    assert len(response.json['results'][0]['results']) == 1
+    assert response.json['results'][0]['results'][0]['name'] == 'test'
 
 
 def test_crud_read_skip_and_limit_admin(client):
@@ -208,8 +208,8 @@ def test_crud_read_skip_and_limit_admin(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'limit': 2,
                 'skip': 3
             }
@@ -217,8 +217,8 @@ def test_crud_read_skip_and_limit_admin(client):
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert len(response.json['results']) == 1
-    assert response.json['results'][0]['name'] == 'disabled'
+    assert len(response.json['results'][0]['results']) == 1
+    assert response.json['results'][0]['results'][0]['name'] == 'disabled'
 
 
 def test_crud_read_limit_admin(client):
@@ -228,16 +228,16 @@ def test_crud_read_limit_admin(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'limit': 2
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert len(response.json['results']) == 2
-    assert response.json['results'][0]['name'] == 'test'
+    assert len(response.json['results'][0]['results']) == 2
+    assert response.json['results'][0]['results'][0]['name'] == 'test'
 
 
 def test_crud_read_skip_admin(client):
@@ -247,16 +247,16 @@ def test_crud_read_skip_admin(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'skip': 2
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert len(response.json['results']) == 2
-    assert response.json['results'][0]['name'] == 'admin'
+    assert len(response.json['results'][0]['results']) == 2
+    assert response.json['results'][0]['results'][0]['name'] == 'admin'
 
 
 def test_crud_read_admin(client):
@@ -266,34 +266,19 @@ def test_crud_read_admin(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert len(response.json['results']) == 4
+    assert len(response.json['results'][0]['results']) == 4
 
 
 ###############################################################################
 # UPDATE
 ###############################################################################
-
-
-def test_crud_invalid_request_missing_data(client):
-    client.login('test@test.com')
-
-    response = client.post_json(
-        '/api/crud/u',
-        {
-            'token': client.__token__,
-            'model': 'user'
-        }
-    )
-    assert response.status_code == 200
-    assert not response.json['success']
-    assert response.json['error'] == 'InvalidRequestException'
 
 
 def test_crud_update_normal_user_not_authorized(client):
@@ -307,8 +292,8 @@ def test_crud_update_normal_user_not_authorized(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': admin.get_uid(),
                 'name': 'new_name'
             }
@@ -330,8 +315,8 @@ def test_crud_update_admin_other_user(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'name': 'new_name'
             }
@@ -353,8 +338,8 @@ def test_crud_update_email(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'name': 'new_name',
                 'email': 'newemail@newemail.com'
@@ -391,8 +376,8 @@ def test_crud_update_invalid_data(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'email': 'invalid'
             }
@@ -407,8 +392,8 @@ def test_crud_update_invalid_data(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'name': 'i',
                 'email': 'test@test.com'
@@ -428,8 +413,8 @@ def test_crud_update_sanitize_data(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'role': 'admin'
             }
@@ -451,8 +436,8 @@ def test_crud_update_name_with_same_email(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'name': 'new_name',
                 'email': 'test@test.com'
@@ -480,8 +465,8 @@ def test_crud_update_sanitize_data_admin(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'role': 'admin'
             }
@@ -503,8 +488,8 @@ def test_crud_update_new_password_success(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'old_password': '123456',
                 'new_password': '1asdf!!'
@@ -552,8 +537,8 @@ def test_crud_update_new_password_invalid(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'old_password': '123456',
                 'new_password': '1'
@@ -572,8 +557,8 @@ def test_crud_update_new_password_old_password_incorrect(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'old_password': '1111111',
                 'new_password': '1asdf!!'
@@ -592,8 +577,8 @@ def test_crud_update_new_password_missing_old_password(client):
         '/api/crud/u',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid(),
                 'new_password': '1asdf!!'
             }
@@ -616,8 +601,8 @@ def test_crud_delete_not_allowed_for_normal_user(client):
         '/api/crud/d',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user.get_uid()
             }
         }
@@ -640,33 +625,46 @@ def test_crud_delete_admin_success(client):
         '/api/crud/d',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
                 'uid': user_uid
             }
         }
     )
     assert response.status_code == 200
     assert response.json['success']
-    assert response.json['deleted'][0]['uid'] == user_uid
+    assert response.json['results'][0]['results'][0]['uid'] == user_uid
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         assert not session.query(User) \
                 .filter(User.email == 'test@test.com').count()
 
 
-def test_crud_delete_admin_missing_uid(client):
+def test_crud_delete_all_user_disabled_admin_success(client):
     client.login('admin@admin.com')
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        user = session.query(User) \
+                .filter(User.email == 'disabled@disabled.com').one()
+
+    user_uid = user.get_uid()
 
     response = client.post_json(
         '/api/crud/d',
         {
             'token': client.__token__,
-            'model': 'user',
             'data': {
+                'model': 'user',
+                'filters': {
+                    'enable': False
+                }
             }
         }
     )
     assert response.status_code == 200
-    assert not response.json['success']
-    assert response.json['error'] == 'InvalidRequestException'
+    assert response.json['success']
+    assert response.json['results'][0]['results'][0]['uid'] == user_uid
+
+    with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        assert not session.query(User) \
+                .filter(User.enable == False).count()  # noqa

@@ -29,18 +29,18 @@ async def set_session(user, request):
 class CRUDBase(web.View):
     async def get_json_data(self):
         try:
-            resq_data = await self.request.json()
-            datum = resq_data['data']
-            model = resq_data['model']
+            req_data = await self.request.json()
+            datum = req_data['data']
 
             # Convert datum to list if necessary
             if not type(datum) == list:
                 datum = [datum]
+
             logger.debug('datum = {datum}'.format(
                 datum=datum
             ))
 
-            return datum, model
+            return datum
         except:
             raise InvalidRequestException(
                 'No json send or missing data parameters'
@@ -62,8 +62,7 @@ class CRUDCreate(CRUDBase):
     @csrf_protected()
     @require('login')
     async def post(self):
-        datum, model = await self.get_json_data()
-        model_class = self.import_model(model)
+        datum = await self.get_json_data()
 
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
@@ -76,7 +75,19 @@ class CRUDCreate(CRUDBase):
         }
 
         resp_datum = []
-        for data in datum:
+        for index, data in enumerate(datum):
+            model_name = data.get('model')
+            if not model_name:
+                raise InvalidRequestException('Missing model in data')
+
+            try:
+                model_class = self.import_model(model_name)
+            except ImportError:
+                raise ModelImportException(model_name)
+
+            resp_datum.append({})
+            resp_datum[index]['results'] = []
+
             model_obj = model_class()
 
             context['data'] = data
@@ -97,8 +108,12 @@ class CRUDCreate(CRUDBase):
             context['data'] = sane_data
             await model_obj.validate_and_save(context)
 
-            context['method'] = 'read'
-            resp_datum.append(await model_obj.serialize(context))
+            resp_datum[index]['total'] = 1
+            if data.get('return_results', True):
+                context['method'] = 'read'
+                resp_datum[index]['results'].append(
+                    await model_obj.serialize(context)
+                )
 
         resp_data = {'success': True, 'results': resp_datum}
         return web.json_response(resp_data)
@@ -110,8 +125,7 @@ class CRUDRead(CRUDBase):
     @csrf_protected()
     @require('login')
     async def post(self):
-        datum, model = await self.get_json_data()
-        model_class = self.import_model(model)
+        datum = await self.get_json_data()
 
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
@@ -124,13 +138,111 @@ class CRUDRead(CRUDBase):
         }
 
         resp_datum = []
-        for data in datum:
-            uid = data.get('uid')
+        for index, data in enumerate(datum):
+            model_name = data.get('model')
+            if not model_name:
+                raise InvalidRequestException('Missing model in data')
+
+            try:
+                model_class = self.import_model(model_name)
+            except ImportError:
+                raise ModelImportException(model_name)
+
+            resp_datum.append({})
+            resp_datum[index]['results'] = []
 
             # READ SPECIFIC RECORD
+            uid = data.get('uid')
             if uid:
-                results = self.request.db_session.query(model_class)\
-                    .filter(model_class.mongo_id == uid).all()
+                base_query = self.request.db_session.query(model_class)\
+                    .filter(model_class.mongo_id == uid)
+
+            else:
+                filters = data.get('filters')
+                limit = data.get('limit')
+                skip = data.get('skip')
+                descending = data.get('descending')
+                ascending = data.get('ascending')
+
+                base_query = self.request.db_session.query(model_class)
+
+                if limit:
+                    base_query = base_query.limit(limit)
+
+                if skip:
+                    base_query = base_query.skip(skip)
+
+                if descending:
+                    base_query = base_query.descending(descending)
+
+                if ascending:
+                    base_query = base_query.ascending(ascending)
+
+                if filters:
+                    if 'uid' in filters:
+                        filters['mongo_id'] = filters['uid']
+                        del filters['uid']
+
+                    base_query = base_query.filter_by(**filters)
+
+            resp_datum[index]['total'] = base_query.count()
+            if data.get('return_results', True):
+                results = base_query.all()
+                for result in results:
+                    if not await result.method_autorized(context):
+                        raise NotAuthorizedException(
+                            '{user} not authorized to read {result}'
+                            .format(
+                                user=user,
+                                result=result
+                            )
+                        )
+
+                    resp_datum[index]['results'].append(
+                        await result.serialize(context)
+                    )
+
+        resp_data = {'success': True, 'results': resp_datum}
+        return web.json_response(resp_data)
+
+
+class CRUDUpdate(CRUDBase):
+
+    @exception_handler()
+    @csrf_protected()
+    @require('login')
+    async def post(self):
+        datum = await self.get_json_data()
+
+        session = await get_session(self.request)
+        user = get_user_from_session(session, self.request.db_session)
+
+        context = {
+            'user': user,
+            'db_session': self.request.db_session,
+            'method': 'update',
+            'queue': self.request.app.queue
+        }
+
+        resp_datum = []
+        for index, data in enumerate(datum):
+            model_name = data.get('model')
+            if not model_name:
+                raise InvalidRequestException('Missing model in data')
+
+            try:
+                model_class = self.import_model(model_name)
+            except ImportError:
+                raise ModelImportException(model_name)
+
+            resp_datum.append({})
+            resp_datum[index]['results'] = []
+
+            # READ SPECIFIC RECORD
+            uid = data.get('uid')
+            if uid:
+                base_query = self.request.db_session.query(model_class)\
+                    .filter(model_class.mongo_id == uid)
 
             else:
                 filters = data.get('filters')
@@ -152,70 +264,31 @@ class CRUDRead(CRUDBase):
 
                     base_query = base_query.filter_by(**filters)
 
-                results = base_query.all()
-
+            resp_datum[index]['total'] = base_query.count()
+            results = base_query.all()
             for result in results:
+                context['method'] = 'update'
                 if not await result.method_autorized(context):
                     raise NotAuthorizedException(
-                        '{user} not authorized to read {model_obj}'
+                        '{user} not authorized to update {result}'
                         .format(
                             user=user,
-                            model_obj=result
+                            result=result
                         )
                     )
 
-                resp_datum.append(await result.serialize(context))
+                context['data'] = data
+                sane_data = await result.sanitize_data(context)
+                context['data'] = sane_data
+                await result.validate_and_save(context)
+                if data.get('return_results', True):
+
+                    context['method'] = 'read'
+                    resp_datum[index]['results'].append(
+                        await result.serialize(context)
+                    )
 
         resp_data = {'success': True, 'results': resp_datum}
-        return web.json_response(resp_data)
-
-
-class CRUDUpdate(CRUDBase):
-
-    @exception_handler()
-    @csrf_protected()
-    @require('login')
-    async def post(self):
-        datum, model = await self.get_json_data()
-        model_class = self.import_model(model)
-
-        session = await get_session(self.request)
-        user = get_user_from_session(session, self.request.db_session)
-
-        context = {
-            'user': user,
-            'db_session': self.request.db_session,
-            'method': 'update',
-            'queue': self.request.app.queue
-        }
-
-        resp_datum = []
-        for data in datum:
-            uid = data.get('uid')
-            if not uid:
-                raise InvalidRequestException('Missing uid in request json')
-
-            model_obj = self.request.db_session.query(model_class)\
-                .filter(model_class.mongo_id == uid).one()
-
-            context['method'] = 'update'
-            if not await model_obj.method_autorized(context):
-                raise NotAuthorizedException(
-                    '{user} not authorized to update {model_obj}'
-                    .format(
-                        user=user,
-                        model_obj=model_obj
-                    )
-                )
-
-            context['data'] = data
-            sane_data = await model_obj.sanitize_data(context)
-            context['data'] = sane_data
-            await model_obj.validate_and_save(context)
-            context['method'] = 'read'
-            resp_datum.append(await model_obj.serialize(context))
-
-        resp_data = {'success': True, 'updated': resp_datum}
         return web.json_response(resp_data)
 
 
@@ -225,8 +298,7 @@ class CRUDDelete(CRUDBase):
     @csrf_protected()
     @require('login')
     async def post(self):
-        datum, model = await self.get_json_data()
-        model_class = self.import_model(model)
+        datum = await self.get_json_data()
 
         session = await get_session(self.request)
         user = get_user_from_session(session, self.request.db_session)
@@ -239,27 +311,66 @@ class CRUDDelete(CRUDBase):
         }
 
         resp_datum = []
-        for data in datum:
+        for index, data in enumerate(datum):
+            model_name = data.get('model')
+            if not model_name:
+                raise InvalidRequestException('Missing model in data')
+
+            try:
+                model_class = self.import_model(model_name)
+            except ImportError:
+                raise ModelImportException(model_name)
+
+            resp_datum.append({})
+            resp_datum[index]['results'] = []
+
+            # READ SPECIFIC RECORD
             uid = data.get('uid')
-            if not uid:
-                raise InvalidRequestException('Missing uid in request json')
+            if uid:
+                base_query = self.request.db_session.query(model_class)\
+                    .filter(model_class.mongo_id == uid)
 
-            model_obj = self.request.db_session.query(model_class)\
-                .filter(model_class.mongo_id == uid).one()
+            else:
+                filters = data.get('filters')
+                limit = data.get('limit')
+                skip = data.get('skip')
 
-            if not await model_obj.method_autorized(context):
-                raise NotAuthorizedException(
-                    '{user} not authorized to delete {model_obj}'
-                    .format(
-                        user=user,
-                        model_obj=model_obj
+                base_query = self.request.db_session.query(model_class)
+
+                if limit:
+                    base_query = base_query.limit(limit)
+
+                if skip:
+                    base_query = base_query.skip(skip)
+
+                if filters:
+                    if 'uid' in filters:
+                        filters['mongo_id'] = filters['uid']
+                        del filters['uid']
+
+                    base_query = base_query.filter_by(**filters)
+
+            resp_datum[index]['total'] = base_query.count()
+
+            results = base_query.all()
+            for result in results:
+                if not await result.method_autorized(context):
+                    raise NotAuthorizedException(
+                        '{user} not authorized to delete {result}'
+                        .format(
+                            user=user,
+                            result=result
+                        )
                     )
-                )
 
-            self.request.db_session.remove(model_obj, safe=True)
-            resp_datum.append({'uid': uid})
+                self.request.db_session.remove(result, safe=True)
 
-        resp_data = {'success': True, 'deleted': resp_datum}
+                if data.get('return_results', True):
+                    resp_datum[index]['results'].append(
+                        {'uid': result.get_uid()}
+                    )
+
+        resp_data = {'success': True, 'results': resp_datum}
         return web.json_response(resp_data)
 
 
@@ -283,6 +394,7 @@ class Login(web.View):
             is_enable = user.enable
             if is_password_valid and is_enable:
                 await set_session(user, self.request)
+                session = await get_session(self.request)
 
                 context = {
                     'db_session': self.request.db_session,
@@ -292,6 +404,7 @@ class Login(web.View):
 
                 resp_data = {
                     'success': True,
+                    'token': session['csrf_token'],
                     'user': await user.serialize(context)
                 }
             else:
@@ -329,10 +442,15 @@ class Register(web.View):
 
         # SET SESSION
         await set_session(user, self.request)
+        session = await get_session(self.request)
 
         context['method'] = 'read'
         context['user'] = user
-        resp_data = {'success': True, 'user': await user.serialize(context)}
+        resp_data = {
+            'success': True,
+            'user': await user.serialize(context),
+            'token': session['csrf_token']
+        }
         return web.json_response(resp_data)
 
 

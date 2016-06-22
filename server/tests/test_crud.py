@@ -31,9 +31,11 @@ def test_save_model_invalid_model(client):
         '/api/crud/r',
         {
             'token': client.__token__,
-            'model': 'invalid'
+            'data': {
+                'model': 'invalid'
+            }
         }
     )
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'InvalidRequestException'
+    assert response.json['error'] == 'ModelImportException'

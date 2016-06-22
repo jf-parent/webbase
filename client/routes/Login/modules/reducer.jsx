@@ -2,6 +2,7 @@ import axios from 'axios'
 import { routerActions } from 'react-router-redux'
 
 import { getSessionLoggedIn } from 'actions/AuthActions'
+import { getNotifications } from 'actions/NotificationActions'
 
 // ====================================
 // Constants
@@ -30,6 +31,7 @@ export function doLogin (data, nextPath) {
           dispatch(resetLoginState())
           dispatch(getSessionLoggedIn(response.data))
           dispatch(routerActions.push(nextPath))
+          dispatch(getNotifications(response.data))
         } else {
           dispatch(loginError(response.data.error))
         }

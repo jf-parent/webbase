@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { bindActionCreators } from 'redux'
 import { FormattedMessage } from 'react-intl'
 
 import NotificationPopup from './NotificationPopup'
 import BaseComponent from 'core/BaseComponent'
 import UserNavStyle from './UserNavStyle.postcss'
+import { actions } from 'actions/NotificationActions'
 
 class UserNav extends BaseComponent {
 
@@ -17,18 +19,18 @@ class UserNav extends BaseComponent {
   }
 
   onOpenNotification (event) {
-    this.refs.notificationPopup.show()
+    this.props.actions.doOpenNotificationPopup()
   }
 
   render () {
     let notificationNumber = null
-    if (this.props.state.session.user.new_notification_number > 0) {
-      notificationNumber = <span className={'badge ' + UserNavStyle['badge-notify']}>{this.props.state.session.user.new_notification_number}</span>
+    if (this.props.state.notification.newNotificationNumber > 0) {
+      notificationNumber = <span className={'badge ' + UserNavStyle['badge-notify']}>{this.props.state.notification.newNotificationNumber}</span>
     }
 
     return (
       <div>
-        <NotificationPopup ref='notificationPopup' notifications={this.props.state.session.user.notifications} />
+        <NotificationPopup />
         <ul className='nav navbar-nav navbar-right nav-pills'>
           <span className={'pull-left ' + UserNavStyle['bell']}>
             <button className='btn btn-default btn-lg btn-link' onClick={this.onOpenNotification} style={{'fontSize': '24px'}}>
@@ -83,4 +85,10 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(UserNav)
+function mapDispatchToProps (dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserNav)

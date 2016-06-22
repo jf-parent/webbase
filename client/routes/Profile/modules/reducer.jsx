@@ -27,7 +27,7 @@ export function doSave (data) {
         logger.debug('/api/crud/u (data) (response)', data, response)
 
         if (response.data.success) {
-          dispatch(updateSessionUser(response.data.updated[0]))
+          dispatch(updateSessionUser(response.data.results[0]['results'][0]))
           dispatch(profileSuccess())
         } else {
           dispatch(profileError(response.data.error))
