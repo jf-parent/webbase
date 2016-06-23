@@ -30,10 +30,10 @@ class Notification(BaseModel):
 ##############################################################################
 
     async def sanitize_data(self, context):
-        user = context.get('user')
+        author = context.get('author')
         data = context.get('data')
-        if user:
-            if user.role == 'admin':
+        if author:
+            if author.role == 'admin':
                 return data
             else:
                 editable_fields = ['seen']
@@ -72,6 +72,11 @@ class Notification(BaseModel):
         message = data.get('message')
         if message:
             self.message = message
+        else:
+            if is_new:
+                raise InvalidRequestException(
+                    'Missing message; cannot create Notification'
+                )
 
         # TEMPLATE DATA
         template_data = data.get('template_data')
@@ -82,36 +87,36 @@ class Notification(BaseModel):
 
     async def method_autorized(self, context):
         method = context.get('method')
-        user = context.get('user')
+        author = context.get('author')
 
         # CREATE
         if method == 'create':
-            if user.role == 'admin':
+            if author.role == 'admin':
                 return True
             else:
                 return False
 
         # READ
         elif method == 'read':
-            if user.get_uid() == self.user_uid:
+            if author.get_uid() == self.user_uid:
                 return True
-            elif user.role == 'admin':
+            elif author.role == 'admin':
                 return True
             else:
                 return False
 
         # UPDATE
         elif method == 'update':
-            if user.get_uid() == self.user_uid:
+            if author.get_uid() == self.user_uid:
                 return True
-            elif user.role == 'admin':
+            elif author.role == 'admin':
                 return True
             else:
                 return False
 
         # DELETE
         elif method == 'delete':
-            if user.role == 'admin':
+            if author.role == 'admin':
                 return True
             else:
                 return False

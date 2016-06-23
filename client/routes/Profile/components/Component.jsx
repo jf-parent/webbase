@@ -45,13 +45,17 @@ class Profile extends BaseComponent {
 
   getData () {
     let formData = this.refs.form.getModel()
-    formData['uid'] = this.props.state.session.user.uid
-    formData['model'] = 'user'
     let token = formData.token
     delete formData.token
+    let action = {
+      action: 'update',
+      model: 'user',
+      uid: this.props.state.session.user.uid,
+      data: formData
+    }
 
     return {
-      data: formData,
+      actions: action,
       token: token
     }
   }

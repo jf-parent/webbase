@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { updateSessionUser } from 'actions/AuthActions'
+import { updateSessionUser, getSession } from 'actions/AuthActions'
 
 // ====================================
 // Constants
@@ -22,13 +22,14 @@ export function doSave (data) {
   return dispatch => {
     dispatch({type: PROFILE_LOADING})
 
-    axios.post('/api/crud/u', data)
+    axios.post('/api/crud', data)
       .then((response) => {
-        logger.debug('/api/crud/u (data) (response)', data, response)
+        logger.debug('/api/crud (data) (response)', data, response)
 
         if (response.data.success) {
-          dispatch(updateSessionUser(response.data.results[0]['results'][0]))
+          dispatch(updateSessionUser(response.data.results[0]))
           dispatch(profileSuccess())
+          dispatch(getSession(false))
         } else {
           dispatch(profileError(response.data.error))
         }

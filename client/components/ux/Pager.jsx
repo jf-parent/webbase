@@ -20,10 +20,41 @@ class Pager extends BaseComponent {
   }
 
   render () {
-    let first = <a onClick={this.props.onFirstClick} className='btn btn-default btn-link'>&lt;&lt;</a>
-    let previous = <a onClick={this.props.onPreviousClick} className='btn btn-default btn-link'>&lt;</a>
-    let next = <a onClick={this.props.onNextClick} className='btn btn-default btn-link'>&gt;</a>
-    let last = <a onClick={this.props.onLastClick} className='btn btn-default btn-link'>&gt;&gt;</a>
+    // FIRST
+    let firstDisabled = !this.props.currentPage
+    let first
+    if (firstDisabled) {
+      first = <a className='btn btn-default btn-link' disabled>&lt;&lt;</a>
+    } else {
+      first = <a onClick={this.props.onFirstClick} className='btn btn-default btn-link'>&lt;&lt;</a>
+    }
+
+    // PREVIOUS
+    let previousDisabled = !this.props.currentPage
+    let previous
+    if (previousDisabled) {
+      previous = <a className='btn btn-default btn-link' disabled>&lt;</a>
+    } else {
+      previous = <a onClick={this.props.onPreviousClick} className='btn btn-default btn-link'>&lt;</a>
+    }
+
+    // NEXT
+    let nextDisabled = this.props.currentPage === (this.props.totalPage - 1)
+    let next
+    if (nextDisabled) {
+      next = <a className='btn btn-default btn-link' disabled>&gt;</a>
+    } else {
+      next = <a onClick={this.props.onNextClick} className='btn btn-default btn-link'>&gt;</a>
+    }
+
+    // LAST
+    let lastDisabled = this.props.currentPage === (this.props.totalPage - 1)
+    let last
+    if (lastDisabled) {
+      last = <a className='btn btn-default btn-link' disabled>&gt;&gt;</a>
+    } else {
+      last = <a onClick={this.props.onLastClick} className='btn btn-default btn-link'>&gt;&gt;</a>
+    }
 
     return (
       <div>

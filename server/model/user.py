@@ -36,6 +36,9 @@ class User(BaseModel):
     # INDEX
     i_email = Index().ascending('email').unique()
 
+    def __eq__(self, target):
+        return target.get_uid() == self.get_uid()
+
     def __repr__(self):
         try:
             _repr = "User <uid: '{uid}'><name:'{name}'><email:'{email}'><role:'{role}'><enable:'{enable}'>"  # noqa
@@ -80,11 +83,11 @@ class User(BaseModel):
         return hashed_password, salt_str
 
     async def sanitize_data(self, context):
-        user = context.get('user')
+        author = context.get('author')
         data = context.get('data')
 
-        if user:
-            if user.role == 'admin':
+        if author:
+            if author.role == 'admin':
                 return data
             else:
                 editable_fields = [
@@ -233,17 +236,17 @@ class User(BaseModel):
 
     async def method_autorized(self, context):
         method = context.get('method')
-        user = context.get('user')
+        author = context.get('author')
 
-        if method in ['create', 'read', 'delete']:
-            if user.role == 'admin':
+        if method in ['create', 'delete']:
+            if author.role == 'admin':
                 return True
             else:
                 return False
-        elif method == 'update':
-            if user == self:
+        elif method in ['update', 'read']:
+            if author == self:
                 return True
-            elif user.role == 'admin':
+            elif author.role == 'admin':
                 return True
             else:
                 return False

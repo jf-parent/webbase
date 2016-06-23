@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 // ====================================
-// Constants
 // ====================================
 
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS'
@@ -24,23 +23,26 @@ logger.setLevel(__LOGLEVEL__)
 
 export function doMarkAllNotificationHasSeen (session) {
   return dispatch => {
-    axios.post('/api/crud/u', {
+    axios.post('/api/crud', {
       token: session.token,
-      data: {
+      actions: {
+        action: 'update',
         model: 'notification',
-        return_results: false,
-        seen: true,
+        total_only: true,
+        data: {
+          seen: true
+        },
         filters: {
           user_uid: session.user.uid
         }
       }
     })
     .then((response) => {
-      logger.debug('/api/crud/u notification (response)', response)
+      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
         dispatch(updateNewNotificationNumber(0))
       } else {
-        logger.error('/api/crud/u notification (error)', response)
+        logger.error('/api/crud notification (error)', response)
       }
     })
   }
@@ -48,22 +50,24 @@ export function doMarkAllNotificationHasSeen (session) {
 
 export function doMarkNotificationHasSeen (session, uid) {
   return dispatch => {
-    axios.post('/api/crud/u', {
+    axios.post('/api/crud', {
       token: session.token,
-      data: {
+      actions: {
+        action: 'update',
         model: 'notification',
-        seen: true,
-        filters: {
-          uid: uid
+        uid: uid,
+        total_only: true,
+        data: {
+          seen: true
         }
       }
     })
     .then((response) => {
-      logger.debug('/api/crud/u notification (response)', response)
+      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
         dispatch(getNotifications(session))
       } else {
-        logger.error('/api/crud/u notification (error)', response)
+        logger.error('/api/crud notification (error)', response)
       }
     })
   }
@@ -83,10 +87,11 @@ export function doOpenNotificationPopup () {
 
 export function getNotifications (session, skip = 0, limit = 10) {
   return dispatch => {
-    axios.post('/api/crud/r', {
+    axios.post('/api/crud', {
       token: session.token,
-      data: [
+      actions: [
         {
+          action: 'read',
           model: 'notification',
           limit: limit,
           skip: skip,
@@ -95,8 +100,8 @@ export function getNotifications (session, skip = 0, limit = 10) {
             user_uid: session.user.uid
           }
         }, {
+          action: 'read',
           model: 'notification',
-          return_results: false,
           filters: {
             user_uid: session.user.uid,
             seen: false
@@ -105,11 +110,11 @@ export function getNotifications (session, skip = 0, limit = 10) {
       ]
     })
     .then((response) => {
-      logger.debug('/api/crud/r notification (response)', response)
+      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
-        dispatch(updateNotifications(response.data.results, skip, limit))
+        dispatch(updateNotifications(response.data, skip, limit))
       } else {
-        logger.error('/api/crud/r notification (error)', response)
+        logger.error('/api/crud notification (error)', response)
       }
     })
   }
@@ -119,9 +124,9 @@ export function updateNotifications (data, skip, limit) {
   let formattedData = {
     skip,
     limit,
-    notifications: data[0].results,
-    totalNotifications: data[0].total,
-    newNotificationNumber: data[1].total
+    notifications: data.results[0].results,
+    totalNotifications: data.results[0].total,
+    newNotificationNumber: data.results[1].total
   }
   return {
     type: UPDATE_NOTIFICATIONS,

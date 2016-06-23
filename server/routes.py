@@ -1,5 +1,6 @@
 from server.public.views import *  # noqa
 from server.auth.views import *  # noqa
+from server.crud.views import CRUD
 
 routes = [
     # CLIENT ROUTE => not /api/* and not /static/*
@@ -22,10 +23,7 @@ routes = [
         api_send_reset_password_token,
         'api_send_reset_password_token'
     ),
-    ('*', '/api/crud/c', CRUDCreate, 'api_crud_create'),
-    ('*', '/api/crud/r', CRUDRead, 'api_crud_read'),
-    ('*', '/api/crud/u', CRUDUpdate, 'api_crud_update'),
-    ('*', '/api/crud/d', CRUDDelete, 'api_crud_delete'),
+    ('*', '/api/crud', CRUD, 'api_crud'),
     ('*', '/api/login', Login, 'api_login'),
     ('*', '/api/register', Register, 'api_register'),
     ('*', '/api/logout', Logout, 'api_logout'),

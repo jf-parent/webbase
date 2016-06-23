@@ -2,13 +2,20 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { defineMessages } from 'react-intl'
 
 import Pager from 'components/ux/Pager'
 import Modal from 'components/ux/Modal'
 import BaseComponent from 'core/BaseComponent'
-import { FormattedMessage } from 'react-intl'
 import { actions } from 'actions/NotificationActions'
 import NotificationPopupStyle from './NotificationPopupStyle.postcss'
+
+const notificationMessages = defineMessages({
+  markAllAsRead: {
+    id: 'notification.MarkAllAsRead',
+    defaultMessage: 'Mark all as read'
+  }
+})
 
 class NotificationPopup extends BaseComponent {
 
@@ -77,9 +84,13 @@ class NotificationPopup extends BaseComponent {
   }
 
   navToTarget (event) {
-    let uid = event.target.closest('li').dataset.uid
+    let el = event.target.closest('a')
+    let uid = el.dataset.uid
+    let seen = el.dataset.seen
     this.props.actions.doCloseNotificationPopup()
-    this.props.actions.doMarkNotificationHasSeen(this.props.state.session, uid)
+    if (seen === 'false') {
+      this.props.actions.doMarkNotificationHasSeen(this.props.state.session, uid)
+    }
   }
 
   closePopup () {
@@ -87,21 +98,28 @@ class NotificationPopup extends BaseComponent {
   }
 
   renderNotification (value, index) {
-    let className = value.seen ? NotificationPopupStyle['seen'] : NotificationPopupStyle['unseen']
+    const { formatMessage } = this._reactInternalInstance._context.intl
+    const messageConfig = {
+      id: value.message,
+      defaultMessage: value.message
+    }
+    const message = formatMessage(messageConfig, value.template_data)
+    const className = value.seen ? NotificationPopupStyle['seen'] : NotificationPopupStyle['unseen']
+
     return (
-      <div key={index}>
-        <li className={className} data-uid={value.uid}>
-          <FormattedMessage
-            id={value.message}
-            defaultMessage={value.message}
-            values={value.template_data}
-          />
+      <div className={className}>
+        <li>
+          <span>
+            {message}
+          </span>
         </li>
       </div>
     )
   }
 
   render () {
+    const { formatMessage } = this._reactInternalInstance._context.intl
+
     let overlayStyle = {
       height: '80%',
       width: '80%',
@@ -118,22 +136,33 @@ class NotificationPopup extends BaseComponent {
       let currentPage = this.getCurrentPage()
       pager = <Pager totalPage={totalPage} currentPage={currentPage} onFirstClick={this.onFirstClick} onLastClick={this.onLastClick} onNextClick={this.onNextClick} onPreviousClick={this.onPreviousClick} />
     }
+    const markAllAsRead = formatMessage(notificationMessages.markAllAsRead)
 
     return (
-      <Modal ref='modal' isOpen={isPopupOpen} onClose={this.closePopup} overlayStyle={overlayStyle} title='Notification'>
-        <p><a className='btn btn-default btn-link' onClick={this.markAllNotificationAsSeen}>Mark all as read</a></p>
-        <ul>
-        {this.props.state.notification.notifications.map((value, index) => {
-          if (value.target_url !== '') {
-            return (
-              <Link key={index} onClick={this.navToTarget} to={value.target_url}>
-                {this.renderNotification(value, index)}
-              </Link>
-            )
-          } else {
-            return this.renderNotification(value, index)
-          }
-        })}
+      <Modal ref='modal' isOpen={isPopupOpen} onClose={this.closePopup} overlayStyle={overlayStyle} title='Notifications'>
+        <p>
+          <a className='btn btn-default btn-link' onClick={this.markAllNotificationAsSeen}>
+            <span>
+              {markAllAsRead}
+            </span>
+          </a>
+        </p>
+        <ul className='list-unstyled'>
+          {this.props.state.notification.notifications.map((value, index) => {
+            if (value.target_url !== '') {
+              return (
+                <Link data-seen={value.seen} data-uid={value.uid} key={index} className={NotificationPopupStyle['anchor']} onClick={this.navToTarget} to={value.target_url}>
+                  {this.renderNotification(value, index)}
+                </Link>
+              )
+            } else {
+              return (
+                <a data-seen={value.seen} data-uid={value.uid} key={index} className={NotificationPopupStyle['anchor']} onClick={this.navToTarget}>
+                  {this.renderNotification(value, index)}
+                </a>
+              )
+            }
+          })}
         </ul>
         {pager}
       </Modal>

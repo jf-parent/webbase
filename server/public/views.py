@@ -7,7 +7,7 @@ from server.settings import logger, config
 from server.server_decorator import exception_handler, csrf_protected
 from server.model.user import User
 from server.model.reset_password_token import ResetPasswordToken
-from server.auth.views import set_session, get_user_from_session
+from server.auth import set_session, get_user_from_session
 from server.utils import generate_token
 
 
