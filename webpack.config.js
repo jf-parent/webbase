@@ -1,7 +1,7 @@
 var webpack = require('webpack');
-var serverConfig = require('./configs/server');
 
-var isDev = process.env.NODE_ENV == 'development';
+var isDev = process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'travis';
+var isTravis = process.env.NODE_ENV == 'travis';
 var isProd = process.env.NODE_ENV == 'production';
 var isTest = process.env.NODE_ENV == 'test';
 var logLevel = isDev ? "'debug'" : "'error'";
@@ -22,9 +22,12 @@ if (isProd) {
 } else if (isTest) {
     console.log('[*] Using TEST config');
     config = require('./webpack.test.config.js');
-} else {
+} else if (isDev  || isTravis) {
     console.log('[*] Using DEV config');
     config = require('./webpack.dev.config.js');
+} else {
+    console.error("No config found for the NODE_ENV:", process.env.NODE_ENV)
+    process.exit(1)
 }
 
 module.exports = config;
