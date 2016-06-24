@@ -69,14 +69,15 @@ async def init(loop, config_args=None):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if config.get('ENV', 'production') == 'development':
-        static_path = os.path.join(ROOT, 'dist-dev')
-    else:
-        static_path = os.path.join(ROOT, 'dist-prod')
+    if not config.get('ENV', 'production') == 'test':
+        if config.get('ENV', 'production') == 'development':
+            static_path = os.path.join(ROOT, 'dist-dev')
+        else:
+            static_path = os.path.join(ROOT, 'dist-prod')
 
-    app.router.add_static('/', static_path, name='static')
+        app.router.add_static('/', static_path, name='static')
 
-    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
+        aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
 
     # PREPARE HOOK
     async def after_request(request, response):
@@ -95,6 +96,11 @@ async def init(loop, config_args=None):
         config.get('SERVER_HOST'),
         config.get('SERVER_PORT')
     )
+
+    # PROMETHEUS CLIENT
+    if not config.get('ENV', 'production') == 'test':
+        start_http_server(8001)
+
     return serv_generator, handler, app
 
 if __name__ == '__main__':
@@ -103,12 +109,10 @@ if __name__ == '__main__':
     asyncio.set_event_loop(loop)
     """
 
-# PROMETHEUS CLIENT
-    start_http_server(8001)
-
     loop = asyncio.get_event_loop()
 
     serv_generator, handler, app = loop.run_until_complete(init(loop))
+
     serv = loop.run_until_complete(serv_generator)
 
     logger.debug('Server listening at %s' % str(serv.sockets[0].getsockname()))
