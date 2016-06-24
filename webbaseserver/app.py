@@ -69,15 +69,14 @@ async def init(loop, config_args=None):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if not config.get('ENV', 'production') == 'test':
-        if config.get('ENV', 'production') == 'development':
-            static_path = os.path.join(ROOT, 'dist-dev')
-        else:
-            static_path = os.path.join(ROOT, 'dist-prod')
+    if config.get('ENV', 'production') == ['development', 'test']:
+        static_path = os.path.join(ROOT, 'dist-dev')
+    else:
+        static_path = os.path.join(ROOT, 'dist-prod')
 
-        app.router.add_static('/', static_path, name='static')
+    app.router.add_static('/', static_path, name='static')
 
-        aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
 
     # PREPARE HOOK
     async def after_request(request, response):

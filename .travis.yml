@@ -1,11 +1,17 @@
-language: python
+language:
+  - python
+  - node_js
+node_js:
+  - "4.4.4"
 python:
   - "3.5"
 services:
   - mongodb
   - redis-server
 install:
+  - "npm install"
   - "pip install --editable ."
+  - "npm build:dev"
   - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
 script: make test-prod
