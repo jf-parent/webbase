@@ -1,13 +1,13 @@
-language: node_js
-node_js:
-  - "4.4.4"
+language: python
 python:
   - "3.5"
 services:
   - mongodb
   - redis-server
+before_install:
+  - "nvm install 4.4.4"
+  - "nvm use 4.4.4"
 install:
-  - "node --version"
   - "npm install"
   - "pip install --editable ."
   - "npm build:dev"
