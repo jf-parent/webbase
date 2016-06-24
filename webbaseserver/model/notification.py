@@ -7,7 +7,7 @@ from webbaseserver.exceptions import *  # noqa
 
 
 class Notification(BaseModel):
-    user_uid = StringField(required=True)
+    user_uid = ObjectIdField(required=True)
     message = StringField()
     template_data = DictField(StringField(), default_empty=True)
     seen = BoolField(default=False)

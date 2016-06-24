@@ -9,7 +9,7 @@ from jobs.send_email import send_email
 
 
 class ResetPasswordToken(BaseToken):
-    user_uid = StringField(required=True)
+    user_uid = ObjectIdField(required=True)
     expiration_datetime = DateTimeField(required=True)
 
     def init(self, context):

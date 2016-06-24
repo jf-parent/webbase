@@ -4,6 +4,9 @@ deps:
 deps-dev:
 	pip install -r requirements-dev.txt
 
+admin-dev:
+	python admin/app.py
+
 start-queue-prod:
 	scripts/start_rqueue.sh
 

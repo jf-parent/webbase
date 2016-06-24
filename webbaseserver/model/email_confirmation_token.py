@@ -4,7 +4,7 @@ from webbaseserver.model.base_token import BaseToken
 
 
 class EmailConfirmationToken(BaseToken):
-    user_uid = StringField(required=True)
+    user_uid = ObjectIdField(required=True)
 
     def init(self, context):
         db_session = context.get('db_session')
