@@ -10,7 +10,7 @@ before_install:
 install:
   - "npm install"
   - "pip install --editable ."
-  - "npm run build:dev"
+  - "npm run build:travis"
   - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
 script: make test-prod
