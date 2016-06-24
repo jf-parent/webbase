@@ -1,5 +1,6 @@
 aiohttp==0.21.6
 python-memcached==1.58
+requests
 python-dateutil==2.5.3
 cchardet==1.0.0
 aiohttp-debugtoolbar==0.1.1

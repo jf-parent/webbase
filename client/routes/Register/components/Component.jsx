@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { defineMessages, FormattedMessage } from 'react-intl'
+import { DatePicker } from 'react-input-enhancements'
 
 import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
 import SecureForm from 'components/ux/SecureForm'
@@ -83,6 +84,7 @@ class Register extends BaseComponent {
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
           <ValidatedInput type='text' name='name' placeholder={namePlaceholder} required validations='minLength:2' maxLength='60' />
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} required />
+          <DatePicker />
           <LaddaButton ref='button' isDisabled isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='register.RegisterBtn'

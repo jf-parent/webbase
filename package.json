@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/jf-parent/webbase#readme",
   "dependencies": {
+    "react-input-enhancements": "^0.4.12",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
