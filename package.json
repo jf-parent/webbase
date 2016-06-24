@@ -7,6 +7,7 @@
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
     "build:prod": "NODE_ENV=production webpack",
+    "build:travis": "NODE_ENV=travis webpack",
     "build:dev": "NODE_ENV=development webpack",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true"
   },
@@ -31,6 +32,8 @@
   },
   "homepage": "https://github.com/jf-parent/webbase#readme",
   "dependencies": {
+    "moment": "^2.13.0",
+    "react-input-enhancements": "^0.4.12",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
@@ -99,7 +102,6 @@
     "less-loader": "^2.2.3",
     "loglevel": "^1.4.0",
     "mocha": "^2.5.3",
-    "node-sass": "^3.7.0",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-prebuilt": "^2.1.7",
     "postcss-loader": "^0.9.1",
@@ -109,6 +111,7 @@
     "react-addons-css-transition-group": "^15.1.0",
     "react-addons-pure-render-mixin": "^15.1.0",
     "react-addons-test-utils": "^15.1.0",
+    "react-bootstrap": "^0.29.5",
     "react-dom": "^15.0.2",
     "react-intl": "^2.1.2",
     "react-ladda": "^4.0.3",
@@ -123,7 +126,6 @@
     "redux": "^3.5.2",
     "redux-devtools": "^3.3.1",
     "redux-thunk": "^2.1.0",
-    "sass-loader": "^3.2.0",
     "sinon": "^1.17.4",
     "string-replace-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",

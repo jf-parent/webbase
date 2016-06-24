@@ -2,20 +2,16 @@
 
 from time import sleep
 import asyncio
-import sys
-import os
-
-sys.path.append('.')
 
 from mongoalchemy.session import Session
 
-from server.utils import drop_database
-from server.model.user import User
-from server.settings import config
-from server.model.email_confirmation_token import EmailConfirmationToken  # noqa
-from server.model.reset_password_token import ResetPasswordToken  # noqa
-from server.model.notification import Notification  # noqa
-from server.utils import DbSessionContext  # noqa
+from webbaseserver.utils import drop_database
+from webbaseserver.model.user import User
+from webbaseserver.settings import config
+from webbaseserver.model.email_confirmation_token import EmailConfirmationToken  # noqa
+from webbaseserver.model.reset_password_token import ResetPasswordToken  # noqa
+from webbaseserver.model.notification import Notification  # noqa
+from webbaseserver.utils import DbSessionContext  # noqa
 
 config.configure()
 loop = asyncio.get_event_loop()

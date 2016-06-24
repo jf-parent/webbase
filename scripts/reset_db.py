@@ -1,12 +1,7 @@
 #! /usr/bin/env python
 
-import sys
-import os
-
-sys.path.append('.')
-
-from server.settings import config
-from server.utils import drop_database
+from webbaseserver.settings import config
+from webbaseserver.utils import drop_database
 
 config.configure()
 

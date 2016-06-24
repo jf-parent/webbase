@@ -1,7 +1,14 @@
 var webpack = require('webpack');
 var fs = require('fs')
 var path = require('path');
-var serverConfig = require('./configs/server');
+var serverConfig
+
+var isTravis = process.env.NODE_ENV == 'travis';
+if (isTravis) {
+    var serverConfig = require('./configs/server-travis');
+} else {
+    var serverConfig = require('./configs/server');
+}
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var BUILD_DIR = path.resolve(__dirname, 'dist-dev');

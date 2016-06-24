@@ -1,8 +1,8 @@
 from jobs.send_email import PySendPulse
 
-from server.utils import generate_token
-from server.settings import config
-from server.auth.user import User
+from webbaseserver.utils import generate_token
+from webbaseserver.settings import config
+from webbaseserver.auth.user import User
 
 config.configure(False)
 user = User()

@@ -4,6 +4,9 @@ deps:
 deps-dev:
 	pip install -r requirements-dev.txt
 
+admin-dev:
+	python admin/app.py
+
 start-queue-prod:
 	scripts/start_rqueue.sh
 
@@ -24,21 +27,24 @@ stop-prometheus-prod:
 
 lint:
 	@echo "====Python flake8===="
-	flake8 server || true
+	flake8 webbaseserver || true
 	@echo "====Javascript eslin====t"
 	npm run lint
 
 serve-cwd:
 	python -m http.server 9010
 
+test-prod:
+	py.test webbaseserver/tests --instafail --html=last-report.html
+
 test:
-	flake8 server && py.test server/tests --instafail --html=last-report.html
+	flake8 webbaseserver && py.test webbaseserver/tests --instafail --html=last-report.html
 
 test-debug:
-	flake8 server && py.test server/tests --pdb
+	flake8 webbaseserver && py.test webbaseserver/tests --pdb
 
 server-dev:
-	flake8 server && python server/app.py
+	flake8 webbaseserver && python webbaseserver/app.py
 
 start-server-prod:
 	scripts/start_server.sh

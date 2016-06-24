@@ -1,8 +1,18 @@
 language: python
 python:
   - "3.5"
+services:
+  - mongodb
+  - redis-server
+before_install:
+  - "nvm install 4.4.4"
+  - "nvm use 4.4.4"
 install:
-  - "pip install ."
+  - "npm install"
+  - "pip install --editable ."
+  - "npm run build:travis"
   - "pip install -r requirements.txt"
   - "pip install -r requirements-dev.txt"
-script: make test
+script:
+  - make test-prod
+  - npm run test
