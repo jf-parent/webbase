@@ -1,13 +1,17 @@
 from aiohttp_session import get_session
 from aiohttp import web
 
-from server.exceptions import *  # noqa
-from server.model.user import User
-from server.model.email_confirmation_token import EmailConfirmationToken
-from server.model.reset_password_token import ResetPasswordToken
-from server.settings import logger
-from server.server_decorator import require, exception_handler, csrf_protected
-from server.auth import set_session, get_user_from_session
+from webbaseserver.exceptions import *  # noqa
+from webbaseserver.model.user import User
+from webbaseserver.model.email_confirmation_token import EmailConfirmationToken
+from webbaseserver.model.reset_password_token import ResetPasswordToken
+from webbaseserver.settings import logger
+from webbaseserver.server_decorator import (
+    require,
+    exception_handler,
+    csrf_protected
+)
+from webbaseserver.auth import set_session, get_user_from_session
 
 
 class Login(web.View):

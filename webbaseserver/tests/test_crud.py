@@ -1,6 +1,6 @@
-from server.settings import config
-from server.utils import DbSessionContext
-from server.model.user import User
+from webbaseserver.settings import config
+from webbaseserver.utils import DbSessionContext
+from webbaseserver.model.user import User
 
 
 def test_crud_not_authorized(client):

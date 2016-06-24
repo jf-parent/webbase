@@ -1,6 +1,6 @@
 from mongoalchemy.fields import *  # noqa
 
-from server.model.base_token import BaseToken
+from webbaseserver.model.base_token import BaseToken
 
 
 class EmailConfirmationToken(BaseToken):

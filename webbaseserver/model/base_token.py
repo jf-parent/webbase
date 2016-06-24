@@ -1,8 +1,8 @@
 from mongoalchemy.document import Document, Index
 from mongoalchemy.fields import *  # noqa
 
-from server.utils import generate_token
-from server.exceptions import *  # noqa
+from webbaseserver.utils import generate_token
+from webbaseserver.exceptions import *  # noqa
 
 
 class BaseToken(Document):

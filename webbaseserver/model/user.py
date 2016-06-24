@@ -7,12 +7,12 @@ from mongoalchemy.fields import *  # noqa
 from validate_email import validate_email
 
 from jobs.send_email import send_email
-from server.model.base_model import BaseModel
-from server.model.notification import Notification
-from server.prometheus_instruments import active_user_gauge
-from server.settings import config
-from server.exceptions import *  # noqa
-from server.model.email_confirmation_token import EmailConfirmationToken
+from webbaseserver.model.base_model import BaseModel
+from webbaseserver.model.notification import Notification
+from webbaseserver.prometheus_instruments import active_user_gauge
+from webbaseserver.settings import config
+from webbaseserver.exceptions import *  # noqa
+from webbaseserver.model.email_confirmation_token import EmailConfirmationToken
 
 NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa

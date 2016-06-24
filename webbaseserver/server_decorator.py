@@ -5,10 +5,10 @@ from aiohttp import web
 from aiohttp.abc import AbstractView
 from aiohttp_session import get_session
 
-from server.auth import permits
-from server.settings import logger
-from server.exceptions import *  # noqa
-from server.prometheus_instruments import (
+from webbaseserver.auth import permits
+from webbaseserver.settings import logger
+from webbaseserver.exceptions import *  # noqa
+from webbaseserver.prometheus_instruments import (
     security_violation_attempt_counter,
     serverside_unhandled_exception_counter
 )

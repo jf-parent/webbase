@@ -4,11 +4,15 @@ import traceback
 from aiohttp_session import get_session
 from aiohttp import web
 
-from server.exceptions import *  # noqa
-from server.settings import logger
-from server.server_decorator import require, exception_handler, csrf_protected
-from server.auth import get_user_from_session
-from server.prometheus_instruments import (
+from webbaseserver.exceptions import *  # noqa
+from webbaseserver.settings import logger
+from webbaseserver.server_decorator import (
+    require,
+    exception_handler,
+    csrf_protected
+)
+from webbaseserver.auth import get_user_from_session
+from webbaseserver.prometheus_instruments import (
     serverside_unhandled_exception_counter
 )
 
@@ -44,7 +48,7 @@ class CRUD(web.View):
     def import_model(self, model):
         try:
             m = importlib.import_module(
-                'server.model.{model}'.format(model=model)
+                'webbaseserver.model.{model}'.format(model=model)
             )
             return getattr(m, model.title())
         except ImportError:

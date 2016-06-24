@@ -1,7 +1,7 @@
 import pytest
 from webtest.app import AppError
 
-from server.exceptions import *  # noqa
+from webbaseserver.exceptions import *  # noqa
 
 
 def test_index_route(client):

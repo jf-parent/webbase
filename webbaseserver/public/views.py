@@ -2,13 +2,13 @@ from aiohttp import web
 import aiohttp_jinja2
 from aiohttp_session import get_session
 
-from server.exceptions import *  # noqa
-from server.settings import logger, config
-from server.server_decorator import exception_handler, csrf_protected
-from server.model.user import User
-from server.model.reset_password_token import ResetPasswordToken
-from server.auth import set_session, get_user_from_session
-from server.utils import generate_token
+from webbaseserver.exceptions import *  # noqa
+from webbaseserver.settings import logger, config
+from webbaseserver.server_decorator import exception_handler, csrf_protected
+from webbaseserver.model.user import User
+from webbaseserver.model.reset_password_token import ResetPasswordToken
+from webbaseserver.auth import set_session, get_user_from_session
+from webbaseserver.utils import generate_token
 
 
 async def set_csrf_token_session(session):

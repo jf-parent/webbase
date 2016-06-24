@@ -1,20 +1,15 @@
 import asyncio
 import types
-import os
-import sys
 
 import pytest
 from webtest_aiohttp import TestApp
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(HERE, '..', '..'))
-
-from server.app import init  # noqa
-from server.model.user import User  # noqa
-from server.model.notification import Notification  # noqa
-from server.model.email_confirmation_token import EmailConfirmationToken  # noqa
-from server.model.reset_password_token import ResetPasswordToken  # noqa
-from server.utils import DbSessionContext, drop_database  # noqa
+from webbaseserver.app import init  # noqa
+from webbaseserver.model.user import User  # noqa
+from webbaseserver.model.notification import Notification  # noqa
+from webbaseserver.model.email_confirmation_token import EmailConfirmationToken  # noqa
+from webbaseserver.model.reset_password_token import ResetPasswordToken  # noqa
+from webbaseserver.utils import DbSessionContext, drop_database  # noqa
 
 
 @pytest.fixture

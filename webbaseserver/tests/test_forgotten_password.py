@@ -1,9 +1,9 @@
 from dateutil import parser as dateutil_parser
 
-from server.settings import config
-from server.utils import DbSessionContext
-from server.model.user import User
-from server.model.reset_password_token import ResetPasswordToken
+from webbaseserver.settings import config
+from webbaseserver.utils import DbSessionContext
+from webbaseserver.model.user import User
+from webbaseserver.model.reset_password_token import ResetPasswordToken
 
 
 def test_reset_password_not_authorized(client):

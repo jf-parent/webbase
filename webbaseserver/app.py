@@ -16,10 +16,10 @@ from aiohttp import web
 HERE = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(HERE, '..'))
 
-from server.prometheus_instruments import db_session_gauge  # noqa
-from server.routes import routes  # noqa
-from server.middlewares import db_handler  # noqa
-from server.settings import config, logger, ROOT  # noqa
+from webbaseserver.prometheus_instruments import db_session_gauge  # noqa
+from webbaseserver.routes import routes  # noqa
+from webbaseserver.middlewares import db_handler  # noqa
+from webbaseserver.settings import config, logger, ROOT  # noqa
 
 
 async def on_shutdown(app):

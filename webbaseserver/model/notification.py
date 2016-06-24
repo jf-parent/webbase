@@ -2,8 +2,8 @@ from datetime import datetime
 
 from mongoalchemy.fields import *  # noqa
 
-from server.model.base_model import BaseModel
-from server.exceptions import *  # noqa
+from webbaseserver.model.base_model import BaseModel
+from webbaseserver.exceptions import *  # noqa
 
 
 class Notification(BaseModel):

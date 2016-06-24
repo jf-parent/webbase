@@ -1,7 +1,7 @@
 from aiohttp_session import get_session
 
-from server.model.user import User
-from server.prometheus_instruments import active_user_gauge
+from webbaseserver.model.user import User
+from webbaseserver.prometheus_instruments import active_user_gauge
 
 
 def permits(request, session, permission):

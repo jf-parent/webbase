@@ -1,5 +1,5 @@
-from server.settings import config
-from server.utils import DbSessionContext
+from webbaseserver.settings import config
+from webbaseserver.utils import DbSessionContext
 
 
 def test_get_session_return_token(client):

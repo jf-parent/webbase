@@ -3,8 +3,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from mongoalchemy.fields import *  # noqa
 
-from server.model.base_token import BaseToken
-from server.settings import config
+from webbaseserver.model.base_token import BaseToken
+from webbaseserver.settings import config
 from jobs.send_email import send_email
 
 

@@ -1,6 +1,6 @@
-from server.public.views import *  # noqa
-from server.auth.views import *  # noqa
-from server.crud.views import CRUD
+from webbaseserver.public.views import *  # noqa
+from webbaseserver.auth.views import *  # noqa
+from webbaseserver.crud.views import CRUD
 
 routes = [
     # CLIENT ROUTE => not /api/* and not /static/*

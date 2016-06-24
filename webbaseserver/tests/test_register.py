@@ -1,6 +1,6 @@
-from server.settings import config
-from server.utils import DbSessionContext
-from server.model.user import User, NAME_MAX_LEN
+from webbaseserver.settings import config
+from webbaseserver.utils import DbSessionContext
+from webbaseserver.model.user import User, NAME_MAX_LEN
 
 
 DEFAULT_EMAIL = 'test.new@test.com'

@@ -1,7 +1,7 @@
-from server.settings import config
-from server.utils import DbSessionContext
-from server.model.user import User
-from server.model.notification import Notification
+from webbaseserver.settings import config
+from webbaseserver.utils import DbSessionContext
+from webbaseserver.model.user import User
+from webbaseserver.model.notification import Notification
 
 
 ###############################################################################
