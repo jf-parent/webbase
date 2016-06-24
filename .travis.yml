@@ -2,7 +2,7 @@ language:
   - python
   - node_js
 node_js:
-  - "4"
+  - "node"
 python:
   - "3.5"
 services:
