@@ -98,7 +98,7 @@ class Notification(BaseModel):
 
         # READ
         elif method == 'read':
-            if author.get_uid() == self.user_uid:
+            if author.get_uid() == str(self.user_uid):
                 return True
             elif author.role == 'admin':
                 return True
@@ -107,7 +107,7 @@ class Notification(BaseModel):
 
         # UPDATE
         elif method == 'update':
-            if author.get_uid() == self.user_uid:
+            if author.get_uid() == str(self.user_uid):
                 return True
             elif author.role == 'admin':
                 return True

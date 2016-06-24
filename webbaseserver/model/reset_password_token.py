@@ -57,7 +57,7 @@ class ResetPasswordToken(BaseToken):
             )
 
     def is_belonging_to_user(self, user):
-        return self.user_uid == user.get_uid()
+        return str(self.user_uid) == user.get_uid()
 
     def is_expire(self):
         NOW = datetime.now()
