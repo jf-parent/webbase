@@ -1,8 +1,6 @@
-language:
-  - python
-  - node_js
+language: node_js
 node_js:
-  - "node"
+  - "4.4.x"
 python:
   - "3.5"
 services:
