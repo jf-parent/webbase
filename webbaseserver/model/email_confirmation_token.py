@@ -16,4 +16,4 @@ class EmailConfirmationToken(BaseToken):
         db_session.save(self, safe=True)
 
     def is_belonging_to_user(self, user):
-        return self.user_uid == user.get_uid()
+        return str(self.user_uid) == user.get_uid()
