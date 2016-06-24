@@ -2,13 +2,14 @@ language:
   - python
   - node_js
 node_js:
-  - "4.4.x"
+  - "4"
 python:
   - "3.5"
 services:
   - mongodb
   - redis-server
 install:
+  - "node --version"
   - "npm install"
   - "pip install --editable ."
   - "npm build:dev"
