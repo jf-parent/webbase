@@ -31,6 +31,9 @@ lint:
 serve-cwd:
 	python -m http.server 9010
 
+test-prod:
+	py.test webbaseserver/tests --instafail --html=last-report.html
+
 test:
 	flake8 webbaseserver && py.test webbaseserver/tests --instafail --html=last-report.html
 
