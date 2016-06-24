@@ -69,7 +69,7 @@ async def init(loop, config_args=None):
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
 
-    if config.get('ENV', 'production') == ['development', 'test']:
+    if config.get('ENV', 'production') in ['development', 'test']:
         static_path = os.path.join(ROOT, 'dist-dev')
     else:
         static_path = os.path.join(ROOT, 'dist-prod')
