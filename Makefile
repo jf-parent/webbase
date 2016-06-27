@@ -7,6 +7,12 @@ deps-dev:
 admin-dev:
 	python admin/app.py
 
+start-admin-prod:
+	scripts/start_admin.sh
+
+stop-admin-prod:
+	scripts/stop_admin.sh
+
 start-queue-prod:
 	scripts/start_rqueue.sh
 
