@@ -8,6 +8,7 @@ var logLevel = isDev ? "'debug'" : "'error'";
 
 definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,
+  __GET_SESSION_INTERVAL__: 3000,
   __TEST__: isTest,
   __PROD__: isProd,
   __DEBUG__: isDev,
@@ -17,7 +18,6 @@ definePlugin = new webpack.DefinePlugin({
 
 var config;
 if (isProd) {
-    console.log('[*] Using PROD config');
     config = require('./webpack.prod.config.js');
 } else if (isTest) {
     console.log('[*] Using TEST config');

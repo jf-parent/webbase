@@ -4,8 +4,10 @@ import os
 import binascii
 
 from redis import StrictRedis
+import jinja2
 from pymongo import MongoClient
 from mongoalchemy.session import Session
+from mongoalchemy.fields import StringField
 
 
 def generate_token(n):
@@ -34,3 +36,10 @@ def drop_database(db_name):
 
     redis_client = StrictRedis()
     redis_client.flushall()
+
+
+class SafeStringField(StringField):
+
+    def __set__(self, instance, value):
+        value = jinja2.utils.escape(value)
+        self.set_value(instance, value)

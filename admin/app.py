@@ -1,9 +1,8 @@
 import os
 import base64
+import json
 import logging
-
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+from logging.handlers import TimedRotatingFileHandler
 
 from IPython import embed
 from cryptography import fernet
@@ -17,6 +16,43 @@ from flask_admin.contrib.pymongo import ModelView, filters
 import pymongo
 from bson.objectid import ObjectId
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+ROOT = os.path.join(HERE, '..')
+
+# CONFIG
+
+config_path = os.path.join(ROOT, 'configs', 'server.json')
+
+with open(config_path) as fd:
+    config = json.load(fd)
+
+# LOGGING
+
+## DISABLE werkzeug
+werkzeug_logger = logging.getLogger('werkzeug')
+werkzeug_logger.setLevel(logging.ERROR)
+
+## WEBBASE ADMIN
+logger = logging.getLogger('webbase_admin')
+logger.setLevel(getattr(logging, config.get('ADMIN').get('LOG_LEVEL', 'INFO')))
+
+formatter = logging.Formatter(
+    '[L:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
+    datefmt='%d-%m-%Y %H:%M:%S'
+)
+
+## StreamHandler
+sh = logging.StreamHandler()
+sh.setFormatter(formatter)
+logger.addHandler(sh)
+
+## FileHandler
+fh = TimedRotatingFileHandler(
+    os.path.join(ROOT, 'logs', 'admin_server.log'),
+    when="midnight"
+)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 conn = pymongo.Connection()
 db = conn.webbase
@@ -110,8 +146,6 @@ class NotificationView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated()
 
-
-
 class UserForm(form.Form):
     name = fields.TextField('Name', [validators.DataRequired()])
     email = fields.TextField('Email', [validators.DataRequired(), validators.Email()])
@@ -122,6 +156,7 @@ class UserForm(form.Form):
 class UserView(ModelView):
     column_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
     column_sortable_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
+    column_searchable_list = ('name', 'email')
 
     form = UserForm
 
@@ -130,14 +165,14 @@ class UserView(ModelView):
 
 class Admin(object):
 
-    # TODO get from config
-    username = "webbase_admin"
-    password = "123456"
+    username = config.get('ADMIN').get('USERNAME')
+    password = config.get('ADMIN').get('PASSWORD')
 
     def __repr__(self):
         return "Admin"
 
     def is_authenticated(self):
+        # logger.debug('Admin.is_authenticated')
         return True
 
     def is_active(self):
@@ -167,7 +202,7 @@ class LoginForm(form.Form):
             raise validators.ValidationError('Invalid password')
 
     def get_user(self):
-        if self.login.data == 'webbase_admin':
+        if self.login.data == config.get('ADMIN').get('USERNAME'):
             return Admin()
         else:
             return None
@@ -178,7 +213,7 @@ def init_login():
 
     @login_manager.user_loader
     def load_user(user_id):
-        if user_id == 'webbase_admin':
+        if user_id == config.get('ADMIN').get('USERNAME'):
             return Admin()
         else:
             return None
@@ -189,6 +224,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     @expose('/')
     def index(self):
         if not login.current_user.is_authenticated():
+            # logger.debug('not login.current_user.is_authenticated() redirect to login_view')
             return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 
@@ -200,6 +236,7 @@ class MyAdminIndexView(admin.AdminIndexView):
             login.login_user(user)
 
         if login.current_user.is_authenticated():
+            # logger.debug('login.current_user.is_authenticated() redirect to index')
             return redirect(url_for('.index'))
         self._template_args['form'] = form
         return super(MyAdminIndexView, self).index()
@@ -224,5 +261,6 @@ admin.add_view(EmailConfirmationTokenView(db.EmailConfirmationToken, 'EmailConfi
 admin.add_view(ForgottenPasswordtokenView(db.ForgottenPasswordtoken, 'ForgottenPasswordtoken'))
 
 if __name__ == '__main__':
-    # TODO get from config
-    app.run(host='0.0.0.0', port=31337, debug=False)
+    host = config.get('ADMIN').get('HOST')
+    port = config.get('ADMIN').get('PORT')
+    app.run(host=host, port=31337, debug=False)

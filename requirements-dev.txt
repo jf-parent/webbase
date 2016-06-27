@@ -10,3 +10,4 @@ pytest-instafail
 pytest-html
 q
 freezegun
+cookiecutter

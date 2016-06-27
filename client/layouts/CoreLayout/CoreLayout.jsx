@@ -37,6 +37,7 @@ class CoreLayout extends BaseComponent {
     this.debug('componentDidMount')
 
     this.props.actions.getSession()
+    window.setInterval(() => this.props.actions.getSession(false), __GET_SESSION_INTERVAL__)
   }
 
   render () {
