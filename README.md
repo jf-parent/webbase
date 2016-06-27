@@ -3,7 +3,8 @@
 Webbase is a fully functionnal web application with a lot of features
 
 # Webbase Front-End
-![alt text](./documentation/screenshots/Webbase-front-end.png "Webbase-front-end")
+![alt text](./documentation/screenshots/Webbase-front-end-1.png "Webbase-front-end-1")
+![alt text](./documentation/screenshots/Webbase-front-end-2.png "Webbase-front-end-2")
 
 # Webbase Admin
 ![alt text](./documentation/screenshots/Webbase-admin.png "Webbase-admin")
