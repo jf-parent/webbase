@@ -6,10 +6,6 @@ var BUILD_DIR = path.resolve(__dirname, 'dist-prod');
 var APP_DIR = path.resolve(__dirname, 'client');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
-console.log('[*] BUILD_DIR:', BUILD_DIR);
-console.log('[*] APP_DIR:', APP_DIR);
-console.log('[*]', definePlugin['definitions']);
-
 var config = {
 
    resolve: {

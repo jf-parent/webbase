@@ -18,7 +18,6 @@ definePlugin = new webpack.DefinePlugin({
 
 var config;
 if (isProd) {
-    console.log('[*] Using PROD config');
     config = require('./webpack.prod.config.js');
 } else if (isTest) {
     console.log('[*] Using TEST config');
