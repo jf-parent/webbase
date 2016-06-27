@@ -4,6 +4,9 @@ deps:
 deps-dev:
 	pip install -r requirements-dev.txt
 
+new-route:
+	cookiecutter ../webbase-cookiecutter-create-route -o client/routes/
+
 admin-dev:
 	python admin/app.py
 
