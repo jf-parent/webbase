@@ -4,14 +4,15 @@ from mongoalchemy.fields import *  # noqa
 
 from webbaseserver.model.base_model import BaseModel
 from webbaseserver.exceptions import *  # noqa
+from webbaseserver.utils import SafeStringField
 
 
 class Notification(BaseModel):
     user_uid = ObjectIdField(required=True)
-    message = StringField()
-    template_data = DictField(StringField(), default_empty=True)
+    message = SafeStringField()
+    template_data = DictField(SafeStringField(), default_empty=True)
     seen = BoolField(default=False)
-    target_url = StringField(default='')
+    target_url = SafeStringField(default='')
     seen_timestamp = DateTimeField(default=None)
 
     def __repr__(self):

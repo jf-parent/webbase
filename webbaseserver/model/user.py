@@ -7,6 +7,7 @@ from mongoalchemy.fields import *  # noqa
 from validate_email import validate_email
 
 from jobs.send_email import send_email
+from webbaseserver.utils import SafeStringField
 from webbaseserver.model.base_model import BaseModel
 from webbaseserver.model.notification import Notification
 from webbaseserver.prometheus_instruments import active_user_gauge
@@ -19,8 +20,8 @@ NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr
 
 
 class User(BaseModel):
-    name = StringField(required=True, min_length=NAME_MIN_LEN, max_length=NAME_MAX_LEN)  # noqa
-    email = StringField(required=True)
+    name = SafeStringField(required=True, min_length=NAME_MIN_LEN, max_length=NAME_MAX_LEN)  # noqa
+    email = SafeStringField(required=True)
     role = EnumField(StringField(), 'admin', 'user', default="user")
     enable = BoolField(default=True)
     email_confirmed = BoolField(default=False)

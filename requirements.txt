@@ -20,3 +20,4 @@ Flask
 Flask-Admin
 Flask-Login>=0.3.0
 flask-appbuilder
+jinja2

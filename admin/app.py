@@ -110,8 +110,6 @@ class NotificationView(BaseView):
     def is_accessible(self):
         return login.current_user.is_authenticated()
 
-
-
 class UserForm(form.Form):
     name = fields.TextField('Name', [validators.DataRequired()])
     email = fields.TextField('Email', [validators.DataRequired(), validators.Email()])
@@ -122,6 +120,7 @@ class UserForm(form.Form):
 class UserView(ModelView):
     column_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
     column_sortable_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
+    column_searchable_list = ('name', 'email')
 
     form = UserForm
 
