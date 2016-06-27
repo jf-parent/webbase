@@ -4,26 +4,26 @@ Webbase is a fully functionnal web application with a lot of features
 
 # Open-Source projects that webbase use:
 
-* (React)[https://github.com/facebook/react]
-* (React-intl)[https://github.com/yahoo/react-intl]
-* (Redux)[https://github.com/reactjs/redux]
-* (React-router)[https://github.com/reactjs/react-router]
-* (Webpack)[https://github.com/webpack/webpack]
-* (Aoihttp)[https://github.com/KeepSafe/aiohttp]
-* (Prometheus)[https://github.com/prometheus/prometheus]
-* (Grafana)[https://github.com/grafana/grafana]
-* (Monit)[https://bitbucket.org/tildeslash/monit]
-* (Flask-admin)[https://github.com/flask-admin/flask-admin]
-* (MongoAlchemy)[https://github.com/jeffjenkins/MongoAlchemy]
-* (Cookiecutter)[https://github.com/audreyr/cookiecutter]
-* (Postcss)[https://github.com/postcss/postcss]
-* (Pytest)[https://github.com/pytest-dev/pytest]
-* (Enzyme)[https://github.com/airbnb/enzyme]
-* (Karma)[https://github.com/karma-runner/karma]
-* (Bootstrap)[https://github.com/twbs/bootstrap]
+* [React](https://github.com/facebook/react)
+* [React-intl](https://github.com/yahoo/react-intl)
+* [Redux](https://github.com/reactjs/redux)
+* [React-router](https://github.com/reactjs/react-router)
+* [Webpack](https://github.com/webpack/webpack)
+* [Aoihttp](https://github.com/KeepSafe/aiohttp)
+* [Prometheus](https://github.com/prometheus/prometheus)
+* [Grafana](https://github.com/grafana/grafana)
+* [Monit](https://bitbucket.org/tildeslash/monit)
+* [Flask-admin](https://github.com/flask-admin/flask-admin)
+* [MongoAlchemy](https://github.com/jeffjenkins/MongoAlchemy)
+* [Cookiecutter](https://github.com/audreyr/cookiecutter)
+* [Postcss](https://github.com/postcss/postcss)
+* [Pytest](https://github.com/pytest-dev/pytest)
+* [Enzyme](https://github.com/airbnb/enzyme)
+* [Karma](https://github.com/karma-runner/karma)
+* [Bootstrap](https://github.com/twbs/bootstrap)
 * ...
 
-# (Documentation)[./documentation]
+# [Documentation](./documentation)
 
 # Features
 
@@ -94,3 +94,7 @@ Webbase is a fully functionnal web application with a lot of features
 * Not supported browser system
 * More front-test unittests
 * Better style: animation, svg, design, etc
+
+# License
+
+* MIT
