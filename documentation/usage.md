@@ -1,10 +1,17 @@
 # USAGE
 
-## LINT / FLAKE8 / STATS
+## DEV
 
 ```bash
-$ make lint
-$ make stats
+$ npm run start
+$ make server-dev
+```
+
+## PROD
+
+```bash
+$ make start-server-prod
+$ make stop-server-prod
 ```
 
 ## TESTING
@@ -24,27 +31,83 @@ $ make test-debug
 $ server-cwd => last-report.html
 ```
 
-## DEV
+
+## ADMIN SERVER
 
 ```bash
-$ webpack-dev-server
+$ make admin-dev
+$ make start-admin-prod
+$ make stop-admin-prod
 ```
 
-## BUILD-PROD
+## DEPS
 
 ```bash
-$ npm run build
+$ make deps
+$ make deps-dev
 ```
 
-## QUEUE-DEV
+## BUILD
+
+### DEV
+
+```bash
+$ npm run build:dev
+```
+
+### TRAVIS
+
+```bash
+$ npm run build:travis
+```
+
+### PROD
+
+```bash
+$ npm run build:prod
+```
+
+## QUEUE
 
 ```bash
 $ make queue-dev
+$ make start-queue-prod
+$ make stop-queue-prod
 ```
 
-## QUEUE-PROD
+## PROMETHEUS
 
 ```bash
-$ make start-queue-prod
+$ make prometheus-dev
+$ make start-prometheus-prod
+$ make stop-prometheus-prod
 ```
 
+## CREATE NEW MODEL
+
+```bash
+$ make new-model
+```
+
+## CREATE NEW ROUTE
+
+```bash
+$ make new-route
+```
+
+## LINT / FLAKE8 / STATS
+
+```bash
+$ make lint
+$ make stats
+$ npm run profile
+```
+
+## OTHERS
+
+```bash
+$ make serve-cwd
+$ make query
+$ reset-db
+$ init-db-sample-data
+```
