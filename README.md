@@ -2,7 +2,17 @@
 
 Webbase is a fully functionnal web application with a lot of features
 
+# Webbase Front-End
 ![alt text](./documentation/screenshots/Webbase-front-end.png "Webbase-front-end")
+
+# Webbase Admin
+![alt text](./documentation/screenshots/Webbase-admin.png "Webbase-admin")
+
+# Grafana
+![alt text](./documentation/screenshots/Webbase-grafana.png "Webbase-grafana")
+
+# Monit
+![alt text](./documentation/screenshots/Webbase-monit.png "Webbase-monit")
 
 # Open-Source projects that webbase use:
 
@@ -31,6 +41,7 @@ Webbase is a fully functionnal web application with a lot of features
 
 * Performance of asyncio
 * Responsive design
+* I18N
 
 ## App
 
