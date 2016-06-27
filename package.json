@@ -7,6 +7,7 @@
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
     "build:prod": "NODE_ENV=production webpack",
+    "profile": "NODE_ENV=production webpack --profile --json > stats.json && echo 'visualize => http://webpack.github.io/analyse/#modules'",
     "build:travis": "NODE_ENV=travis webpack",
     "build:dev": "NODE_ENV=development webpack",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true"
