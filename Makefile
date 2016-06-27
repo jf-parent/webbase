@@ -4,8 +4,11 @@ deps:
 deps-dev:
 	pip install -r requirements-dev.txt
 
+new-model:
+	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o webbaseserver/model/
+
 new-route:
-	cookiecutter ../webbase-cookiecutter-create-route -o client/routes/
+	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-route -o client/routes/
 
 admin-dev:
 	python admin/app.py
