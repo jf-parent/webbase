@@ -2,6 +2,8 @@
 
 Webbase is a fully functionnal web application with a lot of features
 
+![alt text](./documentation/screenshots/Webbase-front-end.png "Webbase-front-end")
+
 # Open-Source projects that webbase use:
 
 * [React](https://github.com/facebook/react)
