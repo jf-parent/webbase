@@ -3,12 +3,14 @@
     "REST_API_SECRET" = "", #CHANGEME
     "LOG_LEVEL": "ERROR",
     "ENV": "production",
+    "RELEASE": "latest",
     "MONGO_DATABASE_NAME": "webbase-prod",
     "MONGO_HOST": "127.0.0.1",
     "SERVER_PORT": 80,
     "SERVER_HOST": "0.0.0.0",
     "MASTER_PASSWORD": "" #CHANGEME,
     "ADMIN": {
+        "ENV": "production",
         "LOG_LEVEL": "ERROR",
         "USERNAME": "admin",
         "PASSWORD": "1asdf!!",

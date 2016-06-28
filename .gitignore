@@ -27,7 +27,6 @@ coverage
 develop-eggs
 logs
 dist-dev
-dist-prod
 docs/_build/
 eggs
 include/

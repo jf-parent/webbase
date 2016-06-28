@@ -1,10 +1,10 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 
-var isDev = process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'travis';
-var isTravis = process.env.NODE_ENV == 'travis';
-var isProd = process.env.NODE_ENV == 'production';
-var isTest = process.env.NODE_ENV == 'test';
-var logLevel = isDev ? "'debug'" : "'error'";
+const isDev = process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'travis';
+const isTravis = process.env.NODE_ENV == 'travis';
+const isProd = process.env.NODE_ENV == 'production';
+const isTest = process.env.NODE_ENV == 'test';
+const logLevel = isDev ? "'debug'" : "'error'";
 
 definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,

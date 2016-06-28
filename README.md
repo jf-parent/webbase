@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/jf-parent/webbase.svg?branch=master)](https://travis-ci.org/jf-parent/webbase)
+[![Python Version](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/downloads/release/python-350/)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
 
 Webbase is a fully functionnal web application with a lot of features
 
@@ -34,6 +36,7 @@ Webbase is a fully functionnal web application with a lot of features
 * [Enzyme](https://github.com/airbnb/enzyme)
 * [Karma](https://github.com/karma-runner/karma)
 * [Bootstrap](https://github.com/twbs/bootstrap)
+* [rq](https://github.com/nvie/rq)
 * ...
 
 # [Documentation](./documentation)
@@ -100,6 +103,10 @@ Webbase is a fully functionnal web application with a lot of features
 
 * Monitoring with prometheus and monit
 * Notification on Slack
+
+# Version
+
+* 0.0.1 Initial Release
 
 # Coming up
 

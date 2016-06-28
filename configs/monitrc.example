@@ -159,7 +159,8 @@ check process webbase_admin with pidfile /var/run/webbase/webbase_admin.pid
 
 ## WEBBASE QUEUE
 
-check process rqueue with pidfile /var/run/webbase/rqueue.pid
+check process rq
+    matching "rq"
     start program = "/path/to/webbase/scripts/start_queue.sh" # CHANGEME
     stop program = "/path/to/webbase/scripts/stop_queue.sh" # CHANGEME
     if 5 restarts within 5 cycles then timeout

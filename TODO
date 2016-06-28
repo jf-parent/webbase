@@ -1,16 +1,23 @@
-
 ### TEST - SERVER ###
-
-* email confirmation
 
 ### TEST - CLIENT ####
 
+* Notification popup
 
-### TEST - BROWSER ###
+### TEST - BROME ###
 
-* auth flow
-* login
-* logout
-* register
-* email confirmation
-* translation
+* Auth flow
+* Login
+* Logout
+* Register
+* Email confirmation
+* Translation
+* Forgotten email
+* Notification
+* Security
+
+### DEV ###
+
+* Ansible deployment
+* Not supported browser system
+* Better style: animation, svg, design, etc

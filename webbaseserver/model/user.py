@@ -106,6 +106,7 @@ class User(BaseModel):
         queue = context.get('queue')
         data = context.get('data')
         db_session = context.get('db_session')
+        save = context.get('save', True)
 
         is_new = await self.is_new()
 
@@ -208,18 +209,18 @@ class User(BaseModel):
             if is_new:
                 raise InvalidEmailException('empty email')
 
-        db_session.save(self, safe=True)
+        if save:
+            db_session.save(self, safe=True)
 
-        if not self.email_confirmed:
+        if not self.email_confirmed and queue:
             email_confirmation_token = EmailConfirmationToken()
             context['user'] = self
             email_confirmation_token.init(context)
             if config.get('ENV', 'production') == 'production':
-                if queue is not None:
-                    self.send_email_confirmation_email(
-                        queue,
-                        email_confirmation_token
-                    )
+                self.send_email_confirmation_email(
+                    queue,
+                    email_confirmation_token
+                )
 
     async def set_password(self, password):
         if await self.is_password_valid(password):
