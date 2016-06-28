@@ -1,39 +1,52 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+import dateutil.parser
 from mongoalchemy.fields import *  # noqa
 
-from webbaseserver.model.base_token import BaseToken
+from webbaseserver.model.basetoken import BaseToken
 from webbaseserver.settings import config
 from jobs.send_email import send_email
 
 
-class ResetPasswordToken(BaseToken):
-    user_uid = ObjectIdField(required=True)
+class Resetpasswordtoken(BaseToken):
     expiration_datetime = DateTimeField(required=True)
 
-    def init(self, context):
+    async def validate_and_save(self, context):
+        NOW = datetime.now()
+
         queue = context.get('queue')
+        data = context.get('data')
         user = context.get('user')
         db_session = context.get('db_session')
+        save = context.get('save', True)
 
-        BaseToken.init(self, context)
+        # BaseToken validate_and_save
+        new_context = context.copy()
+        new_context['save'] = False
+        await super(Resetpasswordtoken, self).validate_and_save(new_context)
 
-        NOW = datetime.now()
         # FOR TEST ONLY
         if config.get('ENV', 'production') == 'test':
             mock_expiration_date = context.get('mock_expiration_date', NOW)
             NOW = mock_expiration_date
 
-        TOMORROW = NOW + relativedelta(days=+1)
+        # EXPIRATION DATETIME
+        expiration_datetime = data.get('expiration_datetime')
+        if expiration_datetime:
+            self.expiration_datetime = dateutil.parser.parse(
+                expiration_datetime
+            )
+        else:
+            TOMORROW = NOW + relativedelta(days=+1)
+            self.expiration_datetime = TOMORROW
 
-        self.user_uid = user.get_uid()
-        self.expiration_datetime = TOMORROW
+        # SAVE
+        if save:
+            db_session.save(self, safe=True)
 
-        db_session.save(self, safe=True)
-
+        # FORMAT EMAIL TEMPLATE
         if config.get('ENV', 'production') == 'production' and queue:
-            # FORMAT EMAIL TEMPLATE
             email = config.get('reset_password_email')
             email['text'] = email['text'].format(
                 reset_password_token=self.token
@@ -55,6 +68,14 @@ class ResetPasswordToken(BaseToken):
                 config.get('REST_API_SECRET'),
                 email
             )
+
+    async def serialize(self, context):
+        data = {}
+        data['token'] = self.token
+        data['user_uid'] = str(self.user_uid)
+        data['expiration_datetime'] = self.expiration_datetime.isoformat()
+        data['used'] = self.used
+        return data
 
     def is_belonging_to_user(self, user):
         return str(self.user_uid) == user.get_uid()

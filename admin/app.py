@@ -6,27 +6,32 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import asyncio
 
-from flask import flash
-from flask_admin.babel import gettext, ngettext, lazy_gettext
 from IPython import embed
 from cryptography import fernet
-from flask import Flask, url_for, redirect, render_template, request
-from wtforms import form, fields, validators
-import flask_admin as admin
-import flask_login as login
-from flask_admin import helpers, expose
-from flask_admin.form import Select2Widget
-from flask_admin.contrib.pymongo import ModelView, filters
 import pymongo
 from bson.objectid import ObjectId
+from wtforms import form, fields, validators
+from flask import Flask, url_for, redirect, render_template, request, flash
+import flask_admin as admin
+from flask_admin import expose, helpers
+import flask_login as login
+from flask_mongoengine.wtf.fields import DictField
+from flask_admin.babel import gettext
+from flask_admin.form import Select2Widget
+from flask_admin.contrib.pymongo import ModelView, filters
+from flask.ext.session import Session
 
+from webbaseserver.model.user import User
 from webbaseserver.utils import DbSessionContext
 from webbaseserver.settings import config
 from webbaseserver.exceptions import *  # noqa
 
+# LOOP
+
 loop = asyncio.get_event_loop()
 asyncio.set_event_loop(loop)
 
+# PATH
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 ROOT = os.path.join(HERE, '..')
@@ -64,18 +69,87 @@ fh = TimedRotatingFileHandler(
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
+# MONGO
 conn = pymongo.Connection()
 db = getattr(conn, config.get('MONGO_DATABASE_NAME'))
 
+# APP
 app = Flask(__name__)
 
+# SECRET KEY
 fernet_key = fernet.Fernet.generate_key()
 secret_key = base64.urlsafe_b64decode(fernet_key)
 app.config['SECRET_KEY'] = secret_key
 
+# SESSION
+app.config['SESSION_TYPE'] = 'redis'
+sess = Session()
+sess.init_app(app)
+
 class BaseView(ModelView):
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('index'))
+
+    def create_model(self, form):
+        model = form.data
+        self.on_model_change(form, model, True)
+        return True
+
+    def update_model(self, form, model):
+        self.on_model_change(form, model, False)
+        return True
+
+    def on_model_change(self, form, model, is_created):
+        logger.info("on_model_change")
+        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+            try:
+                m = importlib.import_module(
+                    'webbaseserver.model.{model}'.format(model=self.name.lower())
+                )
+                model_class = getattr(m, self.name)
+
+                if not is_created:
+                    model_obj = session.query(model_class)\
+                        .filter(model_class.mongo_id == model['_id'])\
+                        .one()
+                else:
+                    model_obj = model_class()
+
+                context = {}
+                context['db_session'] = session
+                context['author'] = login.current_user
+                context['data'] = form.data
+                context['save'] = True
+
+                loop.run_until_complete(model_obj.validate_and_save(context))
+
+                pk = model_obj.get_uid()
+                self.coll.update({'_id': pk}, model)
+
+            except Exception as e:
+                if isinstance(e, ServerBaseException):
+                    flash(gettext('Failed to update record. %(exception)s(%(error)s)', exception=e.get_name(), error=e),
+                          'error')
+                else:
+                    flash(gettext('Failed to update record. %(error)s', error=e),
+                          'error')
+                return False
+            else:
+                self.after_model_change(form, model, True)
+
+            return True
+
+
+# TODO refactor and make it more general
+# currently only support the mapping between
+# model.user_uid to user.email
+class UidToEmailView(BaseView):
     def get_list(self, *args, **kwargs):
-        count, data = super(BaseView, self).get_list(*args, **kwargs)
+        count, data = super(UidToEmailView, self).get_list(*args, **kwargs)
 
         query = {'_id': {'$in': [x['user_uid'] for x in data]}}
         users = db.User.find(query, fields=('email',))
@@ -93,19 +167,34 @@ class BaseView(ModelView):
         return form
 
     def create_form(self):
-        form = super(BaseView, self).create_form()
+        form = super(UidToEmailView, self).create_form()
         return self._feed_user_choices(form)
 
     def edit_form(self, obj):
-        form = super(BaseView, self).edit_form(obj)
+        form = super(UidToEmailView, self).edit_form(obj)
         return self._feed_user_choices(form)
 
-    def on_model_change(self, form, model):
+    def on_model_change(self, form, model, is_created):
         user_uid = model.get('user_uid')
         model['user_uid'] = ObjectId(user_uid)
 
-        return model
+        return super(UidToEmailView, self).on_model_change(form, model, is_created)
 
+    def _search(self, query, search_term):
+        m = importlib.import_module(
+            'webbaseserver.model.{model}'.format(model=self.name.lower())
+        )
+        model_class = getattr(m, self.name)
+        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+            user_query = session.query(User)\
+                .filter(User.email == search_term)
+            if user_query.count():
+                user = user_query.one()
+                query_model = session.query(model_class)\
+                    .filter(model_class.user_uid == user.get_uid())
+                query = query_model.query
+
+        return query
 
 
 class EmailConfirmationTokenForm(form.Form):
@@ -114,48 +203,44 @@ class EmailConfirmationTokenForm(form.Form):
     used = fields.BooleanField()
 
 
-class EmailConfirmationTokenView(BaseView):
+class EmailConfirmationTokenView(UidToEmailView):
     column_list = ('token', 'user_email', 'used')
     column_sortable_list = ('token', 'user_email', 'used')
+    column_searchable_list = ('user_uid')
 
     form = EmailConfirmationTokenForm
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
 
-
-class ForgottenPasswordtokenForm(form.Form):
+class ResetPasswordTokenForm(form.Form):
     user_uid = fields.SelectField('User', widget=Select2Widget())
     token = fields.TextField()
+    expiration_datetime = fields.TextField()
     used = fields.BooleanField()
 
 
-class ForgottenPasswordtokenView(BaseView):
+class ResetPasswordTokenView(UidToEmailView):
     column_list = ('token', 'user_email', 'used')
     column_sortable_list = ('token', 'user_email', 'used')
+    column_searchable_list = ('user_uid')
 
-    form = ForgottenPasswordtokenForm
-
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
+    form = ResetPasswordTokenForm
 
 
 class NotificationForm(form.Form):
     user_uid = fields.SelectField('User', widget=Select2Widget())
     message = fields.TextField()
-    template_data = fields.TextAreaField()  # TODO add validation
+    template_data = DictField()
     seen = fields.BooleanField()
     target_url = fields.TextField()
 
 
-class NotificationView(BaseView):
-    column_list = ('user_uid', 'user_email', 'message')
-    column_sortable_list = ('user_uid', 'user_email', 'message', 'seen_timestamp')
+class NotificationView(UidToEmailView):
+    column_list = ('user_email', 'message')
+    column_sortable_list = ('user_email', 'message', 'seen_timestamp')
+    column_searchable_list = ('user_uid')
 
     form = NotificationForm
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
 
 class UserForm(form.Form):
     name = fields.TextField('Name', [validators.DataRequired()])
@@ -163,46 +248,14 @@ class UserForm(form.Form):
     role = fields.SelectField('Role', choices=[('admin', 'admin'), ('user', 'user')])
     enable = fields.BooleanField('Enable')
     email_confirmed = fields.BooleanField('Email confirmed')
+    password = fields.PasswordField('Password')
 
-class UserView(ModelView):
-    column_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
+class UserView(BaseView):
+    column_list = ('_id', 'name', 'email', 'role', 'enable', 'email_confirmed')
     column_sortable_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
     column_searchable_list = ('name', 'email')
 
     form = UserForm
-
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
-
-    def on_model_change(self, form, model):
-        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-            try:
-                m = importlib.import_module(
-                    'webbaseserver.model.{model}'.format(model=self.name.lower())
-                )
-                model_class = getattr(m, self.name.title())
-
-                model_obj = session.query(model_class)\
-                    .filter(model_class.mongo_id == model['_id'])\
-                    .one()
-
-                context = {}
-                context['db_session'] = session
-                context['author'] = login.current_user
-                context['data'] = form.data
-
-                loop.run_until_complete(model_obj.validate_and_save(context))
-
-            except Exception as e:
-                if isinstance(e, ServerBaseException):
-                    flash(gettext('Failed to update record. %(exception)s(%(error)s)', exception=e.get_name(), error=e),
-                          'error')
-                else:
-                    flash(gettext('Failed to update record. %(error)s', error=e),
-                          'error')
-                return False
-
-            return True
 
 class Admin(object):
 
@@ -253,12 +306,9 @@ class LoginForm(form.Form):
 def init_login():
     login_manager = login.LoginManager()
     login_manager.init_app(app)
-    if config.get('ADMIN').get('ENV', 'production') == 'development':
-        login.current_user = Admin()
 
     @login_manager.user_loader
     def load_user(user_id):
-        embed()
         if user_id == config.get('ADMIN').get('USERNAME'):
             return Admin()
         else:
@@ -269,8 +319,8 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/')
     def index(self):
-        if not login.current_user.is_authenticated():
-            # logger.debug('not login.current_user.is_authenticated() redirect to login_view')
+        if not login.current_user.is_authenticated:
+            # logger.debug('not login.current_user.is_authenticated redirect to login_view')
             return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 
@@ -281,8 +331,8 @@ class MyAdminIndexView(admin.AdminIndexView):
             user = form.get_user()
             login.login_user(user)
 
-        if login.current_user.is_authenticated():
-            # logger.debug('login.current_user.is_authenticated() redirect to index')
+        if login.current_user.is_authenticated:
+            # logger.debug('login.current_user.is_authenticated redirect to index')
             return redirect(url_for('.index'))
         self._template_args['form'] = form
         return super(MyAdminIndexView, self).index()
@@ -303,8 +353,8 @@ init_login()
 admin = admin.Admin(app, 'Webbase - admin', index_view=MyAdminIndexView(), base_template='my_master.html')
 admin.add_view(UserView(db.User, 'User'))
 admin.add_view(NotificationView(db.Notification, 'Notification'))
-admin.add_view(EmailConfirmationTokenView(db.EmailConfirmationToken, 'EmailConfirmationToken'))
-admin.add_view(ForgottenPasswordtokenView(db.ForgottenPasswordtoken, 'ForgottenPasswordtoken'))
+admin.add_view(EmailConfirmationTokenView(db.Emailconfirmationtoken, 'Emailconfirmationtoken'))
+admin.add_view(ResetPasswordTokenView(db.Resetpasswordtoken, 'Resetpasswordtoken'))
 
 if __name__ == '__main__':
     host = config.get('ADMIN').get('HOST')

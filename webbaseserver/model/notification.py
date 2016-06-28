@@ -2,7 +2,7 @@ from datetime import datetime
 
 from mongoalchemy.fields import *  # noqa
 
-from webbaseserver.model.base_model import BaseModel
+from webbaseserver.model.basemodel import BaseModel
 from webbaseserver.exceptions import *  # noqa
 from webbaseserver.utils import SafeStringField
 
@@ -45,6 +45,7 @@ class Notification(BaseModel):
     async def validate_and_save(self, context):
         data = context.get('data')
         db_session = context.get('db_session')
+        save = context.get('save', True)
 
         is_new = await self.is_new()
 
@@ -84,7 +85,8 @@ class Notification(BaseModel):
         if template_data:
             self.template_data = template_data
 
-        db_session.save(self, safe=True)
+        if save:
+            db_session.save(self, safe=True)
 
     async def method_autorized(self, context):
         method = context.get('method')
