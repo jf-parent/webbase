@@ -1,7 +1,7 @@
 from webbaseserver.settings import config
 from webbaseserver.utils import DbSessionContext
 from webbaseserver.model.user import User
-from webbaseserver.model.email_confirmation_token import EmailConfirmationToken
+from webbaseserver.model.emailconfirmationtoken import Emailconfirmationtoken
 from webbaseserver.model.notification import Notification
 
 
@@ -30,8 +30,8 @@ def test_confirm_email_right_token(client):
     user = client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
+        token = session.query(Emailconfirmationtoken)\
+            .filter(Emailconfirmationtoken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',
@@ -75,8 +75,8 @@ def test_confirm_email_right_token_wrong_user(client):
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         user = session.query(User)\
             .filter(User.email == 'admin@admin.com').one()
-        token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
+        token = session.query(Emailconfirmationtoken)\
+            .filter(Emailconfirmationtoken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',
@@ -94,8 +94,8 @@ def test_confirm_email_already_confirmed(client):
     user = client.login('test@test.com')
 
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
-        token = session.query(EmailConfirmationToken)\
-            .filter(EmailConfirmationToken.user_uid == user.get_uid()).one()
+        token = session.query(Emailconfirmationtoken)\
+            .filter(Emailconfirmationtoken.user_uid == user.get_uid()).one()
 
     response = client.post_json(
         '/api/confirm_email',

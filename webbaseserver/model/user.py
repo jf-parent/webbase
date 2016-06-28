@@ -8,12 +8,12 @@ from validate_email import validate_email
 
 from jobs.send_email import send_email
 from webbaseserver.utils import SafeStringField
-from webbaseserver.model.base_model import BaseModel
+from webbaseserver.model.basemodel import BaseModel
 from webbaseserver.model.notification import Notification
 from webbaseserver.prometheus_instruments import active_user_gauge
 from webbaseserver.settings import config
 from webbaseserver.exceptions import *  # noqa
-from webbaseserver.model.email_confirmation_token import EmailConfirmationToken
+from webbaseserver.model.emailconfirmationtoken import Emailconfirmationtoken
 
 NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa
@@ -147,7 +147,7 @@ class User(BaseModel):
         # PASSWORD
         password = data.get('password')
         if password:
-            await self.set_password(data.get('password'))
+            await self.set_password(password)
         else:
             if is_new:
                 raise InvalidPasswordException('empty password')
@@ -212,11 +212,11 @@ class User(BaseModel):
         if save:
             db_session.save(self, safe=True)
 
-        if not self.email_confirmed and queue:
-            email_confirmation_token = EmailConfirmationToken()
-            context['user'] = self
-            email_confirmation_token.init(context)
-            if config.get('ENV', 'production') == 'production':
+        if not self.email_confirmed:
+            email_confirmation_token = Emailconfirmationtoken()
+            context['data']['user_uid'] = self.get_uid()
+            await email_confirmation_token.validate_and_save(context)
+            if config.get('ENV', 'production') == 'production' and queue:
                 self.send_email_confirmation_email(
                     queue,
                     email_confirmation_token

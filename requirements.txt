@@ -16,8 +16,10 @@ validate_email
 prometheus_client
 rq
 redis
+jinja2
 Flask
 Flask-Admin
 Flask-Login>=0.3.0
 flask-appbuilder
-jinja2
+flask-mongoengine
+Flask-Session

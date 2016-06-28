@@ -1,9 +1,10 @@
 from dateutil import parser as dateutil_parser
+import asyncio
 
 from webbaseserver.settings import config
 from webbaseserver.utils import DbSessionContext
 from webbaseserver.model.user import User
-from webbaseserver.model.reset_password_token import ResetPasswordToken
+from webbaseserver.model.resetpasswordtoken import Resetpasswordtoken
 
 
 def test_reset_password_not_authorized(client):
@@ -73,16 +74,23 @@ def test_send_reset_password_token_error_not_existing_email(client):
 
 
 def test_validate_reset_password_token_expired(client):
+    loop = asyncio.get_event_loop()
+    asyncio.set_event_loop(loop)
     with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
         old_datetime = dateutil_parser.parse('2012 12 22 00:00:00')
         user = session.query(User).filter(User.email == 'test@test.com').one()
-        reset_password_token = ResetPasswordToken()
+        reset_password_token = Resetpasswordtoken()
         context = {
             'db_session': session,
-            'user': user,
+            'author': user,
+            'data': {
+                'user_uid': user.get_uid()
+            },
             'mock_expiration_date': old_datetime
         }
-        reset_password_token.init(context)
+        loop.run_until_complete(
+            reset_password_token.validate_and_save(context)
+        )
         old_token = reset_password_token.token
 
     response = client.post_json(

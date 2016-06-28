@@ -6,7 +6,7 @@ from webbaseserver.exceptions import *  # noqa
 from webbaseserver.settings import logger, config
 from webbaseserver.server_decorator import exception_handler, csrf_protected
 from webbaseserver.model.user import User
-from webbaseserver.model.reset_password_token import ResetPasswordToken
+from webbaseserver.model.resetpasswordtoken import Resetpasswordtoken
 from webbaseserver.auth import set_session, get_user_from_session
 from webbaseserver.utils import generate_token
 
@@ -65,8 +65,8 @@ async def api_validate_reset_password_token(request):
     except:
         raise InvalidRequestException('Missing json data')
 
-    token_query = request.db_session.query(ResetPasswordToken)\
-        .filter(ResetPasswordToken.token == reset_password_token)
+    token_query = request.db_session.query(Resetpasswordtoken)\
+        .filter(Resetpasswordtoken.token == reset_password_token)
     if token_query.count():
         reset_password_token = token_query.one()
         user = request.db_session.query(User)\
@@ -121,11 +121,14 @@ async def api_send_reset_password_token(request):
             'user': user,
             'db_session': request.db_session,
             'method': 'create',
+            'data': {
+                'user_uid': user.get_uid()
+            },
             'queue': request.app.queue
         }
 
-        reset_password_token = ResetPasswordToken()
-        reset_password_token.init(context)
+        reset_password_token = Resetpasswordtoken()
+        await reset_password_token.validate_and_save(context)
 
         resp_data = {'success': True}
 

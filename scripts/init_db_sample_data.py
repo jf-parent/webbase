@@ -8,8 +8,6 @@ from mongoalchemy.session import Session
 from webbaseserver.utils import drop_database
 from webbaseserver.model.user import User
 from webbaseserver.settings import config
-from webbaseserver.model.email_confirmation_token import EmailConfirmationToken  # noqa
-from webbaseserver.model.reset_password_token import ResetPasswordToken  # noqa
 from webbaseserver.model.notification import Notification  # noqa
 from webbaseserver.utils import DbSessionContext  # noqa
 

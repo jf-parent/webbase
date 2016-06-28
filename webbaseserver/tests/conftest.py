@@ -7,9 +7,8 @@ from webtest_aiohttp import TestApp
 from webbaseserver.app import init  # noqa
 from webbaseserver.model.user import User  # noqa
 from webbaseserver.model.notification import Notification  # noqa
-from webbaseserver.model.email_confirmation_token import EmailConfirmationToken  # noqa
-from webbaseserver.model.reset_password_token import ResetPasswordToken  # noqa
 from webbaseserver.utils import DbSessionContext, drop_database  # noqa
+from webbaseserver.model.resetpasswordtoken import Resetpasswordtoken
 
 
 @pytest.fixture
@@ -83,6 +82,18 @@ def client():
             }
 
             loop.run_until_complete(user.validate_and_save(context))
+
+            context = {
+                'db_session': session,
+                'method': 'create',
+                'data': {
+                    'user_uid': user.get_uid()
+                }
+            }
+            resetpasswordtoken = Resetpasswordtoken()
+            loop.run_until_complete(
+                resetpasswordtoken.validate_and_save(context)
+            )
             for notification_data in notifications:
                 notification = Notification()
                 notification_data['user_uid'] = user.get_uid()

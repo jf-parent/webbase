@@ -3,8 +3,8 @@ from aiohttp import web
 
 from webbaseserver.exceptions import *  # noqa
 from webbaseserver.model.user import User
-from webbaseserver.model.email_confirmation_token import EmailConfirmationToken
-from webbaseserver.model.reset_password_token import ResetPasswordToken
+from webbaseserver.model.emailconfirmationtoken import Emailconfirmationtoken
+from webbaseserver.model.resetpasswordtoken import Resetpasswordtoken
 from webbaseserver.settings import logger
 from webbaseserver.server_decorator import (
     require,
@@ -146,8 +146,8 @@ async def api_confirm_email(request):
         'queue': request.app.queue
     }
 
-    token_query = request.db_session.query(EmailConfirmationToken)\
-        .filter(EmailConfirmationToken.token == email_confirmation_token)
+    token_query = request.db_session.query(Emailconfirmationtoken)\
+        .filter(Emailconfirmationtoken.token == email_confirmation_token)
     if token_query.count():
         email_confirmation_token = token_query.one()
 
@@ -194,9 +194,9 @@ async def api_reset_password(request):
         'data': {'password': new_password}
     }
 
-    token_query = request.db_session.query(ResetPasswordToken)\
-        .filter(ResetPasswordToken.token == token)\
-        .filter(ResetPasswordToken.user_uid == user.get_uid())
+    token_query = request.db_session.query(Resetpasswordtoken)\
+        .filter(Resetpasswordtoken.token == token)\
+        .filter(Resetpasswordtoken.user_uid == user.get_uid())
     if token_query.count():
         reset_password_token = token_query.one()
         if reset_password_token.token == token:
