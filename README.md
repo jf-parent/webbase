@@ -106,7 +106,7 @@ Webbase is a fully functionnal web application with a lot of features
 
 # Version
 
-* 0.0.1 Initial Release
+* 0.0.1 - 2016-06-28 - Initial Release
 
 # Coming up
 
