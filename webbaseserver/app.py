@@ -72,9 +72,29 @@ async def init(loop, config_args=None):
     if config.get('ENV', 'production') in ['development', 'test']:
         static_path = os.path.join(ROOT, 'dist-dev')
     else:
-        static_path = os.path.join(ROOT, 'dist-prod')
+        if config.get('RELEASE', 'latest') == 'latest':
+            latest_version_path = os.path.join(
+                ROOT,
+                'releases',
+                'latest.txt'
+            )
+            if os.path.exists(latest_version_path):
+                with open(latest_version_path, 'r') as fd:
+                    release_version = fd.read()
+            else:
+                raise Exception("The latest.txt file doesn't exists")
+        else:
+            release_version = config.get('RELEASE')
+
+        static_path = os.path.join(ROOT, 'releases', release_version)
 
     app.router.add_static('/', static_path, name='static')
+    logger.info(
+        "Serving static: {static_path}"
+        .format(
+            static_path=static_path
+        )
+    )
 
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(static_path))
 

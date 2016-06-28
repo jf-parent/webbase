@@ -1,10 +1,14 @@
-var webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BUILD_DIR = path.resolve(__dirname, 'dist-prod');
-var APP_DIR = path.resolve(__dirname, 'client');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const fs = require('fs');
+const crypto = require('crypto');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const APP_DIR = path.resolve(__dirname, 'client');
+const current_date = (new Date()).valueOf().toString();
+const random = Math.random().toString();
+const versionHash = crypto.createHash('sha1').update(current_date + random).digest('hex');
+const BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
 
 var config = {
 
@@ -27,7 +31,6 @@ var config = {
    },
 
   plugins: [
-      new CleanWebpackPlugin(BUILD_DIR),
       new ExtractTextPlugin('style.css', { allChunks: true }),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.DedupePlugin(),
@@ -64,5 +67,12 @@ var config = {
     ]
   }
 };
+
+// edit releases/last-version.txt with the current release hash
+fs.writeFile("./releases/latest.txt", versionHash, function(err) {
+    if(err) {
+        return console.error(err);
+    }
+});
 
 module.exports = config;

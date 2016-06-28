@@ -1,9 +1,13 @@
 import os
+import importlib
 import base64
 import json
 import logging
 from logging.handlers import TimedRotatingFileHandler
+import asyncio
 
+from flask import flash
+from flask_admin.babel import gettext, ngettext, lazy_gettext
 from IPython import embed
 from cryptography import fernet
 from flask import Flask, url_for, redirect, render_template, request
@@ -16,15 +20,21 @@ from flask_admin.contrib.pymongo import ModelView, filters
 import pymongo
 from bson.objectid import ObjectId
 
+from webbaseserver.utils import DbSessionContext
+from webbaseserver.settings import config
+from webbaseserver.exceptions import *  # noqa
+
+loop = asyncio.get_event_loop()
+asyncio.set_event_loop(loop)
+
+
 HERE = os.path.abspath(os.path.dirname(__file__))
 ROOT = os.path.join(HERE, '..')
 
 # CONFIG
 
 config_path = os.path.join(ROOT, 'configs', 'server.json')
-
-with open(config_path) as fd:
-    config = json.load(fd)
+config.configure(config_path)
 
 # LOGGING
 
@@ -55,7 +65,7 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 conn = pymongo.Connection()
-db = conn.webbase
+db = getattr(conn, config.get('MONGO_DATABASE_NAME'))
 
 app = Flask(__name__)
 
@@ -95,6 +105,7 @@ class BaseView(ModelView):
         model['user_uid'] = ObjectId(user_uid)
 
         return model
+
 
 
 class EmailConfirmationTokenForm(form.Form):
@@ -163,10 +174,41 @@ class UserView(ModelView):
     def is_accessible(self):
         return login.current_user.is_authenticated()
 
+    def on_model_change(self, form, model):
+        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+            try:
+                m = importlib.import_module(
+                    'webbaseserver.model.{model}'.format(model=self.name.lower())
+                )
+                model_class = getattr(m, self.name.title())
+
+                model_obj = session.query(model_class)\
+                    .filter(model_class.mongo_id == model['_id'])\
+                    .one()
+
+                context = {}
+                context['db_session'] = session
+                context['author'] = login.current_user
+                context['data'] = form.data
+
+                loop.run_until_complete(model_obj.validate_and_save(context))
+
+            except Exception as e:
+                if isinstance(e, ServerBaseException):
+                    flash(gettext('Failed to update record. %(exception)s(%(error)s)', exception=e.get_name(), error=e),
+                          'error')
+                else:
+                    flash(gettext('Failed to update record. %(error)s', error=e),
+                          'error')
+                return False
+
+            return True
+
 class Admin(object):
 
     username = config.get('ADMIN').get('USERNAME')
     password = config.get('ADMIN').get('PASSWORD')
+    role= 'admin'
 
     def __repr__(self):
         return "Admin"
@@ -207,12 +249,16 @@ class LoginForm(form.Form):
         else:
             return None
 
+
 def init_login():
     login_manager = login.LoginManager()
     login_manager.init_app(app)
+    if config.get('ADMIN').get('ENV', 'production') == 'development':
+        login.current_user = Admin()
 
     @login_manager.user_loader
     def load_user(user_id):
+        embed()
         if user_id == config.get('ADMIN').get('USERNAME'):
             return Admin()
         else:
