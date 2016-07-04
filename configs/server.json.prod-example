@@ -1,6 +1,6 @@
 {
-    "REST_API_ID" = "", #CHANGEME
-    "REST_API_SECRET" = "", #CHANGEME
+    "REST_API_ID": "", #CHANGEME
+    "REST_API_SECRET": "", #CHANGEME
     "LOG_LEVEL": "ERROR",
     "ENV": "production",
     "RELEASE": "latest",
