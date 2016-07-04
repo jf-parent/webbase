@@ -18,12 +18,12 @@
         "PORT": 31337
     },
     "email_confirmation_email": {
-        'subject': 'Webbase Email Account Confirmation',
-        'html': '<p>Please click <a href="https://domain.com/confirm-email/{email_validation_token}">here</a> to confirm your email account'</p>',
-        'text': 'Please click here to confirm your email account: https://domain.com/confirm-email/{email_validation_token}',
-        'from': {'name': 'Webbase', 'email': 'no-reply@domain.com'},
-        'to': [{
-            'name': '{user_name}', 'email': '{user_email}'
+        "subject": "Webbase Email Account Confirmation",
+        "html": "<p>Please click <a href='https://domain.com/confirm-email/{email_validation_token}'>here</a> to confirm your email account</p>",
+        "text": "Please click here to confirm your email account: https://domain.com/confirm-email/{email_validation_token}",
+        "from": {"name": "Webbase", "email": "no-reply@domain.com"},
+        "to": [{
+            "name": "{user_name}", "email": "{user_email}"
         }]
     },
     "reset_password_email": {
