@@ -13,7 +13,7 @@
         "ENV": "production",
         "LOG_LEVEL": "ERROR",
         "USERNAME": "admin",
-        "PASSWORD": "1asdf!!",
+        "PASSWORD": "" #CHANGEME,
         "HOST": "0.0.0.0",
         "PORT": 31337
     },
