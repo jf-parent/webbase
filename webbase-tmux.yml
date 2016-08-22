@@ -8,14 +8,14 @@ windows:
   - focus: 'true'
     shell_command:
     - workon webbase
-    - cd /root/PROG/PYTHON/webbase
+    - webbase
   - shell_command:
     - workon webbase
-    - cd /root/PROG/PYTHON/webbase
+    - webbase
   - shell_command:
     - workon webbase
-    - cd /root/PROG/PYTHON/webbase
+    - webbase
   - shell_command:
     - workon webbase
-    - cd /root/PROG/PYTHON/webbase
+    - webbase
   window_name: Webbase

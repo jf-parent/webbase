@@ -24,58 +24,16 @@ class NotificationPopup extends BaseComponent {
 
     this._initLogger()
     this._bind(
-      'getCurrentPage',
       'renderNotification',
       'navToTarget',
       'closePopup',
-      'markAllNotificationAsSeen',
-      'onFirstClick',
-      'onPreviousClick',
-      'onNextClick',
-      'onLastClick'
+      'fetchNotificaton',
+      'markAllNotificationAsSeen'
       )
   }
 
-  onFirstClick () {
-    this.debug('onFirstClick')
-    this.props.actions.getNotifications(
-      this.props.state.session,
-      0
-    )
-  }
-
-  onLastClick () {
-    this.debug('onLastClick')
-    let limit = this.props.state.notification.limit
-    let lastPage = this.props.state.notification.totalNotifications - limit
-    this.props.actions.getNotifications(
-      this.props.state.session,
-      lastPage
-    )
-  }
-
-  onNextClick () {
-    this.debug('onNextClick')
-    let limit = this.props.state.notification.limit
-    let nextPage = (this.getCurrentPage() + 1) * limit
-    this.props.actions.getNotifications(
-      this.props.state.session,
-      nextPage
-    )
-  }
-
-  onPreviousClick () {
-    this.debug('onPreviousClick')
-    let limit = this.props.state.notification.limit
-    let previousPage = this.props.state.notification.skip - limit
-    this.props.actions.getNotifications(
-      this.props.state.session,
-      previousPage
-    )
-  }
-
-  getCurrentPage () {
-    return this.props.state.notification.skip / this.props.state.notification.limit
+  fetchNotificaton (skip) {
+    this.props.actions.getNotifications(this.props.state.session, skip)
   }
 
   markAllNotificationAsSeen (event) {
@@ -129,13 +87,6 @@ class NotificationPopup extends BaseComponent {
       marginLeft: '10px'
     }
     let isPopupOpen = this.props.state.notification.notificationPopupOpened
-
-    let pager = null
-    if (this.props.state.notification.totalNotifications > 10) {
-      let totalPage = this.props.state.notification.totalNotifications / this.props.state.notification.limit
-      let currentPage = this.getCurrentPage()
-      pager = <Pager totalPage={totalPage} currentPage={currentPage} onFirstClick={this.onFirstClick} onLastClick={this.onLastClick} onNextClick={this.onNextClick} onPreviousClick={this.onPreviousClick} />
-    }
     const markAllAsRead = formatMessage(notificationMessages.markAllAsRead)
 
     return (
@@ -164,7 +115,12 @@ class NotificationPopup extends BaseComponent {
             }
           })}
         </ul>
-        {pager}
+        <Pager
+          totalItem={this.props.state.notification.totalNotifications}
+          skippedItem={this.props.state.notification.skip}
+          fetchData={this.fetchNotificaton}
+          itemPerPage={this.props.state.notification.limit}
+        />
       </Modal>
     )
   }

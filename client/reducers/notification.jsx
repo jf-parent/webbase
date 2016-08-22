@@ -23,7 +23,6 @@ export default function notification (state = initialState, action) {
         state,
         {
           notifications: action.data.notifications,
-          limit: action.data.limit,
           skip: action.data.skip,
           newNotificationNumber: action.data.newNotificationNumber,
           totalNotifications: action.data.totalNotifications

@@ -56,7 +56,7 @@ test-debug:
 	flake8 webbaseserver && py.test webbaseserver/tests --pdb
 
 server-dev:
-	flake8 webbaseserver && python webbaseserver/app.py
+	python webbaseserver/app.py
 
 start-server-prod:
 	scripts/start_server.sh

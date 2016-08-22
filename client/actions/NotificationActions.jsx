@@ -85,15 +85,15 @@ export function doOpenNotificationPopup () {
   }
 }
 
-export function getNotifications (session, skip = 0, limit = 10) {
+export function getNotifications (session, skip = 0) {
   return dispatch => {
-    axios.post('/api/crud', {
+    let data = {
       token: session.token,
       actions: [
         {
           action: 'read',
           model: 'notification',
-          limit: limit,
+          limit: 10,
           skip: skip,
           descending: 'created_ts',
           filters: {
@@ -108,11 +108,12 @@ export function getNotifications (session, skip = 0, limit = 10) {
           }
         }
       ]
-    })
+    }
+    axios.post('/api/crud', data)
     .then((response) => {
       logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
-        dispatch(updateNotifications(response.data, skip, limit))
+        dispatch(updateNotifications(response.data, skip))
       } else {
         logger.error('/api/crud notification (error)', response)
       }

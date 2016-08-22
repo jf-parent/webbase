@@ -1,13 +1,18 @@
 #! /usr/bin/env python
 
+import sys
+import os
 from time import sleep
 import asyncio
 
-from mongoalchemy.session import Session
+HERE = os.path.abspath(os.path.dirname(__file__))
+ROOT = os.path.join(HERE, '..')
 
-from webbaseserver.utils import drop_database
-from webbaseserver.model.user import User
-from webbaseserver.settings import config
+sys.path.append(ROOT)
+
+from webbaseserver.utils import drop_database  # noqa
+from webbaseserver.model.user import User  # noqa
+from webbaseserver.settings import config  # noqa
 from webbaseserver.model.notification import Notification  # noqa
 from webbaseserver.utils import DbSessionContext  # noqa
 
