@@ -4,7 +4,7 @@ import traceback
 from aiohttp_session import get_session
 from aiohttp import web
 
-from webbaseserver.exceptions import *  # noqa
+from webbaseserver import exceptions
 from webbaseserver.settings import logger
 from webbaseserver.server_decorator import (
     require,
@@ -41,7 +41,7 @@ class CRUD(web.View):
 
             return actions
         except:
-            raise InvalidRequestException(
+            raise exceptions.InvalidRequestException(
                 'No json send or missing actions parameters'
             )
 
@@ -52,13 +52,18 @@ class CRUD(web.View):
             )
             return getattr(m, model.title())
         except ImportError:
-            raise ModelImportException('{model} not found'.format(model=model))
+            raise exceptions.ModelImportException(
+                '{model} not found'.format(model=model)
+            )
 
-    def trim_response_data(self, success, response_data):
+    def trim_response_data(self, success, response_data, error):
         if len(response_data) == 1:
             return response_data[0]
         else:
-            return {'success': success, 'results': response_data}
+            data = {'success': success, 'results': response_data}
+            if error:
+                data['error'] = error
+            return data
 
     @exception_handler()
     @csrf_protected()
@@ -68,8 +73,6 @@ class CRUD(web.View):
 
         session = await get_session(self.request)
         author = get_user_from_session(session, self.request.db_session)
-
-        success = True
 
         read_context = {
             'author': author,
@@ -83,7 +86,9 @@ class CRUD(web.View):
             'queue': self.request.app.queue
         }
 
+        success = True
         response_data = []
+        error = []
         for index, action in enumerate(actions):
             try:
                 # RESPONSE
@@ -94,14 +99,14 @@ class CRUD(web.View):
                 # ACTION
                 action_name = action.get('action')
                 if not action_name:
-                    raise InvalidRequestException(
+                    raise exceptions.InvalidRequestException(
                         'Missing action in actions[{index}]'
                         .format(
                             index=index
                         )
                     )
                 elif action_name not in self.action_list:
-                    raise InvalidRequestException(
+                    raise exceptions.InvalidRequestException(
                         'Invalid action name: "{action_name}"'
                         .format(
                             action_name=action_name
@@ -113,7 +118,9 @@ class CRUD(web.View):
                 # IMPORT MODEL
                 model_name = action.get('model')
                 if not model_name:
-                    raise InvalidRequestException('Missing model in action')
+                    raise exceptions.InvalidRequestException(
+                        'Missing model in action'
+                    )
 
                 model_class = self.import_model(model_name)
 
@@ -130,6 +137,14 @@ class CRUD(web.View):
                         base_query = self.request.db_session\
                             .query(model_class)\
                             .filter(model_class.mongo_id == uid)
+
+                    # BATCH
+                    elif action.get('uids'):
+                        uids = action.get('uids')
+                        base_query = self.request.db_session.query(model_class)
+                        response_data[index]['total'] = len(uids)
+                        base_query = base_query.in_('mongo_id', *uids)
+                        results = base_query.all()
 
                     else:
                         filters = action.get('filters')
@@ -172,7 +187,7 @@ class CRUD(web.View):
                         )
                     )
                     if not await result.method_autorized(action_context):
-                        raise NotAuthorizedException(
+                        raise exceptions.NotAuthorizedException(
                             '{author} not authorized to {action_name} {result}'
                             .format(
                                 author=author,
@@ -186,7 +201,7 @@ class CRUD(web.View):
                     if action_name in ['create', 'update']:
                         data = action.get('data')
                         if not data:
-                            raise InvalidRequestException(
+                            raise exceptions.InvalidRequestException(
                                 'Missing data in action'
                             )
 
@@ -195,11 +210,32 @@ class CRUD(web.View):
                             action_context
                         )
                         action_context['data'] = sane_data
+
+                        # BEFORE HOOK
+                        await getattr(
+                            result,
+                            'before_{action_name}'
+                            .format(
+                                action_name=action_name
+                            )
+                        )(action_context)
+
                         await result.validate_and_save(action_context)
+
+                        # AFTER HOOK
+                        await getattr(
+                            result,
+                            'after_{action_name}'
+                            .format(
+                                action_name=action_name
+                            )
+                        )(action_context)
 
                     # DELETE
                     elif action_name == 'delete':
+                        await result.before_delete(action_context)
                         self.request.db_session.remove(result, safe=True)
+                        await result.after_delete(action_context)
 
                     if not action.get('total_only', False) \
                             and not action_name == 'delete':
@@ -215,7 +251,7 @@ class CRUD(web.View):
                                 )
                             )
                             if not await result.method_autorized(read_context):
-                                raise NotAuthorizedException(
+                                raise exceptions.NotAuthorizedException(
                                     '{author} not authorized to {action_name} {result}'  # noqa
                                     .format(
                                         author=author,
@@ -233,18 +269,22 @@ class CRUD(web.View):
                     'Request HandledException<{exception}>'
                     .format(exception=str(tb))
                 )
-                if isinstance(e, ServerBaseException):
-                    response_data[index] = {
-                        'success': False,
-                        'error': e.get_name()
-                    }
+                if isinstance(e, exceptions.ServerBaseException):
+                    error_msg = e.get_name()
                 else:
                     serverside_unhandled_exception_counter.inc()
-                    response_data[index] = {
-                        'success': False,
-                        'error': 'ServerSideError'
-                    }
+                    error_msg = 'ServerSideError'
+
+                response_data[index] = {
+                    'success': False,
+                    'error': error_msg
+                }
+                error.append(error_msg)
 
         # RESPONSE
-        trimmed_response_data = self.trim_response_data(success, response_data)
+        trimmed_response_data = self.trim_response_data(
+            success,
+            response_data,
+            error
+        )
         return web.json_response(trimmed_response_data)

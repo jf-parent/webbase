@@ -7,6 +7,7 @@ class LaddaButton extends Component {
     isDisabled: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    btnClass: PropTypes.string,
     children: PropTypes.any
   }
 
@@ -20,18 +21,18 @@ class LaddaButton extends Component {
   }
 
   render () {
-    let buttonClass = ['btn', 'btn-lg', 'btn-primary', 'btn-block']
+    let btnClass = this.props.btnClass
     if (this.state.isDisabled) {
-      buttonClass.push('btn-danger')
+      btnClass = btnClass + ' btn-danger'
     } else {
-      buttonClass.push('btn-success')
+      btnClass = btnClass + ' btn-success'
     }
 
     return (
       <center>
         <Ladda
           disabled={this.state.isDisabled}
-          className={buttonClass.join(' ')}
+          className={btnClass}
           onClick={this.props.onSubmit}
           loading={this.props.isLoading}
           buttonStyle='zoom-out'
@@ -42,6 +43,10 @@ class LaddaButton extends Component {
       </center>
     )
   }
+}
+
+LaddaButton.defaultProps = {
+  btnClass: 'btn btn-lg btn-primary btn-block'
 }
 
 module.exports = LaddaButton

@@ -1,7 +1,10 @@
 # from abc import ABCMeta, abstractmethod
 
 from mongoalchemy.document import Document
-from mongoalchemy.fields import *  # noqa
+from mongoalchemy.fields import (
+    CreatedField,
+    ModifiedField
+)
 
 
 # TODO make it a meta class
@@ -32,3 +35,21 @@ class BaseModel(Document):
 
     def get_uid(self):
         return str(self.mongo_id)
+
+    async def before_create(self, context):
+        raise NotImplemented()
+
+    async def after_create(self, context):
+        raise NotImplemented()
+
+    async def before_update(self, context):
+        raise NotImplemented()
+
+    async def after_update(self, context):
+        raise NotImplemented()
+
+    async def before_delete(self, context):
+        raise NotImplemented()
+
+    async def after_delete(self, context):
+        raise NotImplemented()
