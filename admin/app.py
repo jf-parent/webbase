@@ -1,40 +1,40 @@
 import os
 import importlib
 import base64
-import json
 import logging
 from logging.handlers import TimedRotatingFileHandler
+import sys
 import asyncio
 
-from IPython import embed
 from cryptography import fernet
 import pymongo
 from bson.objectid import ObjectId
 from wtforms import form, fields, validators
-from flask import Flask, url_for, redirect, render_template, request, flash
+from flask import Flask, url_for, redirect, request, flash
 import flask_admin as admin
 from flask_admin import expose, helpers
 import flask_login as login
 from flask_mongoengine.wtf.fields import DictField
 from flask_admin.babel import gettext
 from flask_admin.form import Select2Widget
-from flask_admin.contrib.pymongo import ModelView, filters
+from flask_admin.contrib.pymongo import ModelView
 from flask.ext.session import Session
-
-from webbaseserver.model.user import User
-from webbaseserver.utils import DbSessionContext
-from webbaseserver.settings import config
-from webbaseserver.exceptions import *  # noqa
-
-# LOOP
-
-loop = asyncio.get_event_loop()
-asyncio.set_event_loop(loop)
 
 # PATH
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 ROOT = os.path.join(HERE, '..')
+sys.path.append(ROOT)
+
+from server.model.user import User  # noqa
+from server.utils import DbSessionContext  # noqa
+from server.settings import config  # noqa
+from server import exceptions  # noqa
+
+# LOOP
+
+loop = asyncio.get_event_loop()
+asyncio.set_event_loop(loop)
 
 # CONFIG
 
@@ -43,25 +43,25 @@ config.configure(config_path)
 
 # LOGGING
 
-## DISABLE werkzeug
+# DISABLE werkzeug
 werkzeug_logger = logging.getLogger('werkzeug')
 werkzeug_logger.setLevel(logging.ERROR)
 
-## WEBBASE ADMIN
+# WEBBASE ADMIN
 logger = logging.getLogger('webbase_admin')
-logger.setLevel(getattr(logging, config.get('ADMIN').get('LOG_LEVEL', 'INFO')))
+logger.setLevel(getattr(logging, config.get('admin').get('log_level', 'INFO')))
 
 formatter = logging.Formatter(
     '[L:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
     datefmt='%d-%m-%Y %H:%M:%S'
 )
 
-## StreamHandler
+# StreamHandler
 sh = logging.StreamHandler()
 sh.setFormatter(formatter)
 logger.addHandler(sh)
 
-## FileHandler
+# FileHandler
 fh = TimedRotatingFileHandler(
     os.path.join(ROOT, 'logs', 'admin_server.log'),
     when="midnight"
@@ -71,7 +71,7 @@ logger.addHandler(fh)
 
 # MONGO
 conn = pymongo.Connection()
-db = getattr(conn, config.get('MONGO_DATABASE_NAME'))
+db = getattr(conn, config.get('mongo_database_name'))
 
 # APP
 app = Flask(__name__)
@@ -85,6 +85,7 @@ app.config['SECRET_KEY'] = secret_key
 app.config['SESSION_TYPE'] = 'redis'
 sess = Session()
 sess.init_app(app)
+
 
 class BaseView(ModelView):
 
@@ -105,10 +106,11 @@ class BaseView(ModelView):
 
     def on_model_change(self, form, model, is_created):
         logger.info("on_model_change")
-        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        with DbSessionContext(config.get('mongo_database_name')) as session:
             try:
                 m = importlib.import_module(
-                    'webbaseserver.model.{model}'.format(model=self.name.lower())
+                    'webbaseserver.model.{model}'
+                    .format(model=self.name.lower())
                 )
                 model_class = getattr(m, self.name)
 
@@ -131,12 +133,23 @@ class BaseView(ModelView):
                 self.coll.update({'_id': pk}, model)
 
             except Exception as e:
-                if isinstance(e, ServerBaseException):
-                    flash(gettext('Failed to update record. %(exception)s(%(error)s)', exception=e.get_name(), error=e),
-                          'error')
+                if isinstance(e, exceptions.ServerBaseException):
+                    flash(
+                      gettext(
+                        'Failed to update record. %(exception)s(%(error)s)',
+                        exception=e.get_name(),
+                        error=e
+                      ),
+                      'error'
+                    )
                 else:
-                    flash(gettext('Failed to update record. %(error)s', error=e),
-                          'error')
+                    flash(
+                        gettext(
+                            'Failed to update record. %(error)s',
+                            error=e
+                        ),
+                        'error'
+                    )
                 return False
             else:
                 self.after_model_change(form, model, True)
@@ -178,14 +191,18 @@ class UidToEmailView(BaseView):
         user_uid = model.get('user_uid')
         model['user_uid'] = ObjectId(user_uid)
 
-        return super(UidToEmailView, self).on_model_change(form, model, is_created)
+        return super(UidToEmailView, self).on_model_change(
+            form,
+            model,
+            is_created
+        )
 
     def _search(self, query, search_term):
         m = importlib.import_module(
             'webbaseserver.model.{model}'.format(model=self.name.lower())
         )
         model_class = getattr(m, self.name)
-        with DbSessionContext(config.get('MONGO_DATABASE_NAME')) as session:
+        with DbSessionContext(config.get('mongo_database_name')) as session:
             user_query = session.query(User)\
                 .filter(User.email == search_term)
             if user_query.count():
@@ -244,24 +261,38 @@ class NotificationView(UidToEmailView):
 
 class UserForm(form.Form):
     name = fields.TextField('Name', [validators.DataRequired()])
-    email = fields.TextField('Email', [validators.DataRequired(), validators.Email()])
-    role = fields.SelectField('Role', choices=[('admin', 'admin'), ('user', 'user')])
+    email = fields.TextField(
+        'Email',
+        [validators.DataRequired(), validators.Email()]
+    )
+    role = fields.SelectField(
+        'Role',
+        choices=[('admin', 'admin'), ('user', 'user')]
+    )
     enable = fields.BooleanField('Enable')
     email_confirmed = fields.BooleanField('Email confirmed')
     password = fields.PasswordField('Password')
 
+
 class UserView(BaseView):
     column_list = ('_id', 'name', 'email', 'role', 'enable', 'email_confirmed')
-    column_sortable_list = ('name', 'email', 'role', 'enable', 'email_confirmed')
+    column_sortable_list = (
+        'name',
+        'email',
+        'role',
+        'enable',
+        'email_confirmed'
+    )
     column_searchable_list = ('name', 'email')
 
     form = UserForm
 
+
 class Admin(object):
 
-    username = config.get('ADMIN').get('USERNAME')
-    password = config.get('ADMIN').get('PASSWORD')
-    role= 'admin'
+    username = config.get('admin').get('username')
+    password = config.get('admin').get('password')
+    role = 'admin'
 
     def __repr__(self):
         return "Admin"
@@ -297,7 +328,7 @@ class LoginForm(form.Form):
             raise validators.ValidationError('Invalid password')
 
     def get_user(self):
-        if self.login.data == config.get('ADMIN').get('USERNAME'):
+        if self.login.data == config.get('admin').get('username'):
             return Admin()
         else:
             return None
@@ -309,7 +340,7 @@ def init_login():
 
     @login_manager.user_loader
     def load_user(user_id):
-        if user_id == config.get('ADMIN').get('USERNAME'):
+        if user_id == config.get('admin').get('username'):
             return Admin()
         else:
             return None
@@ -320,7 +351,8 @@ class MyAdminIndexView(admin.AdminIndexView):
     @expose('/')
     def index(self):
         if not login.current_user.is_authenticated:
-            # logger.debug('not login.current_user.is_authenticated redirect to login_view')
+            # logger.debug('not login.current_user.is_authenticated
+            # redirect to login_view')
             return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 
@@ -332,7 +364,8 @@ class MyAdminIndexView(admin.AdminIndexView):
             login.login_user(user)
 
         if login.current_user.is_authenticated:
-            # logger.debug('login.current_user.is_authenticated redirect to index')
+            # logger.debug('login.current_user.is_authenticated
+            # redirect to index')
             return redirect(url_for('.index'))
         self._template_args['form'] = form
         return super(MyAdminIndexView, self).index()
@@ -350,13 +383,29 @@ def index():
 
 init_login()
 
-admin = admin.Admin(app, 'Webbase - admin', index_view=MyAdminIndexView(), base_template='my_master.html')
+admin = admin.Admin(
+    app,
+    'Webbase - admin',
+    index_view=MyAdminIndexView(),
+    base_template='my_master.html'
+)
 admin.add_view(UserView(db.User, 'User'))
 admin.add_view(NotificationView(db.Notification, 'Notification'))
-admin.add_view(EmailConfirmationTokenView(db.Emailconfirmationtoken, 'Emailconfirmationtoken'))
-admin.add_view(ResetPasswordTokenView(db.Resetpasswordtoken, 'Resetpasswordtoken'))
+admin.add_view(
+    EmailConfirmationTokenView(
+        db.Emailconfirmationtoken,
+        'Emailconfirmationtoken'
+    )
+)
+admin.add_view(
+    ResetPasswordTokenView(
+        db.Resetpasswordtoken,
+        'Resetpasswordtoken'
+    )
+)
 
 if __name__ == '__main__':
-    host = config.get('ADMIN').get('HOST')
-    port = config.get('ADMIN').get('PORT')
-    app.run(host=host, port=31337, debug=False)
+    host = config.get('admin').get('host')
+    port = config.get('admin').get('port')
+    debug = config.get('admin').get('debug')
+    app.run(host=host, port=port, debug=debug)

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { routerActions } from 'react-router-redux'
 
-import { getSessionLoggedIn } from 'actions/AuthActions'
+import { AUTH_GETTING_SESSION_ERROR, AUTH_GETTING_SESSION_SUCCESS, getSessionLoggedIn } from 'actions/AuthActions'
 import { getNotifications } from 'actions/NotificationActions'
 
 // ====================================
@@ -64,6 +64,7 @@ export const actions = {
 
 const initialState = {
   loading: false,
+  initialLoading: true,
   errorMsgId: null
 }
 
@@ -74,6 +75,15 @@ export default function login (state = initialState, action) {
         initialState,
         {
           loading: true
+        }
+      )
+
+    case AUTH_GETTING_SESSION_SUCCESS:
+    case AUTH_GETTING_SESSION_ERROR:
+      return Object.assign({},
+        initialState,
+        {
+          initialLoading: false
         }
       )
 

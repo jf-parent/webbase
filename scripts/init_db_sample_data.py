@@ -10,22 +10,22 @@ ROOT = os.path.join(HERE, '..')
 
 sys.path.append(ROOT)
 
-from webbaseserver.utils import drop_database  # noqa
-from webbaseserver.model.user import User  # noqa
-from webbaseserver.settings import config  # noqa
-from webbaseserver.model.notification import Notification  # noqa
-from webbaseserver.utils import DbSessionContext  # noqa
+from server.utils import drop_database  # noqa
+from server.model.user import User  # noqa
+from server.settings import config  # noqa
+from server.model.notification import Notification  # noqa
+from server.utils import DbSessionContext  # noqa
 
 config.configure()
 loop = asyncio.get_event_loop()
 asyncio.set_event_loop(loop)
 
-if config.get('ENV', 'production') != 'development':
-    print('The "ENV" variable is not set to development')
+if config.get('env', 'production') != 'development':
+    print('The "env" variable is not set to development')
     sys.exit(1)
 
-DB_NAME = config.get('MONGO_DATABASE_NAME')
-drop_database(DB_NAME)
+DB_NAME = config.get('mongo_database_name')
+drop_database(DB_NAME, config.get('redis_database'))
 
 with DbSessionContext(DB_NAME) as session:
     # INSERT DUMMY DATA

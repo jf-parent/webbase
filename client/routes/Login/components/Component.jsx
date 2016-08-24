@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
 import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
+import Loading from 'components/ux/Loading'
 import SecureForm from 'components/ux/SecureForm'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
@@ -68,43 +69,51 @@ class Login extends BaseComponent {
     const emailPlaceholder = formatMessage(loginMessages.emailPlaceholder)
     const passwordPlaceholder = formatMessage(loginMessages.passwordPlaceholder)
 
-    return (
-      <center>
-        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
-          <h2 className={SecureFormStyle['form-signin-heading']}>
-            <FormattedMessage
-              id='login.PleaseLogin'
-              defaultMessage='Please log in'
-            />
-          </h2>
-          <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
-          <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} quiet required />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
-            <FormattedMessage
-              id='login.SubmitBtn'
-              defaultMessage='Login'
-            />
-          </LaddaButton>
-          <center>{errorMsg}</center>
-        </SecureForm>
-        <p>
-          <Link to='/register'>
-            <FormattedMessage
-              id='login.RegisterRedirect'
-              defaultMessage="Don't have an account yet? Register here"
-            />
-          </Link>
-        </p>
-        <p>
-          <Link to='/forgottenpassword'>
-            <FormattedMessage
-              id='login.ForgottenPassword-btn'
-              defaultMessage='Forgot password?'
-            />
-          </Link>
-        </p>
-      </center>
-    )
+    if (this.props.state.login.initialLoading) {
+      return (
+        <div className='container-fluid'>
+          <Loading style={{left: '50%'}} />
+        </div>
+      )
+    } else {
+      return (
+        <center>
+          <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
+            <h2 className={SecureFormStyle['form-signin-heading']}>
+              <FormattedMessage
+                id='login.PleaseLogin'
+                defaultMessage='Please log in'
+              />
+            </h2>
+            <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
+            <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} quiet required />
+            <LaddaButton ref='button' isDisabled isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
+              <FormattedMessage
+                id='login.SubmitBtn'
+                defaultMessage='Login'
+              />
+            </LaddaButton>
+            <center>{errorMsg}</center>
+          </SecureForm>
+          <p>
+            <Link to='/register'>
+              <FormattedMessage
+                id='login.RegisterRedirect'
+                defaultMessage="Don't have an account yet? Register here"
+              />
+            </Link>
+          </p>
+          <p>
+            <Link to='/forgottenpassword'>
+              <FormattedMessage
+                id='login.ForgottenPassword-btn'
+                defaultMessage='Forgot password?'
+              />
+            </Link>
+          </p>
+        </center>
+      )
+    }
   }
 }
 

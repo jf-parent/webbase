@@ -1,3 +1,35 @@
+help:
+	@echo "-INSTALL-------------------------------------------------------"
+	@echo "[*] 'deps': install python dependencies"
+	@echo "[*] 'deps-dev': install pythno dev dependencies"
+	@echo "-SERVICES------------------------------------------------------"
+	@echo "[*] 'server-dev': start the server without detaching"
+	@echo "[*] 'start-server-prod': start the server and detach"
+	@echo "[*] 'stop-server-prod': stop the server from the pid file"
+	@echo "[*] 'admin-dev': start the admin server without detaching"
+	@echo "[*] 'start-admin-prod': start the admin server and detach"
+	@echo "[*] 'stop-admin-prod': stop the admin server from the pid file"
+	@echo "[*] 'queue-dev': start the queue service without detaching"
+	@echo "[*] 'start-queue-prod': start the queue service and detach"
+	@echo "[*] 'stop-queue-prod': stop the queue service from the pid file"
+	@echo "[*] 'prometheus-dev': start the prometheus server without detaching"
+	@echo "[*] 'start-prometheus-prod': start the prometheus server and detach"
+	@echo "[*] 'stop-prometheus-prod': stop the prometheus server from the pid file"
+	@echo "-DEV-----------------------------------------------------------"
+	@echo "[*] 'new-model': create a new model skeleton file in server/model/"
+	@echo "[*] 'new-route': create a new route skeleton file in client/routes/"
+	@echo "[*] 'lint': lint the server and client code"
+	@echo "[*] 'serve-cwd': server current working directory"
+	@echo "[*] 'stats': show number of line of code for the server and client and some css stats"
+	@echo "-TEST----------------------------------------------------------"
+	@echo "[*] 'test-prod': run the test and output a html report"
+	@echo "[*] 'test': flake8 the tests and run them"
+	@echo "[*] 'test-debug': run test with the debug flag"
+	@echo "-ADMIN---------------------------------------------------------"
+	@echo "[*] 'query': query the database"
+	@echo "[*] 'reset-db': reset the database"
+	@echo "[*] 'init-db-sample-data': init the database with some sample data"
+
 deps:
 	pip install -r requirements.txt
 
@@ -5,7 +37,7 @@ deps-dev:
 	pip install -r requirements-dev.txt
 
 new-model:
-	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o webbaseserver/model/
+	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o server/model/
 
 new-route:
 	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-route -o client/routes/
@@ -39,7 +71,7 @@ stop-prometheus-prod:
 
 lint:
 	@echo "====Python flake8===="
-	flake8 webbaseserver || true
+	flake8 server || true
 	@echo "====Javascript eslin====t"
 	npm run lint
 
@@ -47,16 +79,16 @@ serve-cwd:
 	python -m http.server 9010
 
 test-prod:
-	py.test webbaseserver/tests --instafail --html=last-report.html
+	py.test server/tests --html=last-report.html
 
 test:
-	flake8 webbaseserver && py.test webbaseserver/tests --instafail --html=last-report.html
+	flake8 server && py.test server/tests --instafail
 
 test-debug:
-	flake8 webbaseserver && py.test webbaseserver/tests --pdb
+	flake8 server && py.test server/tests --pdb
 
 server-dev:
-	python webbaseserver/app.py
+	python server/app.py
 
 start-server-prod:
 	scripts/start_server.sh

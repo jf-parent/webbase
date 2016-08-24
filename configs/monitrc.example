@@ -128,7 +128,7 @@ set logfile syslog
 set httpd port 2812 and
     use address 0.0.0.0  # only accept connection from localhost
     allow 0.0.0.0/0.0.0.0        # allow localhost to connect to the server and
-    allow admin:"webbase!!"
+    allow admin:"" # CHANGEME
 
 ###############################################################################
 ## Services

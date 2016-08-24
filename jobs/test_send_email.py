@@ -1,13 +1,19 @@
-from jobs.send_email import PySendPulse
+import os
+import sys
 
-from webbaseserver.utils import generate_token
-from webbaseserver.settings import config
-from webbaseserver.auth.user import User
+HERE = os.path.abspath(os.path.dirname(__file__))
+ROOT = os.path.join(HERE, '..')
+sys.path.append(ROOT)
+
+from jobs.send_email import PySendPulse  # noqa
+from server.utils import generate_token  # noqa
+from server.settings import config  # noqa
+from server.auth.user import User  # noqa
 
 config.configure(False)
 user = User()
-user.name = 'JEAN FRANCOIS PARENT'
-user.email = 'parent.j.f@gmail.com'
+user.name = ''  # CHANGEME
+user.email = ''  # CHANGEME
 
 # SEND EMAIL VALIDATION TOKEN
 email_validation_token = generate_token(20)
