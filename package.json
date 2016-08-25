@@ -4,6 +4,7 @@
   "description": "Base for web",
   "scripts": {
     "start": "NODE_ENV=development ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "start-wd": "NODE_ENV=development webpack-dashboard -- ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
     "profile": "NODE_ENV=production webpack --profile --json > stats.json && echo 'visualize => http://webpack.github.io/analyse/#modules'",
@@ -131,6 +132,7 @@
     "string-replace-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "webpack-dashboard": "^0.1.8",
     "webpack-dev-server": "^1.14.1",
     "yargs": "^4.7.1"
   }
