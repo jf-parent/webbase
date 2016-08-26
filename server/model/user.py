@@ -218,7 +218,8 @@ class User(BaseModel):
             email_confirmation_token = Emailconfirmationtoken()
             context['data']['user_uid'] = self.get_uid()
             await email_confirmation_token.validate_and_save(context)
-            if config.get('env', 'production') == 'production' and hasattr(queue, 'enqueue'):
+            if config.get('env', 'production') == 'production' \
+                    and hasattr(queue, 'enqueue'):
                 self.send_email_confirmation_email(
                     queue,
                     email_confirmation_token

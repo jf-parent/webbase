@@ -7,7 +7,7 @@ from aiohttp_session import get_session
 
 from server.auth import permits
 from server.settings import logger
-from server.exceptions import *  # noqa
+from server import exceptions
 from server.prometheus_instruments import (
     security_violation_attempt_counter,
     serverside_unhandled_exception_counter
@@ -33,7 +33,7 @@ def require(permission):
             if not has_perm:
                 if permission == 'admin':
                     security_violation_attempt_counter.inc()
-                raise NotAuthorizedException(permission)
+                raise exceptions.NotAuthorizedException(permission)
 
             return (await func(params))
         return wrapped
@@ -50,7 +50,7 @@ def exception_handler():
                     return (await func(*args))
                 else:
                     return (await func(args[-1]))
-            except CSRFMismatch as e:
+            except exceptions.CSRFMismatch as e:
                 security_violation_attempt_counter.inc()
                 data = {'success': False, 'error': 'CSRFMismatch'}
 
@@ -61,7 +61,7 @@ def exception_handler():
                     'Request HandledException<{exception}>'
                     .format(exception=str(tb))
                 )
-                if isinstance(e, ServerBaseException):
+                if isinstance(e, exceptions.ServerBaseException):
                     data = {'success': False, 'error': e.get_name()}
                 else:
                     serverside_unhandled_exception_counter.inc()
@@ -91,12 +91,12 @@ def csrf_protected():
             try:
                 data = await request.json()
             except:
-                raise InvalidRequestException('No json send')
+                raise exceptions.InvalidRequestException('No json send')
 
             csrf_token_session = session.get('csrf_token')
             csrf_token_request = data.get('token')
             if csrf_token_request != csrf_token_session:
-                raise CSRFMismatch()
+                raise exceptions.CSRFMismatch()
 
             return (await func(params))
         return wrapped

@@ -1,14 +1,22 @@
 import asyncio
+import sys
+import os
 import types
 
 import pytest
 from webtest_aiohttp import TestApp
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+ROOT = os.path.join(HERE, '..', '..')
+
+sys.path.append(ROOT)
+
+
 from server.app import init  # noqa
 from server.model.user import User  # noqa
 from server.model.notification import Notification  # noqa
 from server.utils import DbSessionContext, drop_database  # noqa
-from server.model.resetpasswordtoken import Resetpasswordtoken
+from server.model.resetpasswordtoken import Resetpasswordtoken  # noqa
 
 
 @pytest.fixture

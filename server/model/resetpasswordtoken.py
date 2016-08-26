@@ -48,7 +48,8 @@ class Resetpasswordtoken(BaseToken):
             db_session.save(self, safe=True)
 
         # FORMAT EMAIL TEMPLATE
-        if config.get('env', 'production') == 'production' and hasattr(queue, 'enqueue'):
+        if config.get('env', 'production') == 'production' \
+                and hasattr(queue, 'enqueue'):
             email = config.get('reset_password_email')
             email['text'] = email['text'].format(
                 reset_password_token=self.token

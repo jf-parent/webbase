@@ -1,7 +1,7 @@
 import React from 'react'
 import { expect } from 'chai'
 
-import TestHelper from 'helpers/TestHelper'
+import { injectRequiredReducer, mountWithContext } from 'helpers/TestHelper'
 import Container from '../containers/Container'
 import reducer from '../modules/reducer'
 
@@ -9,8 +9,8 @@ describe('<Register />', () => {
   let wrapper
 
   beforeEach(() => {
-    TestHelper.injectRequiredReducer('register', reducer)
-    wrapper = TestHelper.mountWithContext(
+    injectRequiredReducer('register', reducer)
+    wrapper = mountWithContext(
       <Container />
     )
   })
@@ -38,7 +38,7 @@ describe('<Register />', () => {
 
   it('Have a submit button not loading', () => {
     let submitBtn = wrapper.find('button')
-    expect(submitBtn.props().loading).to.be.false
+    expect(submitBtn.props().loading).to.be.undefined
     expect(submitBtn.props().isLoading).to.be.false
   })
 

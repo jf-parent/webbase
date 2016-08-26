@@ -1,7 +1,7 @@
 from aiohttp_session import get_session
 from aiohttp import web
 
-from server.exceptions import *  # noqa
+from server import exceptions
 from server.model.user import User
 from server.model.emailconfirmationtoken import Emailconfirmationtoken
 from server.model.resetpasswordtoken import Resetpasswordtoken
@@ -24,7 +24,7 @@ class Login(web.View):
             email = data['email']
             password = data['password']
         except:
-            raise InvalidRequestException('No json send')
+            raise exceptions.InvalidRequestException('No json send')
 
         query = self.request.db_session.query(User)\
             .filter(User.email == email)
@@ -48,9 +48,9 @@ class Login(web.View):
                     'user': await user.serialize(context)
                 }
             else:
-                raise WrongEmailOrPasswordException()
+                raise exceptions.WrongEmailOrPasswordException()
         else:
-            raise WrongEmailOrPasswordException(
+            raise exceptions.WrongEmailOrPasswordException(
                 "Wrong email: '{email}'".format(email=email)
             )
 
@@ -65,7 +65,7 @@ class Register(web.View):
         try:
             data = await self.request.json()
         except:
-            raise InvalidRequestException('No json send')
+            raise exceptions.InvalidRequestException('No json send')
 
         context = {
             'db_session': self.request.db_session,
@@ -134,7 +134,7 @@ async def api_confirm_email(request):
         data = await request.json()
         email_confirmation_token = data['token']
     except:
-        raise InvalidRequestException('Missing json data')
+        raise exceptions.InvalidRequestException('Missing json data')
 
     session = await get_session(request)
     user = get_user_from_session(session, request.db_session)
@@ -167,7 +167,7 @@ async def api_confirm_email(request):
 
     # TOKEN NOT FOUND
     else:
-        raise TokenInvalidException('token not found')
+        raise exceptions.TokenInvalidException('token not found')
 
 
 @exception_handler()
@@ -181,7 +181,7 @@ async def api_reset_password(request):
         new_password = data['password']
         token = data['reset_password_token']
     except:
-        raise InvalidRequestException('Missing json data')
+        raise exceptions.InvalidRequestException('Missing json data')
 
     session = await get_session(request)
     user = get_user_from_session(session, request.db_session)
@@ -206,7 +206,7 @@ async def api_reset_password(request):
             return web.json_response(resp_data)
 
         else:
-            raise TokenInvalidException('Token mismatch')
+            raise exceptions.TokenInvalidException('Token mismatch')
 
     else:
-        raise TokenInvalidException('Token not found')
+        raise exceptions.TokenInvalidException('Token not found')

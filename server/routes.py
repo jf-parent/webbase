@@ -1,5 +1,17 @@
-from server.public.views import *  # noqa
-from server.auth.views import *  # noqa
+from server.public.views import (
+    index,
+    api_get_session,
+    api_validate_reset_password_token,
+    api_send_reset_password_token
+)
+from server.auth.views import (
+    api_admin,
+    api_confirm_email,
+    api_reset_password,
+    Login,
+    Register,
+    Logout
+)
 from server.crud.views import CRUD
 
 routes = [

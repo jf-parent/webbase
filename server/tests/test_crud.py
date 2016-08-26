@@ -154,6 +154,11 @@ def test_crud_combination_multiple_model_multiple_action_by_user_not_allowed(cli
     )
     assert response.status_code == 200
     assert not response.json['success']
+    assert type(response.json['error']) == list
+    assert len(response.json['error']) == 3
+    assert response.json['error'][0] == 'NotAuthorizedException'
+    assert response.json['error'][1] == 'NotAuthorizedException'
+    assert response.json['error'][2] == 'NotAuthorizedException'
     assert response.json['results'][0]['error'] == 'NotAuthorizedException'
     assert response.json['results'][1]['error'] == 'NotAuthorizedException'
     assert response.json['results'][2]['error'] == 'NotAuthorizedException'
@@ -196,6 +201,10 @@ def test_crud_combination_multiple_model_multiple_action_by_user_some_allowed(cl
     )
     assert response.status_code == 200
     assert not response.json['success']
+    assert type(response.json['error']) == list
+    assert len(response.json['error']) == 2
+    assert response.json['error'][0] == 'NotAuthorizedException'
+    assert response.json['error'][1] == 'NotAuthorizedException'
     assert response.json['results'][0]['error'] == 'NotAuthorizedException'
     assert response.json['results'][1]['total'] == 4
     assert response.json['results'][2]['error'] == 'NotAuthorizedException'
