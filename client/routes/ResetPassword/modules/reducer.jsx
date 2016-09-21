@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment-timezone'
 
 // ====================================
 // Constants
@@ -22,6 +23,8 @@ logger.setLevel(__LOGLEVEL__)
 export function doResetPassword (data) {
   return dispatch => {
     dispatch({type: RESET_PASSWORD_LOADING})
+
+    data.user_timezone = moment.tz.guess()
 
     axios.post('/api/reset_password', data)
       .then((response) => {

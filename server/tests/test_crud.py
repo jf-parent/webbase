@@ -15,6 +15,28 @@ def test_crud_not_authorized(client):
     assert response.json['error'] == 'NotAuthorizedException'
 
 
+def test_crud_filters_wildcard(client):
+    client.login('test@test.com')
+
+    response = client.post_json(
+        '/api/crud',
+        {
+            'token': client.__token__,
+            'actions': {
+                'action': 'read',
+                'model': 'user',
+                'filters_wildcard': {
+                    'email': 'test'
+                }
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert response.json['results'][0]['email'] == 'test@test.com'
+    assert response.json['total'] == 1
+
+
 def test_crud_invalid_request_missing_actions(client):
     client.login('test@test.com')
 

@@ -89,6 +89,7 @@ class Register(web.View):
 
         context['method'] = 'read'
         context['user'] = user
+        context['ws_session'] = session
         resp_data = {
             'success': True,
             'user': await user.serialize(context),
@@ -119,6 +120,7 @@ async def api_admin(request):
 
     context = {
         'user': user,
+        'ws_session': session,
         'db_session': request.db_session,
         'method': 'read',
         'queue': request.app.queue
@@ -145,6 +147,7 @@ async def api_confirm_email(request):
     context = {
         'user': user,
         'db_session': request.db_session,
+        'ws_session': session,
         'method': 'update',
         'queue': request.app.queue
     }
@@ -192,6 +195,7 @@ async def api_reset_password(request):
     context = {
         'user': user,
         'db_session': request.db_session,
+        'ws_session': session,
         'method': 'update',
         'queue': request.app.queue,
         'data': {'password': new_password}
