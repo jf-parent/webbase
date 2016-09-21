@@ -17,12 +17,12 @@ definePlugin = new webpack.DefinePlugin({
 });
 
 var config;
-if (isProd) {
+if (isProd || isTravis) {
     config = require('./webpack.prod.config.js');
 } else if (isTest) {
     console.log('[*] Using TEST config');
     config = require('./webpack.test.config.js');
-} else if (isDev  || isTravis) {
+} else if (isDev) {
     console.log('[*] Using DEV config');
     config = require('./webpack.dev.config.js');
 } else {
