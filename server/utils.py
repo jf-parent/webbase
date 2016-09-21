@@ -1,7 +1,9 @@
-
 from contextlib import ContextDecorator
+from datetime import datetime
 import os
 import binascii
+from dateutil import tz
+import pytz
 
 from redis import StrictRedis
 import jinja2
@@ -17,7 +19,8 @@ def generate_token(n):
 class DbSessionContext(ContextDecorator):
     def __init__(self, mongo_database_name):
         self.session = Session.connect(
-            mongo_database_name
+            mongo_database_name,
+            timezone=tz.gettz('UTC')
         )
 
     def __enter__(self):
@@ -27,6 +30,14 @@ class DbSessionContext(ContextDecorator):
         self.session.end()
         self.session.db.connection.disconnect()
         return False
+
+
+def convert_tz_datetime(datetime_input, to_tz):
+    return datetime_input.astimezone(tz.gettz(to_tz))
+
+
+def utcnow():
+    return datetime.now(tz=pytz.utc)
 
 
 def drop_database(db_name, redis_database=0):

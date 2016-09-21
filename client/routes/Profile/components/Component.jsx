@@ -1,5 +1,6 @@
 import React from 'react'
 import { defineMessages, FormattedMessage } from 'react-intl'
+import moment from 'moment'
 
 import ComponentStyle from './ComponentStyle.postcss'
 import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
@@ -110,6 +111,12 @@ class Profile extends BaseComponent {
               defaultMessage='Settings'
             />
           </h2>
+          <h3>
+            Local time:
+          </h3>
+          <h3>
+            {moment(this.props.state.session.user.local_time).format('DD/MM/Y hh:mm:ss A')}
+          </h3>
           {emailConfirmed}
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' autoFocus _value={this.props.state.session.user.email} />
           <ValidatedInput type='text' name='name' placeholder={namePlaceholder} validations='minLength:2' maxLength='60' _value={this.props.state.session.user.name} />

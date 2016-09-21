@@ -5,7 +5,7 @@ import { injectRequiredReducer, mountWithContext } from 'helpers/TestHelper'
 import Container from '../containers/Container'
 import reducer from '../modules/reducer'
 
-idescribe('<Login />', () => {
+describe('<Login />', () => {
   let wrapper
 
   beforeEach(() => {

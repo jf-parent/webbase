@@ -35,9 +35,11 @@ class Login(web.View):
             if is_password_valid and is_enable:
                 await set_session(user, self.request)
                 session = await get_session(self.request)
+                session['tz'] = data.get('user_timezone')
 
                 context = {
                     'db_session': self.request.db_session,
+                    'ws_session': session,
                     'method': 'read',
                     'queue': self.request.app.queue
                 }
@@ -83,6 +85,7 @@ class Register(web.View):
         # SET SESSION
         await set_session(user, self.request)
         session = await get_session(self.request)
+        session['tz'] = data.get('user_timezone')
 
         context['method'] = 'read'
         context['user'] = user

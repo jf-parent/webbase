@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment-timezone'
 
 import { getNotifications } from 'actions/NotificationActions'
 
@@ -32,7 +33,12 @@ export function getSession (loadingContext = false) {
       dispatch({type: AUTH_GETTING_SESSION})
     }
 
-    axios.get('/api/get_session')
+    let userTz = moment.tz.guess()
+    let data = {
+      user_timezone: userTz
+    }
+
+    axios.post('/api/get_session', data)
       .then((response) => {
         logger.debug('/api/get_session (response)', response)
         if (response.data.success) {

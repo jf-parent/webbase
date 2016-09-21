@@ -1,3 +1,6 @@
+
+from pytest import set_trace  # noqa
+
 from server.settings import config
 from server.utils import DbSessionContext
 from server.model.user import User
@@ -730,6 +733,10 @@ def test_crud_delete_admin_success(client):
 
 def test_crud_delete_all_user_disabled_admin_success(client):
     client.login('admin@admin.com')
+
+    with DbSessionContext(config.get('mongo_database_name')) as session:
+        assert session.query(User) \
+                .filter(User.enable == False).count() == 1  # noqa
 
     response = client.post_json(
         '/api/crud',

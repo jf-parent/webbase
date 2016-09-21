@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { routerActions } from 'react-router-redux'
+import moment from 'moment-timezone'
 
 import { getSessionLoggedIn } from 'actions/AuthActions'
 import { getNotifications } from 'actions/NotificationActions'
@@ -22,6 +23,8 @@ logger.setLevel(__LOGLEVEL__)
 export function doLogin (data, nextPath) {
   return dispatch => {
     dispatch({type: LOGIN_LOADING})
+
+    data.user_timezone = moment.tz.guess()
 
     axios.post('/api/login', data)
       .then((response) => {
