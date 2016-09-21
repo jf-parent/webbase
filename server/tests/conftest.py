@@ -141,7 +141,8 @@ def client():
     client.login = types.MethodType(login, client)
 
     # NOTE Always do an /api/get_session to init the session correctly
-    response = client.get('/api/get_session')
+    data = {'user_timezone': 'Australia/Sydney'}
+    response = client.post_json('/api/get_session', data)
     client.__token__ = response.json['token']
 
     return client

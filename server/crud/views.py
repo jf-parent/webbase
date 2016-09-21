@@ -77,12 +77,14 @@ class CRUD(web.View):
         read_context = {
             'author': author,
             'db_session': self.request.db_session,
+            'ws_session': session,
             'method': 'read',
             'queue': self.request.app.queue,
         }
         action_context = {
             'author': author,
             'db_session': self.request.db_session,
+            'ws_session': session,
             'queue': self.request.app.queue
         }
 
@@ -173,6 +175,8 @@ class CRUD(web.View):
                                 filters['mongo_id'] = filters['uid']
                                 del filters['uid']
 
+                            base_query = base_query.filter_by(**filters)
+
                         if filters_wildcard:
                             wildcard = []
                             for key, value in iter(filters_wildcard.items()):
@@ -183,7 +187,7 @@ class CRUD(web.View):
                                     ).regex('.*%s.*' % value, ignore_case=True)
                                 )
 
-                            base_query = base_query.filter_by(**filters)
+                            base_query = base_query.or_(*wildcard)
 
                     response_data[index]['total'] = base_query.count()
                     results = base_query.all()

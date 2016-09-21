@@ -1,5 +1,7 @@
 import urllib
 import hashlib
+from datetime import datetime
+import pytz
 
 import bcrypt
 from mongoalchemy.document import Index
@@ -13,6 +15,7 @@ from validate_email import validate_email
 from jobs.send_email import send_email
 from server.utils import SafeStringField
 from server.model.basemodel import BaseModel
+from server.utils import convert_tz_datetime
 from server.model.notification import Notification
 from server.prometheus_instruments import active_user_gauge
 from server.settings import config
@@ -257,9 +260,15 @@ class User(BaseModel):
                 return False
 
     async def serialize(self, context):
+        ws_session = context.get('ws_session')
+
         data = {}
         data['uid'] = self.get_uid()
         data['name'] = self.name
+        data['local_time'] = convert_tz_datetime(
+            datetime.now(pytz.utc),
+            ws_session['tz']
+        ).isoformat()
         data['email'] = self.email
         data['email_confirmed'] = self.email_confirmed
         data['gravatar_url'] = self.gravatar_url

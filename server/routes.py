@@ -19,7 +19,7 @@ routes = [
     ('GET', r'/{to:(?!api)(?!static).*}', index, 'index'),
 
     # API ROUTES
-    ('GET', '/api/get_session', api_get_session, 'get_session'),
+    ('POST', '/api/get_session', api_get_session, 'get_session'),
     ('GET', '/api/admin', api_admin, 'admin'),
     ('POST', '/api/confirm_email', api_confirm_email, 'api_confirm_email'),
     ('POST', '/api/reset_password', api_reset_password, 'api_reset_password'),
