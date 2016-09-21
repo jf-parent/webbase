@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kill `cat /var/run/webbase/rqueue.pid`
+kill `cat $WEBBASE_PID_PATH/rqueue.pid`

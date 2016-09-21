@@ -1,5 +1,5 @@
 #!/bin/bash
 
-mkdir -p /var/run/webbase/
-nohup $PYTHON_PATH $WEBBASE_ROOT/admin/app.py > /var/log/webbase/admin_server.out 2>&1&
-echo `pgrep -f "admin/app.py"` > /var/run/webbase/webbase_admin.pid
+mkdir -p $WEBBASE_PID_PATH
+nohup $PYTHON_PATH $WEBBASE_ROOT/admin/app.py > $WEBBASE_LOG_PATH/admin_server.out 2>&1&
+echo `pgrep -f "admin/app.py"` > $WEBBASE_PID_PATH/webbase_admin.pid

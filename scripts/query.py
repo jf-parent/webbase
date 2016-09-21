@@ -3,7 +3,7 @@
 import os
 import sys
 
-from IPython import embed
+from IPython.terminal.embed import InteractiveShellEmbed
 from mongoalchemy.session import Session
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -18,4 +18,7 @@ config.configure()
 
 session = Session.connect(config.get("mongo_database_name"))
 
-embed()
+ipshell = InteractiveShellEmbed()
+
+banner = "[*] Import the model you want to query: from server.model.{model_name} import {Model}"  # noqa
+ipshell(banner)

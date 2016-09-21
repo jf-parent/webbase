@@ -1,5 +1,14 @@
 # INSTALLATION [CentOS-7]
 
+## Webbase OS Variables
+
+```bash
+export WEBBASE_LOG_PATH=/path/to/webbase/pid/
+export WEBBASE_PID_PATH=/path/to/webbase/pid/
+export WEBBASE_ROOT=/path/to/webbase/
+export PYTHON_PATH=/path/to/python
+```
+
 ## Dependencies packages
 
 ```bash

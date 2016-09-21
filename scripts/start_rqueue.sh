@@ -1,5 +1,5 @@
 #!/bin/bash
 
-mkdir -p /var/run/webbase/
-nohup $RQ_PATH worker > /var/log/webbase/rqueue.out 2>&1&
-echo `pgrep -f "rq"` > /var/run/webbase/rqueue.pid
+mkdir -p $WEBBASE_PID_PATH
+nohup $RQ_PATH worker > $WEBBASE_LOG_PATH/rqueue.out 2>&1&
+echo `pgrep -f "rq"` > $WEBBASE_PID_PATH/rqueue.pid

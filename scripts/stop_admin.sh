@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kill `cat /var/run/webbase/webbase_admin.pid`
+kill `cat $WEBBASE_PID_PATH/webbase_admin.pid`
