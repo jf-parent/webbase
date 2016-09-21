@@ -62,11 +62,15 @@ async def api_get_session(request):
 async def api_validate_reset_password_token(request):
     logger.debug('validate_reset_password_token')
 
+    session = await get_session(request)
+
     try:
         data = await request.json()
         reset_password_token = data['reset_password_token']
     except:
         raise exceptions.InvalidRequestException('Missing json data')
+
+    session['tz'] = data.get('user_timezone')
 
     token_query = request.db_session.query(Resetpasswordtoken)\
         .filter(Resetpasswordtoken.token == reset_password_token)
@@ -78,6 +82,7 @@ async def api_validate_reset_password_token(request):
         context = {
             'user': user,
             'db_session': request.db_session,
+            'ws_session': session,
             'method': 'update',
             'target': reset_password_token,
             'queue': request.app.queue
@@ -103,6 +108,8 @@ async def api_validate_reset_password_token(request):
 async def api_send_reset_password_token(request):
     logger.debug('send_reset_password_token')
 
+    session = await get_session(request)
+
     try:
         data = await request.json()
         email = data['email']
@@ -123,6 +130,7 @@ async def api_send_reset_password_token(request):
         context = {
             'user': user,
             'db_session': request.db_session,
+            'ws_session': session,
             'method': 'create',
             'data': {
                 'user_uid': user.get_uid()

@@ -17,7 +17,8 @@ def test_index_non_api_route(client):
 
 
 def test_api(client):
-    response = client.get('/api/get_session')
+    data = {'user_timezone': 'Australia/Sydney'}
+    response = client.post_json('/api/get_session', data)
     assert response.status_code == 200
     assert response.content_type == 'application/json'
 
@@ -30,7 +31,8 @@ def test_non_existing_api_route(client):
 
 
 def test_get_session_route(client):
-    response = client.get('/api/get_session')
+    data = {'user_timezone': 'Australia/Sydney'}
+    response = client.post_json('/api/get_session', data)
 
     assert response.status_code == 200
     assert response.content_type == 'application/json'
@@ -138,7 +140,7 @@ def test_logout_method_not_allowed(client):
 
 def test_get_session_method_not_allowed(client):
     with pytest.raises(AppError) as post_not_allowed:
-        client.post_json('/api/get_session')
+        client.get('/api/get_session')
 
     assert post_not_allowed
 
