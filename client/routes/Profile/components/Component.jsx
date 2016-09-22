@@ -91,9 +91,9 @@ class Profile extends BaseComponent {
     // EMAIL CONFIRMATION
     let emailConfirmed = null
     if (this.props.state.session.user.email_confirmed) {
-      emailConfirmed = <i className={'fa fa-check-circle-o ' + ComponentStyle['email-confirmed']} aria-hidden='true'></i>
+      emailConfirmed = <i name='email-verified' className={'fa fa-check-circle-o ' + ComponentStyle['email-confirmed']} aria-hidden='true'></i>
     } else {
-      emailConfirmed = <i className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'>
+      emailConfirmed = <i name='email-not-verified' className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'>
         &nbsp;<FormattedMessage
           id='profile.EmailNotVerified'
           defaultMessage='your email is not verified'
@@ -122,7 +122,7 @@ class Profile extends BaseComponent {
           <ValidatedInput type='text' name='name' placeholder={namePlaceholder} validations='minLength:2' maxLength='60' _value={this.props.state.session.user.name} />
           <PasswordInput type='password' name='old_password' quiet placeholder={oldPasswordPlaceholder} />
           <PasswordInput type='password' name='new_password' placeholder={newPasswordPlaceholder} />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
+          <LaddaButton ref='button' name='profile-btn' isDisabled isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='profile.SubmitBtn'
               defaultMessage='Save'

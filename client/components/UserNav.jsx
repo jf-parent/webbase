@@ -38,18 +38,18 @@ class UserNav extends BaseComponent {
             </button>
             {notificationNumber}
           </span>
-          <li role='presentation' className='dropdown'>
+          <li role='presentation' name='user-dropdown' className='dropdown'>
             <a className='dropdown-toggle small' data-toggle='dropdown' href='#' role='button' aria-haspopup='true' aria-expanded='false'>
-              {this.props.state.session.user.name}
+              <span name='user-name'>{this.props.state.session.user.name}</span>
               {' '}
               <i className='fa fa-caret-down' aria-hidden='true'></i>
               <div className={'pull-right ' + UserNavStyle['profile-img']}>
-                <img className='img-responsive img-circle' src={this.props.state.session.user.gravatar_url} />
+                <img name='user-icon' className='img-responsive img-circle' src={this.props.state.session.user.gravatar_url} />
               </div>
             </a>
             <ul className='dropdown-menu'>
               <li>
-                <Link to='/profile'>
+                <Link name='profile-link' to='/profile'>
                   <FormattedMessage
                     id='nav.Profile'
                     defaultMessage='Profile'
@@ -65,7 +65,7 @@ class UserNav extends BaseComponent {
                 </Link>
               </li>
               <li>
-                <Link to='/logout'>
+                <Link name='logout-link' to='/logout'>
                   <FormattedMessage
                     id='nav.Logout'
                     defaultMessage='Logout'

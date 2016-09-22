@@ -1,4 +1,8 @@
 *.bak
+*.json
+*.pkl
+*.yml
+*.yaml
 *.swp
 *.egg
 *.egg-info
@@ -47,3 +51,5 @@ configs/*.json
 data
 configs/monitrc
 last-report.html
+tests/tests/states
+tests/tb_results

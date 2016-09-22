@@ -1,23 +1,30 @@
-### TEST - SERVER ###
+### GENERAL
 
-### TEST - CLIENT ####
+- [ ] Ansible deployment
+- [ ] Not supported browser system
+- [ ] Better style: animation, svg, design, etc
+- [ ] Cookie Banner
+- [ ] Components Library
+- [ ] Brome test on SauceLabs
 
-* Notification popup
+### TEST - SERVER
 
-### TEST - BROME ###
+- [ ] Timezone
 
-* Auth flow
-* Login
-* Logout
-* Register
-* Email confirmation
-* Translation
-* Forgotten email
-* Notification
-* Security
+### TEST - CLIENT
 
-### DEV ###
+- [ ] Profile
+- [ ] Notification popup
 
-* Ansible deployment
-* Not supported browser system
-* Better style: animation, svg, design, etc
+### TEST - BROME
+
+- [x] Auth flow
+- [ ] Login: validate has-success
+- [ ] Login: validate has-error
+- [ ] Register: validate has-success
+- [ ] Register: validate has-error
+- [ ] Email confirmation
+- [ ] Translation
+- [ ] Forgotten email
+- [ ] Notification
+- [ ] Security

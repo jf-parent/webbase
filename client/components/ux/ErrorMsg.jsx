@@ -12,7 +12,7 @@ class ErrorMsg extends Component {
 
   render () {
     return (
-      <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name} >
+      <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name || this.props.msgId} >
         <FormattedMessage
           id='errorMsg.Error'
           defaultMessage='{error}'

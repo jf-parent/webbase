@@ -13,3 +13,5 @@ mock
 q
 freezegun
 cookiecutter
+brome
+Faker

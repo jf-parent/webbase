@@ -6,7 +6,7 @@ class Settings extends BaseComponent {
   render () {
     return (
       <div>
-        <h1>
+        <h1 name='settings-page'>
           Settings
         </h1>
       </div>

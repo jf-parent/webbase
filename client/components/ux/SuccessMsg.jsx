@@ -12,7 +12,7 @@ class SuccessMsg extends Component {
 
   render () {
     return (
-      <div className={'alert alert-success ' + SuccessMsgStyle['success-msg']} role='alert' name={this.props.name} >
+      <div className={'alert alert-success ' + SuccessMsgStyle['success-msg']} role='alert' name={this.props.name || this.props.msgId} >
         <FormattedMessage
           id={this.props.msgId}
           defaultMessage={this.props.msgId}

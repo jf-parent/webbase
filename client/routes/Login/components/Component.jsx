@@ -79,7 +79,7 @@ class Login extends BaseComponent {
           </h2>
           <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
           <PasswordInput type='password' name='password' placeholder={passwordPlaceholder} quiet required />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
+          <LaddaButton name='login-btn' ref='button' isDisabled isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='login.SubmitBtn'
               defaultMessage='Login'
@@ -88,7 +88,7 @@ class Login extends BaseComponent {
           <center>{errorMsg}</center>
         </SecureForm>
         <p>
-          <Link to='/register'>
+          <Link name='dont-have-account-link' to='/register'>
             <FormattedMessage
               id='login.RegisterRedirect'
               defaultMessage="Don't have an account yet? Register here"
@@ -96,7 +96,7 @@ class Login extends BaseComponent {
           </Link>
         </p>
         <p>
-          <Link to='/forgottenpassword'>
+          <Link name='forgottenpassword-link' to='/forgottenpassword'>
             <FormattedMessage
               id='login.ForgottenPassword-btn'
               defaultMessage='Forgot password?'

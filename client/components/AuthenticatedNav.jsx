@@ -22,7 +22,7 @@ class AuthenticatedNav extends BaseComponent {
                 <span className='icon-bar'></span>
                 <span className='icon-bar'></span>
               </button>
-              <Link className='navbar-brand' to='/'>
+              <Link name='home-link' className='navbar-brand' to='/'>
                 <FormattedMessage
                   id='nav.Home'
                   defaultMessage='Home'

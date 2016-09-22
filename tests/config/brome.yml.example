@@ -1,0 +1,96 @@
+mitmproxy:
+  path: '' #CHANGEME
+  filter: '~m post'
+browser:
+  maximize_window: false
+  window_height: 725
+  window_width: 1650
+  window_x_position: 0
+  window_y_position: 0
+database:
+  mongo_database_name: '' #CHANGEME
+  mongo_host: '127.0.0.1'
+ec2:
+  wait_after_instance_launched: 30
+  wait_until_system_and_instance_check_performed: true
+grid_runner:
+  kill_selenium_server: true
+  max_running_time: 7200
+  selenium_hub_config: '' #CHANGEME
+  selenium_server_command: 'java -jar {selenium_server_jar_path} -role hub -hubConfig {selenium_hub_config} -DPOOL_MAX 512 &'
+  selenium_server_ip: 'localhost'
+  selenium_server_jar_path: '' #CHANGEME
+  selenium_server_port: 4444
+  start_selenium_server: true
+highlight:
+  highlight_on_assertion_failure: true
+  highlight_on_assertion_success: true
+  highlight_when_element_is_clicked: true
+  highlight_when_element_is_visible: true
+  highlight_when_element_receive_keys: true
+  style_on_assertion_failure: 'background: red; border: 2px solid black;'
+  style_on_assertion_success: 'background: green; border: 2px solid black;'
+  style_when_element_is_clicked: 'background: yellow; border: 2px solid red;'
+  style_when_element_is_visible: 'background: purple; border: 2px solid black;'
+  style_when_element_receive_keys: 'background: yellow; border: 2px solid red;'
+  use_highlight: true
+logger_runner:
+  filelogger: true
+  format: '[%(batchid)s]%(message)s'
+  level: 'DEBUG'
+  streamlogger: true
+logger_test:
+  filelogger: true
+  format: '[%(batchid)s](%(testname)s):%(message)s'
+  level: 'DEBUG'
+  streamlogger: true
+project:
+  test_batch_result_path: '' #CHANGEME
+  url: '' # CHANGEME
+proxy_driver:
+  default_timeout: 5
+  intercept_javascript_error: true
+  raise_exception: true
+  take_screenshot_on_assertion_failure: true
+  take_screenshot_on_assertion_success: true
+  validate_css_selector: true
+  validate_xpath_selector: true
+  wait_until_not_present_before_assert_not_present: true
+  wait_until_not_visible_before_assert_not_visible: true
+  wait_until_present_before_assert_present: true
+  wait_until_present_before_find: true
+  wait_until_visible_before_assert_visible: true
+  wait_until_visible_before_find: true
+runner:
+  cache_screenshot: true
+  embed_on_assertion_failure: true
+  embed_on_assertion_success: false
+  embed_on_test_crash: true
+  play_sound_on_assertion_failure: true
+  play_sound_on_assertion_success: false
+  play_sound_on_ipython_embed: true
+  play_sound_on_pdb: false
+  play_sound_on_test_crash: true
+  play_sound_on_test_finished: true
+  sound_on_assertion_failure: '{testid} failed'
+  sound_on_assertion_success: '{testid} succeeded'
+  sound_on_ipython_embed: 'Attention required'
+  sound_on_pdb: 'Attention required'
+  sound_on_test_crash: 'Crash'
+  sound_on_test_finished: 'Test finished'
+webserver:
+  env: 'development'
+  host: '127.0.0.1'
+  port: 8000
+  registration_token: '' #CHANGEME
+  filelogger: true
+  log_level: 'INFO'
+  streamlogger: true
+  release: 'latest'
+  admin:
+    env: 'development'
+    log_level: 'DEBUG'
+    username: 'admin'
+    password: '' #CHANGEME
+    host: '0.0.0.0'
+    port: 31337
