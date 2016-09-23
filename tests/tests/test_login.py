@@ -71,12 +71,35 @@ class Test(BaseTest):
             "#5"
         )
 
+        # HAS-WARNING
+        self.app.refresh()
+
+        self.pdriver.assert_visible(
+            "sv:login_email_input_has_warning",
+            "#33"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:login_password_input_has_warning",
+            "#33"
+        )
+
         # INVALID EMAIL
         self.app.go_to('login')
 
         self.pdriver.find("sv:login_password_input").send_keys(user.password)
 
         self.pdriver.find("sv:login_email_input").send_keys('test')
+
+        self.pdriver.assert_visible(
+            "sv:login_email_input_has_error",
+            "#33"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:login_password_input_has_success",
+            "#33"
+        )
 
         self.pdriver.assert_visible(
             "sv:login_submit_btn_disabled",
@@ -89,6 +112,16 @@ class Test(BaseTest):
         self.pdriver.find("sv:login_email_input").send_keys(user.email)
 
         self.pdriver.find("sv:login_password_input").send_keys('test')
+
+        self.pdriver.assert_visible(
+            "sv:login_email_input_has_success",
+            "#33"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:login_password_input_has_error",
+            "#33"
+        )
 
         self.pdriver.assert_visible(
             "sv:login_submit_btn_disabled",

@@ -32,3 +32,5 @@ test_dict['#28'] = "Navigation: the user is automatically redirect to the login 
 test_dict['#29'] = "Navigation: if the user tried to access a restricted page before being logged in, he is redirect to that page after being logged in."
 test_dict['#30'] = "Translation: changing locale validation."
 test_dict['#31'] = "Privacy-Policy: privacy policy validation."
+test_dict['#32'] = "Register: has-warning, has-success & has-error input validation."
+test_dict['#33'] = "Login: has-warning, has-success & has-error input validation."

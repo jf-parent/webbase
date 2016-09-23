@@ -42,10 +42,41 @@ class Test(BaseTest):
             "#20"
         )
 
+        # HAS-WARNING
+        self.pdriver.assert_visible(
+            "sv:register_name_input_has_warning",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_email_input_has_warning",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_password_input_has_warning",
+            "#32"
+        )
+
         # INVALID EMAIL
         self.pdriver.find("sv:register_name_input").send_keys(name)
         self.pdriver.find("sv:register_password_input").send_keys(password)
         self.pdriver.find("sv:register_email_input").send_keys('test')
+
+        self.pdriver.assert_visible(
+            "sv:register_name_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_password_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_email_input_has_error",
+            "#32"
+        )
 
         self.pdriver.assert_visible(
             "sv:register_submit_btn_disabled",
@@ -60,6 +91,21 @@ class Test(BaseTest):
         self.pdriver.find("sv:register_name_input").send_keys('t')
 
         self.pdriver.assert_visible(
+            "sv:register_name_input_has_error",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_password_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_email_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
             "sv:register_submit_btn_disabled",
             "#22"
         )
@@ -70,6 +116,26 @@ class Test(BaseTest):
         self.pdriver.find("sv:register_email_input").send_keys(email)
         self.pdriver.find("sv:register_name_input").send_keys(name)
         self.pdriver.find("sv:register_password_input").send_keys('test')
+
+        self.pdriver.assert_visible(
+            "sv:register_name_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_password_input_has_error",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_email_input_has_success",
+            "#32"
+        )
+
+        self.pdriver.assert_visible(
+            "sv:register_submit_btn_disabled",
+            "#22"
+        )
 
         self.pdriver.assert_visible(
             "sv:register_submit_btn_disabled",

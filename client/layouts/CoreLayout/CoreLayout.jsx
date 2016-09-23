@@ -48,7 +48,7 @@ class CoreLayout extends BaseComponent {
     return (
       <CookieBanner
         message='Webbase is using cookie.'
-        link={{msg: 'Here are our privacy policy', url: '/privacy-policy'}}
+        link={{msg: 'Here is the privacy policy', url: '/privacy-policy'}}
         cookie='user-has-accepted-cookies'
       />
     )

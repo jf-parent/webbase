@@ -18,12 +18,10 @@
 ### TEST - BROME
 
 - [x] Auth flow
-- [ ] Login: validate has-success
-- [ ] Login: validate has-error
-- [ ] Register: validate has-success
-- [ ] Register: validate has-error
-- [ ] Email confirmation
+- [x] Login
+- [x] Register
 - [x] Translation
 - [x] Privacy Policy
+- [ ] Email confirmation
 - [ ] Forgotten email
 - [ ] Notification
