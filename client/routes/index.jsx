@@ -9,11 +9,13 @@ import Register from 'routes/Register'
 import Confirmation from 'routes/Confirmation'
 import ResetPassword from 'routes/ResetPassword'
 import Dashboard from 'routes/Dashboard'
+import PrivacyPolicy from 'routes/PrivacyPolicy'
 
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
   childRoutes: [
+    PrivacyPolicy(store),
     Dashboard(store),
     ResetPassword(store),
     Login(store),

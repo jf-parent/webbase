@@ -2,8 +2,7 @@
 
 - [ ] Ansible deployment
 - [ ] Not supported browser system
-- [ ] Better style: animation, svg, design, etc
-- [ ] Cookie Banner
+- [x] Cookie Banner
 - [ ] Components Library
 - [ ] Brome test on SauceLabs
 

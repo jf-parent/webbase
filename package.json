@@ -115,6 +115,7 @@
     "react-addons-pure-render-mixin": "^15.1.0",
     "react-addons-test-utils": "^15.1.0",
     "react-bootstrap": "^0.29.5",
+    "react-cookie-banner": "0.0.15",
     "react-dom": "^15.0.2",
     "react-intl": "^2.1.2",
     "react-ladda": "^4.0.3",

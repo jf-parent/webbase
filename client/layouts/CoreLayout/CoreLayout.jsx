@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import CookieBanner from 'react-cookie-banner'
 
 import GrowlNotification from 'components/ux/GrowlNotification'
 import CoreLayoutStyle from './CoreLayoutStyle.postcss'
@@ -31,6 +32,9 @@ class CoreLayout extends BaseComponent {
     super(props, context)
 
     this._initLogger()
+    this._bind(
+      'getPrivacyBanner'
+    )
   }
 
   componentDidMount () {
@@ -38,6 +42,16 @@ class CoreLayout extends BaseComponent {
 
     this.props.actions.getSession()
     // window.setInterval(() => this.props.actions.getSession(false), __GET_SESSION_INTERVAL__)
+  }
+
+  getPrivacyBanner () {
+    return (
+      <CookieBanner
+        message='Webbase is using cookie.'
+        link={{msg: 'Here are our privacy policy', url: '/privacy-policy'}}
+        cookie='user-has-accepted-cookies'
+      />
+    )
   }
 
   render () {
@@ -55,6 +69,7 @@ class CoreLayout extends BaseComponent {
 
       return (
         <div>
+          {this.getPrivacyBanner()}
           <GrowlNotification notifications={this.props.state.session.notifications} />
           {Nav}
           <div className='container'>
