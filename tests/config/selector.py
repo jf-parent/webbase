@@ -11,7 +11,12 @@ selector_dict['locale_fr_btn'] = 'xp://a[@data-locale = "fr"]'
 selector_dict['dashboard_page'] = 'xp://*[@name = "dashboard-page"]'
 # SETTINGS
 selector_dict['settings_page'] = 'xp://*[@name = "settings-page"]'
+# PRIVACY
+selector_dict['privacy_page'] = 'xp://*[@name = "privacy-policy-page"]'
 # HEADER
+selector_dict['header_privacy_policy_banner'] = 'xp://*[@class = "react-cookie-banner"]'
+selector_dict['header_privacy_policy_banner_link'] = 'xp://*[@class = "react-cookie-banner"]//*[@class = "cookie-link"]'
+selector_dict['header_privacy_policy_banner_gotit_btn'] = 'xp://*[@class = "react-cookie-banner"]//*[@class = "button-close"]'
 selector_dict['header_home_link'] = 'xp://*[@name = "home-link"]'
 selector_dict['header_user_dropdown'] = 'xp://*[@name = "user-dropdown"]'
 selector_dict['header_user_dropdown_open'] = 'xp://*[@name = "user-dropdown" and contains(@class, "open")]'

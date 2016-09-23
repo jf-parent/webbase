@@ -24,6 +24,6 @@
 - [ ] Register: validate has-error
 - [ ] Email confirmation
 - [x] Translation
+- [x] Privacy Policy
 - [ ] Forgotten email
 - [ ] Notification
-- [ ] Security

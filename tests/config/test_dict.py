@@ -31,3 +31,4 @@ test_dict['#27'] = "Navigation: the user is automatically redirect to the dashbo
 test_dict['#28'] = "Navigation: the user is automatically redirect to the login page if he try to access restricted page."
 test_dict['#29'] = "Navigation: if the user tried to access a restricted page before being logged in, he is redirect to that page after being logged in."
 test_dict['#30'] = "Translation: changing locale validation."
+test_dict['#31'] = "Privacy-Policy: privacy policy validation."
