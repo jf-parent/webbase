@@ -23,7 +23,7 @@
 - [ ] Register: validate has-success
 - [ ] Register: validate has-error
 - [ ] Email confirmation
-- [ ] Translation
+- [x] Translation
 - [ ] Forgotten email
 - [ ] Notification
 - [ ] Security

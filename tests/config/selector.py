@@ -4,6 +4,9 @@ selector_dict = {}
 # APP
 selector_dict['app_loader'] = 'xp://*[@name = "loader"]'
 selector_dict['app_root_div'] = 'xp://*[@id = "root"]'
+# LOCALE
+selector_dict['locale_en_btn'] = 'xp://a[@data-locale = "en"]'
+selector_dict['locale_fr_btn'] = 'xp://a[@data-locale = "fr"]'
 # DASHBOARD
 selector_dict['dashboard_page'] = 'xp://*[@name = "dashboard-page"]'
 # SETTINGS

@@ -62,6 +62,14 @@ class App(BaseModel):
     # ACTIONS
     ###########################################################################
 
+    def change_locale(self, locale):
+        self.info_log('Changing locale...')
+
+        self.pdriver.find(
+            "sv:locale_{locale}_btn"
+            .format(locale=locale)
+        ).click()
+
     def refresh(self):
         self.pdriver.refresh()
 
