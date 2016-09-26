@@ -1,4 +1,5 @@
 *.bak
+*.log*
 *.json
 *.pkl
 *.yml
@@ -13,6 +14,7 @@
 *.so
 *.tar.gz
 *~
+.vagrant
 .DS_Store
 .Python
 .cache
@@ -29,7 +31,6 @@ build
 cover
 coverage
 develop-eggs
-logs
 dist-dev
 docs/_build/
 eggs

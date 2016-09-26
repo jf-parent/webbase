@@ -4,7 +4,7 @@ import Logout from 'routes/Logout'
 import Profile from 'routes/Profile'
 import ErrorPage from 'routes/ErrorPage'
 import ForgottenPassword from 'routes/ForgottenPassword'
-import Settings from 'routes/Settings'
+import ComponentLibrary from 'routes/ComponentLibrary'
 import Register from 'routes/Register'
 import Confirmation from 'routes/Confirmation'
 import ResetPassword from 'routes/ResetPassword'
@@ -22,7 +22,7 @@ export const createRoutes = (store) => ({
     Profile(store),
     ForgottenPassword(store),
     Logout(store),
-    Settings(store),
+    ComponentLibrary(store),
     Register(store),
     Confirmation(store),
     ErrorPage(store)

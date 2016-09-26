@@ -1,7 +1,7 @@
 import { requireAuth } from 'Auth'
 
 export default (store) => ({
-  path: 'settings',
+  path: 'component-library',
   onEnter: requireAuth(store),
   getComponent (nextState, cb) {
     require.ensure([], (require) => {

@@ -1,0 +1,21 @@
+##
+# NODEJS
+##
+node_major: 4
+node_minor: 4
+node_patch: 4
+
+##
+# PYTHON
+##
+base_install_folder: "/srv"
+py35_version: "3.5.1"
+py35_major_version: "{{ py35_version|truncate(3, killwords=true, end='') }}"
+py35_url: "https://www.python.org/ftp/python/{{ py35_version }}/Python-{{ py35_version }}.tar.xz"
+py35_md5: "e9ea6f2623fffcdd871b7b19113fde80"
+py35_tar_file: "/tmp/py{{ py35_version }}.tar.xz"
+py35_sources: "/tmp/Python-{{ py35_version }}"
+py35_install: "{{ base_install_folder }}/python{{ py35_version }}"
+py35_symlink_target: "{{ py35_install }}"
+py35_bin: "{{ py35_install }}/bin/python3.5"
+pip35_bin: "{{ py35_install }}/bin/pip3.5"

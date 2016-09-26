@@ -30,7 +30,7 @@ class Test(BaseTest):
         self.app.refresh()
 
         self.app.go_to_home()
-        self.app.go_to('settings')
+        self.app.go_to('component-library')
         self.app.go_to_profile()
 
         self.pdriver.back()
@@ -41,13 +41,13 @@ class Test(BaseTest):
         self.app.logout()
 
         # GET AUTH URL => LOGIN => REDIRECTION
-        self.app.go_to('settings')
+        self.app.go_to('component-library')
 
         self.pdriver.assert_visible("sv:login_submit_btn", "#28")
 
         self.app.login(self.user, go_to_login=False)
 
-        self.pdriver.assert_visible("sv:settings_page", "#29")
+        self.pdriver.assert_visible("sv:component_library_page", "#29")
 
         self.app.logout()
 

@@ -9,8 +9,8 @@ selector_dict['locale_en_btn'] = 'xp://a[@data-locale = "en"]'
 selector_dict['locale_fr_btn'] = 'xp://a[@data-locale = "fr"]'
 # DASHBOARD
 selector_dict['dashboard_page'] = 'xp://*[@name = "dashboard-page"]'
-# SETTINGS
-selector_dict['settings_page'] = 'xp://*[@name = "settings-page"]'
+# COMPONENT LIBRARY
+selector_dict['component_library_page'] = 'xp://*[@name = "component-library-page"]'
 # PRIVACY
 selector_dict['privacy_page'] = 'xp://*[@name = "privacy-policy-page"]'
 # HEADER

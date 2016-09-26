@@ -37,10 +37,10 @@ class AuthenticatedNav extends BaseComponent {
                     defaultMessage='Dashboard'
                   />
                 </NavItem>
-                <NavItem to='/settings'>
+                <NavItem to='/component-library'>
                   <FormattedMessage
-                    id='nav.Settings'
-                    defaultMessage='Settings'
+                    id='nav.ComponentLibrary'
+                    defaultMessage='ComponentLibrary'
                   />
                 </NavItem>
               </ul>

@@ -35,7 +35,9 @@
   "homepage": "https://github.com/jf-parent/webbase#readme",
   "dependencies": {
     "moment": "^2.13.0",
+    "react-addons-transition-group": "^15.3.2",
     "react-input-enhancements": "^0.4.12",
+    "reactstrap": "^3.3.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
@@ -116,6 +118,7 @@
     "react-addons-test-utils": "^15.1.0",
     "react-bootstrap": "^0.29.5",
     "react-cookie-banner": "0.0.15",
+    "react-data-grid": "^1.0.46",
     "react-dom": "^15.0.2",
     "react-intl": "^2.1.2",
     "react-ladda": "^4.0.3",
@@ -124,6 +127,7 @@
     "react-router": "^2.4.1",
     "react-router-active-component": "^4.0.0-rc.0",
     "react-router-redux": "^4.0.4",
+    "react-select": "^1.0.0-rc.2",
     "react-transform-hmr": "^1.0.4",
     "react-ux-password-field": "^0.9.12",
     "redbox-react": "^1.2.6",
