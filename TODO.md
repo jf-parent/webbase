@@ -1,19 +1,13 @@
 ### GENERAL
 
-- [ ] Ansible deployment
+- [x] Ansible deployment
 - [ ] Not supported browser system
 - [x] Cookie Banner
-- [ ] Components Library
-- [ ] Brome test on SauceLabs
-
-### TEST - SERVER
-
-- [ ] Timezone
 
 ### TEST - CLIENT
 
 - [ ] Profile
-- [ ] Notification popup
+- [ ] Notification
 
 ### TEST - BROME
 

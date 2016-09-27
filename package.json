@@ -34,13 +34,12 @@
   },
   "homepage": "https://github.com/jf-parent/webbase#readme",
   "dependencies": {
-    "moment": "^2.13.0",
-    "react-addons-transition-group": "^15.3.2",
-    "react-input-enhancements": "^0.4.12",
-    "reactstrap": "^3.3.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
+    "moment": "^2.13.0",
+    "react-addons-transition-group": "^15.3.2",
+    "reactstrap": "^3.3.0",
     "autoprefixer": "^6.3.6",
     "axios": "^0.11.1",
     "babel": "^6.5.2",
@@ -112,6 +111,7 @@
     "postcss-loader": "^0.9.1",
     "precss": "^1.4.0",
     "raw-loader": "^0.5.1",
+    "rc-pager": "^2.2.0",
     "react": "^15.0.2",
     "react-addons-css-transition-group": "^15.1.0",
     "react-addons-pure-render-mixin": "^15.1.0",

@@ -13,16 +13,19 @@
         state=latest
       with_items:
         - vim
-        - jq
         - wget
         - policycoreutils-python
         - git
   roles:
    - { role: samsixtyone.epel, become: true }
+   - { role: FrogyYen.centos7-nginx, become: true }
    - { role: olibob.nodejs, become: true }
    - { role: ice9js.mongodb, become: true }
    - { role: ontic.redis, become: true }
   tasks:
+    - name: install the latest version of JQ
+      become: true
+      yum: name=jq state=latest
     - name: py35 | Check that py35 is still not installed
       become: true
       stat: path="{{ py35_bin }}"
@@ -80,14 +83,20 @@
         state=link
       when: py35_already_installed.stat.exists == false
     - git: repo=https://github.com/jf-parent/webbase.git dest=/home/vagrant/webbase
-    - npm: path=/home/vagrant/webbase
+#    - npm: path=/home/vagrant/webbase
     - name: pip deps
       pip: executable="pip3.5" requirements=/home/vagrant/webbase/requirements.txt
       become: true
-    - name: pip deps-dev
-      become: true
-      pip: executable="pip3.5" requirements=/home/vagrant/webbase/requirements-dev.txt
+#    - name: pip deps-dev
+#      become: true
+#      pip: executable="pip3.5" requirements=/home/vagrant/webbase/requirements-dev.txt
     - name: Server config
       template: src=templates/server.json.j2 dest=/home/vagrant/webbase/configs/server.json
     - name: Social config
       template: src=templates/social_media.json.j2 dest=/home/vagrant/webbase/configs/social_media.json
+    - name: Mongo service
+      become: true
+      service: state=started name=mongod
+    - name: Redis service
+      become: true
+      service: state=started name=redis

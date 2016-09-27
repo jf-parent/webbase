@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDataGrid from 'react-data-grid'
 import 'react-data-grid/themes/react-data-grid.css'
 import {
+  Jumbotron,
   Container,
   Row,
   Col,
@@ -72,7 +73,7 @@ class Settings extends BaseComponent {
 
   getForm () {
     return (
-      <Row>
+      <Jumbotron style={{backgroundColor: 'white'}}>
         <InputGroup>
           <InputGroupAddon>@</InputGroupAddon>
           <Input placeholder='username' />
@@ -92,9 +93,7 @@ class Settings extends BaseComponent {
         <br />
         <InputGroup>
           <InputGroupAddon>$</InputGroupAddon>
-          <InputGroupAddon>$</InputGroupAddon>
-          <Input placeholder='Dolla dolla billz yo!' />
-          <InputGroupAddon>$</InputGroupAddon>
+          <Input placeholder='Dollar' />
           <InputGroupAddon>$</InputGroupAddon>
         </InputGroup>
         <br />
@@ -103,7 +102,7 @@ class Settings extends BaseComponent {
           <Input placeholder='Amount' type='number' step='1' />
           <InputGroupAddon>.00</InputGroupAddon>
         </InputGroup>
-      </Row>
+      </Jumbotron>
     )
   }
 
@@ -133,7 +132,7 @@ class Settings extends BaseComponent {
         <h1 name='components-library-page'>
           Component Library
         </h1>
-        <Row>
+        <Row style={{marginBottom: 20}}>
           <Col>
             {this.getComponentDropdown()}
           </Col>
