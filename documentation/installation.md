@@ -2,6 +2,7 @@
 
 ## Webbase OS Variables
 
+Set in scripts/env.sh
 ```bash
 export WEBBASE_LOG_PATH=/path/to/webbase/pid/
 export WEBBASE_PID_PATH=/path/to/webbase/pid/
@@ -13,7 +14,7 @@ export PYTHON_PATH=/path/to/python
 
 ```bash
 $ su
-$ yum install git gcc gcc-c++
+$ yum install git gcc gcc-c++ jq
 ```
 
 ## SSH

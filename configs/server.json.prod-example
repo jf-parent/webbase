@@ -1,4 +1,8 @@
 {
+    "WEBBASE_PID_PATH": "/var/run/webbase/", #CHANGEME
+    "PYTHON_PATH": "python3.5", #CHANGEME
+    "WEBBASE_ROOT": "/home/centos/webbase/", #CHANGEME
+    "WEBBASE_LOG_PATH": "/var/log/webbase/", #CHANGEME
     "rest_api_id": "", #CHANGEME
     "rest_api_secret": "", #CHANGEME
     "redis_database": 0, #CHANGEME
@@ -14,7 +18,7 @@
         "log_level": "ERROR",
         "debug": true,
         "username": "admin",
-        "password": "" #CHANGEME,
+        "password": "", #CHANGEME
         "host": "0.0.0.0",
         "port": 31337
     },

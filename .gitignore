@@ -54,3 +54,4 @@ configs/monitrc
 last-report.html
 tests/tests/states
 tests/tb_results
+pid
