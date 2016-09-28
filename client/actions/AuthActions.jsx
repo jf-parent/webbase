@@ -1,5 +1,6 @@
 import axios from 'axios'
 import moment from 'moment-timezone'
+import { routerActions } from 'react-router-redux'
 
 import { getNotifications } from 'actions/NotificationActions'
 
@@ -7,6 +8,9 @@ import { getNotifications } from 'actions/NotificationActions'
 // Constants
 // ====================================
 
+export const LOGOUT_LOADING = 'LOGOUT_LOADING'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
+export const LOGOUT_ERROR = 'LOGOUT_ERROR'
 export const UPDATE_SESSION_NOTIFICATIONS = 'UPDATE_SESSION_NOTIFICATIONS'
 export const UPDATE_SESSION_USER = 'UPDATE_SESSION_USER'
 export const AUTH_GETTING_SESSION = 'AUTH_GETTING_SESSION'
@@ -27,7 +31,7 @@ logger.setLevel(__LOGLEVEL__)
 // Actions
 // ====================================
 
-export function getSession (loadingContext = false) {
+export function getSession (loadingContext = false, cb = null) {
   return dispatch => {
     if (loadingContext) {
       dispatch({type: AUTH_GETTING_SESSION})
@@ -44,8 +48,14 @@ export function getSession (loadingContext = false) {
         if (response.data.success) {
           dispatch(getSessionSuccess(response.data))
           dispatch(getNotifications(response.data))
+          if (cb) {
+            cb()
+          }
         } else {
           dispatch(getSessionError(response.data))
+          if (cb) {
+            cb()
+          }
         }
       })
   }
@@ -93,8 +103,32 @@ export function getSessionError (data) {
   }
 }
 
-export function resetSession () {
+export function doLogout (token) {
+  return dispatch => {
+    dispatch({type: LOGOUT_LOADING})
+
+    axios.post('/api/logout', {token: token})
+      .then((response) => {
+        logger.debug('/api/logout (response)', response)
+        if (response.data.success) {
+          dispatch(routerActions.push('/'))
+          dispatch(logoutSuccess())
+        } else {
+          dispatch(logoutError(response.data.error))
+        }
+      })
+  }
+}
+
+export function logoutSuccess () {
   return {
-    type: AUTH_RESET_SESSION
+    type: LOGOUT_SUCCESS
+  }
+}
+
+export function logoutError (error) {
+  return {
+    type: LOGOUT_ERROR,
+    error
   }
 }

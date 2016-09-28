@@ -1,6 +1,9 @@
 'use strict'
 
 import {
+  LOGOUT_ERROR,
+  LOGOUT_SUCCESS,
+  LOGOUT_LOADING,
   UPDATE_SESSION_USER,
   UPDATE_SESSION_NOTIFICATIONS,
   AUTH_GETTING_SESSION,
@@ -21,6 +24,32 @@ const initialState = {
 
 export default function session (state = initialState, action) {
   switch (action.type) {
+    case LOGOUT_LOADING:
+      return Object.assign({},
+        state,
+        {
+          loading: true
+        }
+      )
+
+    case LOGOUT_SUCCESS:
+      return Object.assign({},
+        state,
+        {
+          user: null,
+          notifications: [],
+          loading: false
+        }
+      )
+
+    case LOGOUT_ERROR:
+      return Object.assign({},
+        state,
+        {
+          error: action.error
+        }
+      )
+
     case AUTH_GETTING_SESSION:
       return Object.assign({},
         initialState,

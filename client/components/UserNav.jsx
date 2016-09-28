@@ -8,6 +8,7 @@ import NotificationPopup from './NotificationPopup'
 import BaseComponent from 'core/BaseComponent'
 import UserNavStyle from './UserNavStyle.postcss'
 import { actions } from 'actions/NotificationActions'
+import * as AuthActions from 'actions/AuthActions'
 
 class UserNav extends BaseComponent {
 
@@ -15,7 +16,14 @@ class UserNav extends BaseComponent {
     super(props)
 
     this._initLogger()
-    this._bind('onOpenNotification')
+    this._bind(
+      'onOpenNotification',
+      'doLogout'
+    )
+  }
+
+  doLogout () {
+    this.props.authActions.doLogout(this.props.state.session.token)
   }
 
   onOpenNotification (event) {
@@ -65,12 +73,12 @@ class UserNav extends BaseComponent {
                 </Link>
               </li>
               <li>
-                <Link name='logout-link' to='/logout'>
+                <a onClick={this.doLogout} name='logout-link'>
                   <FormattedMessage
                     id='nav.Logout'
                     defaultMessage='Logout'
                   />
-                </Link>
+                </a>
               </li>
             </ul>
           </li>
@@ -88,7 +96,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
+    authActions: bindActionCreators(AuthActions, dispatch)
   }
 }
 

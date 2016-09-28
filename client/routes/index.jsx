@@ -1,6 +1,5 @@
 import CoreLayout from 'layouts/CoreLayout/CoreLayout'
 import Login from 'routes/Login'
-import Logout from 'routes/Logout'
 import Profile from 'routes/Profile'
 import ErrorPage from 'routes/ErrorPage'
 import ForgottenPassword from 'routes/ForgottenPassword'
@@ -23,7 +22,6 @@ export const createRoutes = (store) => ({
     Login(store),
     Profile(store),
     ForgottenPassword(store),
-    Logout(store),
     ComponentLibrary(store),
     Register(store),
     Confirmation(store),
