@@ -8,6 +8,7 @@ import log from 'loglevel'
 require('./polyfills')
 
 import { notAuthRoutes, createRoutes } from 'routes/index'
+import BrowserSupport from 'helpers/BrowserSupport'
 
 // ========================================================
 // Developer Tools Setup
@@ -75,6 +76,12 @@ function loginLogoutHandler () {
 }
 
 store.subscribe(loginLogoutHandler)
+
+const browserSupported = BrowserSupport(store.dispatch)
+
+if (!browserSupported) {
+  store.dispatch(push('/browsernotsupported'))
+}
 
 // ========================================================
 // Render Setup

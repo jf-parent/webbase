@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import CookieBanner from 'react-cookie-banner'
 
+import BrowserSupport from 'helpers/BrowserSupport'
 import GrowlNotification from 'components/ux/GrowlNotification'
 import CoreLayoutStyle from './CoreLayoutStyle.postcss'
 import BaseComponent from 'core/BaseComponent'
@@ -63,6 +64,8 @@ class CoreLayout extends BaseComponent {
       let Nav
       if (this.props.state.session.user) {
         Nav = <AuthenticatedNav />
+      } else if (!BrowserSupport()) {
+        Nav = <div style={{marginTop: 20}}></div>
       } else {
         Nav = <UnAuthenticatedNav />
       }

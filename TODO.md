@@ -1,7 +1,7 @@
 ### GENERAL
 
 - [x] Ansible deployment
-- [ ] Not supported browser system
+- [x] Not supported browser system
 - [x] Cookie Banner
 
 ### TEST - CLIENT
@@ -19,3 +19,4 @@
 - [ ] Email confirmation
 - [ ] Forgotten email
 - [ ] Notification
+- [ ] Not supported browser system

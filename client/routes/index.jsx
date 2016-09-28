@@ -10,11 +10,13 @@ import Confirmation from 'routes/Confirmation'
 import ResetPassword from 'routes/ResetPassword'
 import Dashboard from 'routes/Dashboard'
 import PrivacyPolicy from 'routes/PrivacyPolicy'
+import BrowserNotSupported from 'routes/BrowserNotSupported'
 
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
   childRoutes: [
+    BrowserNotSupported(store),
     PrivacyPolicy(store),
     Dashboard(store),
     ResetPassword(store),
@@ -29,4 +31,4 @@ export const createRoutes = (store) => ({
   ]
 })
 
-export const notAuthRoutes = ['/login', '/register', '/forgottenpassword']
+export const notAuthRoutes = ['/login', '/register', '/forgottenpassword', '/privacy-policy', '/browsernotsupported']
