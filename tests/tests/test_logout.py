@@ -11,11 +11,7 @@ class Test(BaseTest):
 
         self.app.go_to_home()
 
-        user = self.app.register(
-            email=self.app.faker.email(),
-            name=self.app.faker.name(),
-            password=self.app.faker.password()
-        )
+        user = self.app.register_user()
 
         self.app.assert_user_name_equal(user.name, "#2")
 

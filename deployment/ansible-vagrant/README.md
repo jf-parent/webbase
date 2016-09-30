@@ -13,7 +13,7 @@ vagrant up
 or 
 
 ```bash
-./install
+./install.sh
 ```
 
 ## Usage

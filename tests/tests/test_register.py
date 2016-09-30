@@ -134,11 +134,6 @@ class Test(BaseTest):
 
         self.pdriver.assert_visible(
             "sv:register_submit_btn_disabled",
-            "#22"
-        )
-
-        self.pdriver.assert_visible(
-            "sv:register_submit_btn_disabled",
             "#23"
         )
 
