@@ -1,5 +1,6 @@
 ipython
 ipdb
+pdbpp
 flake8
 pip-save
 tmuxp

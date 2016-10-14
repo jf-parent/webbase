@@ -70,6 +70,27 @@ class App(BaseModel):
             .format(locale=locale)
         ).click()
 
+    def select_locale_profile(self, locale):
+        self.info_log('Selecting locale in profile...')
+
+        locales_map = {
+            'fr': 'Français',
+            'en': 'English'
+        }
+
+        self.pdriver.find(
+            "xp://*[contains(@class, 'Select-arrow')]"
+        ).click()
+
+        self.pdriver.find(
+            "xp://*[contains(@class, 'Select-option') and text() = '%s']"
+            % locales_map[locale]
+        ).click()
+
+        self.pdriver.find(
+            "sv:profile_submit_btn"
+        ).click()
+
     def refresh(self):
         self.pdriver.refresh()
 

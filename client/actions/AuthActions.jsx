@@ -2,6 +2,7 @@ import axios from 'axios'
 import moment from 'moment-timezone'
 import { routerActions } from 'react-router-redux'
 
+import { doChangeLocale } from 'locales/reducer'
 import { getNotifications } from 'actions/NotificationActions'
 
 // ====================================
@@ -48,6 +49,7 @@ export function getSession (loadingContext = false, cb = null) {
         if (response.data.success) {
           dispatch(getSessionSuccess(response.data))
           dispatch(getNotifications(response.data))
+          dispatch(doChangeLocale(response.data.user.locale))
           if (cb) {
             cb()
           }

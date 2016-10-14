@@ -65,14 +65,6 @@ class UserNav extends BaseComponent {
                 </Link>
               </li>
               <li>
-                <Link to='/settings'>
-                  <FormattedMessage
-                    id='nav.Settings'
-                    defaultMessage='Settings'
-                  />
-                </Link>
-              </li>
-              <li>
                 <a onClick={this.doLogout} name='logout-link'>
                   <FormattedMessage
                     id='nav.Logout'

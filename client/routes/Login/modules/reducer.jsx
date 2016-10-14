@@ -4,6 +4,7 @@ import moment from 'moment-timezone'
 
 import { getSessionLoggedIn } from 'actions/AuthActions'
 import { getNotifications } from 'actions/NotificationActions'
+import { doChangeLocale } from 'locales/reducer'
 
 // ====================================
 // Constants
@@ -35,6 +36,7 @@ export function doLogin (data, nextPath) {
           dispatch(getSessionLoggedIn(response.data))
           dispatch(routerActions.push(nextPath))
           dispatch(getNotifications(response.data))
+          dispatch(doChangeLocale(response.data.user.locale))
         } else {
           dispatch(loginError(response.data.error))
         }

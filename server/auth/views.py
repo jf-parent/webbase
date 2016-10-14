@@ -71,6 +71,7 @@ class Register(web.View):
 
         context = {
             'db_session': self.request.db_session,
+            'ws_session': {'tz': data.get('user_timezone')},
             'method': 'create',
             'queue': self.request.app.queue
         }
