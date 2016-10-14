@@ -2,8 +2,8 @@ import axios from 'axios'
 import { routerActions } from 'react-router-redux'
 import moment from 'moment-timezone'
 
-import { getSessionLoggedIn } from 'actions/AuthActions'
-import { getNotifications } from 'actions/NotificationActions'
+import { getSessionLoggedIn } from 'reducers/session'
+import { getNotifications } from 'reducers/notification'
 import { doChangeLocale } from 'locales/reducer'
 
 // ====================================

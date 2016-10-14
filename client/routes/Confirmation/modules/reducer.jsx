@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { updateSessionUser } from 'actions/AuthActions'
+import { updateSessionUser } from 'reducers/session'
 
 // ====================================
 // Constants

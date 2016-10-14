@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { doChangeLocale } from 'locales/reducer'
-import { updateSessionUser, getSession } from 'actions/AuthActions'
+import { updateSessionUser, getSession } from 'reducers/session'
 
 // ====================================
 // Constants

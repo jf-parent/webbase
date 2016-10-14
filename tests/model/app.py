@@ -175,6 +175,8 @@ class App(BaseModel):
 
         self.wait_until_loaded()
 
+        self.pdriver.wait_until_visible("sv:header_register_link")
+
     def register(self, email, name, password):
         self.info_log('Register...')
 

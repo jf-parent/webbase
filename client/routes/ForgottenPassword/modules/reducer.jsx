@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { routerActions } from 'react-router-redux'
 
-import { getSessionRegistered } from 'actions/AuthActions'
+import { getSessionRegistered } from 'reducers/session'
 
 // ====================================
 // Constants

@@ -7,8 +7,8 @@ import { FormattedMessage } from 'react-intl'
 import NotificationPopup from './NotificationPopup'
 import BaseComponent from 'core/BaseComponent'
 import UserNavStyle from './UserNavStyle.postcss'
-import { actions } from 'actions/NotificationActions'
-import * as AuthActions from 'actions/AuthActions'
+import { actions } from 'reducers/notification'
+import { actions as AuthActions } from 'reducers/session'
 
 class UserNav extends BaseComponent {
 

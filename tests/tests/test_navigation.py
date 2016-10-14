@@ -5,18 +5,13 @@ class Test(BaseTest):
 
     name = 'Test Navigation'
 
-    def create_state(self):
-        self.user = self.app.register_user(logout=True)
-
-        return True
-
     def run(self, **kwargs):
 
         self.info_log("Running...")
 
-        self.app.go_to_home()
+        user = self.app.register_user()
 
-        self.app.login(user=self.user)
+        self.app.go_to_home()
 
         # HISTORY BACK
         self.app.go_to_profile()
@@ -45,7 +40,7 @@ class Test(BaseTest):
 
         self.pdriver.assert_visible("sv:login_submit_btn", "#28")
 
-        self.app.login(self.user, go_to_login=False)
+        self.app.login(user, go_to_login=False)
 
         self.pdriver.assert_visible("sv:component_library_page", "#29")
 
@@ -54,7 +49,7 @@ class Test(BaseTest):
         # LOGIN => REDIRECTION[DASHBOARD]
         self.app.refresh()
 
-        self.app.login(self.user)
+        self.app.login(user)
 
         self.pdriver.assert_visible("sv:dashboard_page", "#27")
 

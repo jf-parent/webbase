@@ -7,7 +7,7 @@ import frLocaleData from 'react-intl/locale-data/fr'
 
 import Loading from 'components/ux/Loading'
 import ConnectedIntlProvider from 'locales/ConnectedIntlProvider'
-import * as AuthActions from 'actions/AuthActions'
+import { actions as AuthActions } from 'reducers/session'
 import BaseComponent from 'core/BaseComponent'
 
 addLocaleData(enLocaleData)
