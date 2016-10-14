@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { FormattedMessage } from 'react-intl'
-import { updateSessionNotifications } from 'actions/AuthActions'
+import { updateSessionNotifications } from 'reducers/session'
 
 import BaseComponent from 'core/BaseComponent'
 import GrowlNotificationStyle from './GrowlNotificationStyle.postcss'

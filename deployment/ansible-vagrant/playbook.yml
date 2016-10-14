@@ -1,0 +1,102 @@
+---
+- hosts: all
+  vars_files:
+    - defaults/main.yml
+  pre_tasks:
+    - name: Install python build deps
+      become: true
+      command: yum-builddep python -y
+    - name: install deps
+      become: true
+      yum:
+        name={{ item }}
+        state=latest
+      with_items:
+        - vim
+        - wget
+        - policycoreutils-python
+        - git
+  roles:
+   - { role: samsixtyone.epel, become: true }
+   - { role: FrogyYen.centos7-nginx, become: true }
+   - { role: olibob.nodejs, become: true }
+   - { role: ice9js.mongodb, become: true }
+   - { role: ontic.redis, become: true }
+  tasks:
+    - name: install the latest version of JQ
+      become: true
+      yum: name=jq state=latest
+    - name: py35 | Check that py35 is still not installed
+      become: true
+      stat: path="{{ py35_bin }}"
+      register: py35_already_installed
+      ignore_errors: True
+    - name: py35 | Download
+      get_url:
+        url="{{ py35_url }}"
+        dest="{{ py35_tar_file }}"
+        checksum="md5:{{ py35_md5 }}"
+      when: py35_already_installed.stat.exists == false
+    - name: py35 | Uncompress
+      unarchive:
+        src={{ py35_tar_file }}
+        dest=/tmp
+        copy=no
+        creates="{{ py35_sources }}"
+      when: py35_already_installed.stat.exists == false
+    - name: py35 | Compile and install
+      become: true
+      command: "{{ item }}"
+      args:
+        chdir: "{{ py35_sources }}"
+      with_items:
+        - "./configure --prefix {{ py35_install }}"
+        - make
+        - make install
+      when: py35_already_installed.stat.exists == false
+    - name: py35 | Create python_major_version symlink
+      become: true
+      file:
+        src={{ py35_bin }}
+        dest='/bin/python3.5'
+        state=link
+      when: py35_already_installed.stat.exists == false
+    - name: py35 | Create python_major_version symlink
+      become: true
+      file:
+        src={{ py35_bin }}
+        dest='/usr/local/bin/python'
+        state=link
+      when: py35_already_installed.stat.exists == false
+    - name: pip35 | Create pip symlink
+      become: true
+      file:
+        src={{ pip35_bin }}
+        dest='/bin/pip3.5'
+        state=link
+      when: py35_already_installed.stat.exists == false
+    - name: pip35 | Create pip symlink
+      become: true
+      file:
+        src={{ py35_bin }}
+        dest='/usr/local/bin/pip'
+        state=link
+      when: py35_already_installed.stat.exists == false
+    - git: repo=https://github.com/jf-parent/webbase.git dest=/home/vagrant/webbase
+#    - npm: path=/home/vagrant/webbase
+    - name: pip deps
+      pip: executable="pip3.5" requirements=/home/vagrant/webbase/requirements.txt
+      become: true
+#    - name: pip deps-dev
+#      become: true
+#      pip: executable="pip3.5" requirements=/home/vagrant/webbase/requirements-dev.txt
+    - name: Server config
+      template: src=templates/server.json.j2 dest=/home/vagrant/webbase/configs/server.json
+    - name: Social config
+      template: src=templates/social_media.json.j2 dest=/home/vagrant/webbase/configs/social_media.json
+    - name: Mongo service
+      become: true
+      service: state=started name=mongod
+    - name: Redis service
+      become: true
+      service: state=started name=redis

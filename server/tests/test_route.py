@@ -139,10 +139,10 @@ def test_logout_method_not_allowed(client):
 
 
 def test_get_session_method_not_allowed(client):
-    with pytest.raises(AppError) as post_not_allowed:
+    with pytest.raises(AppError) as get_not_allowed:
         client.get('/api/get_session')
 
-    assert post_not_allowed
+    assert get_not_allowed
 
     with pytest.raises(AppError) as put_not_allowed:
         client.put('/api/get_session')

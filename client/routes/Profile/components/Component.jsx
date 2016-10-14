@@ -1,6 +1,8 @@
 import React from 'react'
 import { defineMessages, FormattedMessage } from 'react-intl'
 import moment from 'moment'
+import Select from 'react-select'
+import 'layouts/react-select.css'
 
 import ComponentStyle from './ComponentStyle.postcss'
 import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
@@ -36,7 +38,20 @@ class Profile extends BaseComponent {
     super(props)
 
     this._initLogger()
-    this._bind('enableButton', 'disableButton', 'onSubmit')
+    this._bind(
+      'enableButton',
+      'disableButton',
+      'onSubmit',
+      'onLocaleChange'
+    )
+
+    this.state = {
+      locale: this.props.state.session.user.locale
+    }
+  }
+
+  onLocaleChange (locale) {
+    this.setState({locale: locale.value})
   }
 
   componentWillUnmount () {
@@ -46,6 +61,7 @@ class Profile extends BaseComponent {
 
   getData () {
     let formData = this.refs.form.getModel()
+    formData.locale = this.state.locale
     let token = formData.token
     delete formData.token
     let action = {
@@ -87,13 +103,20 @@ class Profile extends BaseComponent {
     const namePlaceholder = formatMessage(profileMessages.namePlaceholder)
     const oldPasswordPlaceholder = formatMessage(profileMessages.oldPasswordPlaceholder)
     const newPasswordPlaceholder = formatMessage(profileMessages.newPasswordPlaceholder)
+    let localeOptions = [
+      {
+        value: 'en', label: 'English'
+      }, {
+        value: 'fr', label: 'Français'
+      }
+    ]
 
     // EMAIL CONFIRMATION
     let emailConfirmed = null
     if (this.props.state.session.user.email_confirmed) {
-      emailConfirmed = <i className={'fa fa-check-circle-o ' + ComponentStyle['email-confirmed']} aria-hidden='true'></i>
+      emailConfirmed = <i name='email-verified' className={'fa fa-check-circle-o ' + ComponentStyle['email-confirmed']} aria-hidden='true'></i>
     } else {
-      emailConfirmed = <i className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'>
+      emailConfirmed = <i name='email-not-verified' className={'fa fa-times ' + ComponentStyle['email-not-confirmed']} aria-hidden='true'>
         &nbsp;<FormattedMessage
           id='profile.EmailNotVerified'
           defaultMessage='your email is not verified'
@@ -112,7 +135,11 @@ class Profile extends BaseComponent {
             />
           </h2>
           <h3>
-            Local time:
+            <FormattedMessage
+              id='profile.LocalTime'
+              defaultMessage='Local time:'
+            />
+
           </h3>
           <h3>
             {moment(this.props.state.session.user.local_time).format('DD/MM/Y hh:mm:ss A')}
@@ -122,7 +149,15 @@ class Profile extends BaseComponent {
           <ValidatedInput type='text' name='name' placeholder={namePlaceholder} validations='minLength:2' maxLength='60' _value={this.props.state.session.user.name} />
           <PasswordInput type='password' name='old_password' quiet placeholder={oldPasswordPlaceholder} />
           <PasswordInput type='password' name='new_password' placeholder={newPasswordPlaceholder} />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
+          <Select
+            style={{marginBottom: 10}}
+            name='locale'
+            value={this.state.locale}
+            options={localeOptions}
+            clearable={false}
+            onChange={this.onLocaleChange}
+          />
+          <LaddaButton ref='button' name='profile-btn' isDisabled isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
             <FormattedMessage
               id='profile.SubmitBtn'
               defaultMessage='Save'

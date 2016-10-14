@@ -17,28 +17,6 @@ Webbase is a fully functionnal web application with a lot of features
 # Monit
 ![alt text](./documentation/screenshots/Webbase-monit.png "Webbase-monit")
 
-# Open-Source projects that webbase use:
-
-* [React](https://github.com/facebook/react)
-* [React-intl](https://github.com/yahoo/react-intl)
-* [Redux](https://github.com/reactjs/redux)
-* [React-router](https://github.com/reactjs/react-router)
-* [Webpack](https://github.com/webpack/webpack)
-* [Aoihttp](https://github.com/KeepSafe/aiohttp)
-* [Prometheus](https://github.com/prometheus/prometheus)
-* [Grafana](https://github.com/grafana/grafana)
-* [Monit](https://bitbucket.org/tildeslash/monit)
-* [Flask-admin](https://github.com/flask-admin/flask-admin)
-* [MongoAlchemy](https://github.com/jeffjenkins/MongoAlchemy)
-* [Cookiecutter](https://github.com/audreyr/cookiecutter)
-* [Postcss](https://github.com/postcss/postcss)
-* [Pytest](https://github.com/pytest-dev/pytest)
-* [Enzyme](https://github.com/airbnb/enzyme)
-* [Karma](https://github.com/karma-runner/karma)
-* [Bootstrap](https://github.com/twbs/bootstrap)
-* [rq](https://github.com/nvie/rq)
-* ...
-
 # [Documentation](./documentation)
 
 # Features
@@ -106,16 +84,49 @@ Webbase is a fully functionnal web application with a lot of features
 
 # Version
 
+* 0.0.2 - 2016-10-14 - New features & bug fixes
 * 0.0.1 - 2016-06-28 - Initial Release
 
-# Coming up
+# New in 0.0.2
 
-* Ansible deployment
-* Selenium test suite
-* Not supported browser system
-* More front-test unittests
-* Better style: animation, svg, design, etc
+- [x] Ansible deployment
+- [x] Not supported browser system
+- [x] Cookie Banner
+- [x] Selenium test suite
+- [x] DB migration system
+
+# Coming up next
+
+- [ ] Cookiecutter configuration
+- [ ] EC2 deployment
+- [ ] Os X deployment
+- [ ] Documentation
+- [ ] Amazon SES
+- [ ] OpenID (twitter / facebook / google / github)
 
 # License
 
 * MIT
+
+# Open-Source projects that webbase use:
+
+* [React](https://github.com/facebook/react)
+* [React-intl](https://github.com/yahoo/react-intl)
+* [Redux](https://github.com/reactjs/redux)
+* [React-router](https://github.com/reactjs/react-router)
+* [Webpack](https://github.com/webpack/webpack)
+* [Aoihttp](https://github.com/KeepSafe/aiohttp)
+* [Prometheus](https://github.com/prometheus/prometheus)
+* [Grafana](https://github.com/grafana/grafana)
+* [Monit](https://bitbucket.org/tildeslash/monit)
+* [Flask-admin](https://github.com/flask-admin/flask-admin)
+* [MongoAlchemy](https://github.com/jeffjenkins/MongoAlchemy)
+* [Cookiecutter](https://github.com/audreyr/cookiecutter)
+* [Postcss](https://github.com/postcss/postcss)
+* [Pytest](https://github.com/pytest-dev/pytest)
+* [Enzyme](https://github.com/airbnb/enzyme)
+* [Karma](https://github.com/karma-runner/karma)
+* [Bootstrap](https://github.com/twbs/bootstrap)
+* [rq](https://github.com/nvie/rq)
+* ...
+

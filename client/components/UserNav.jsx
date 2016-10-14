@@ -7,7 +7,8 @@ import { FormattedMessage } from 'react-intl'
 import NotificationPopup from './NotificationPopup'
 import BaseComponent from 'core/BaseComponent'
 import UserNavStyle from './UserNavStyle.postcss'
-import { actions } from 'actions/NotificationActions'
+import { actions } from 'reducers/notification'
+import { actions as AuthActions } from 'reducers/session'
 
 class UserNav extends BaseComponent {
 
@@ -15,7 +16,14 @@ class UserNav extends BaseComponent {
     super(props)
 
     this._initLogger()
-    this._bind('onOpenNotification')
+    this._bind(
+      'onOpenNotification',
+      'doLogout'
+    )
+  }
+
+  doLogout () {
+    this.props.authActions.doLogout(this.props.state.session.token)
   }
 
   onOpenNotification (event) {
@@ -38,18 +46,18 @@ class UserNav extends BaseComponent {
             </button>
             {notificationNumber}
           </span>
-          <li role='presentation' className='dropdown'>
+          <li role='presentation' name='user-dropdown' className='dropdown'>
             <a className='dropdown-toggle small' data-toggle='dropdown' href='#' role='button' aria-haspopup='true' aria-expanded='false'>
-              {this.props.state.session.user.name}
+              <span name='user-name'>{this.props.state.session.user.name}</span>
               {' '}
               <i className='fa fa-caret-down' aria-hidden='true'></i>
               <div className={'pull-right ' + UserNavStyle['profile-img']}>
-                <img className='img-responsive img-circle' src={this.props.state.session.user.gravatar_url} />
+                <img name='user-icon' className='img-responsive img-circle' src={this.props.state.session.user.gravatar_url} />
               </div>
             </a>
             <ul className='dropdown-menu'>
               <li>
-                <Link to='/profile'>
+                <Link name='profile-link' to='/profile'>
                   <FormattedMessage
                     id='nav.Profile'
                     defaultMessage='Profile'
@@ -57,20 +65,12 @@ class UserNav extends BaseComponent {
                 </Link>
               </li>
               <li>
-                <Link to='/settings'>
-                  <FormattedMessage
-                    id='nav.Settings'
-                    defaultMessage='Settings'
-                  />
-                </Link>
-              </li>
-              <li>
-                <Link to='/logout'>
+                <a onClick={this.doLogout} name='logout-link'>
                   <FormattedMessage
                     id='nav.Logout'
                     defaultMessage='Logout'
                   />
-                </Link>
+                </a>
               </li>
             </ul>
           </li>
@@ -88,7 +88,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
+    authActions: bindActionCreators(AuthActions, dispatch)
   }
 }
 

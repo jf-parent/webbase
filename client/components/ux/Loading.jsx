@@ -97,7 +97,7 @@ var Loader = React.createClass({
 class Loading extends Component {
   render () {
     return (
-      <Loader className={LoadingStyle.loader} color='#000' size='16px' margin='4px' />
+      <Loader name='loader' className={LoadingStyle.loader} color='#000' size='16px' margin='4px' />
     )
   }
 }

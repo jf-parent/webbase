@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-import { updateSessionUser, getSession } from 'actions/AuthActions'
+import { doChangeLocale } from 'locales/reducer'
+import { updateSessionUser, getSession } from 'reducers/session'
 
 // ====================================
 // Constants
@@ -28,6 +29,7 @@ export function doSave (data) {
 
         if (response.data.success) {
           dispatch(updateSessionUser(response.data.results[0]))
+          dispatch(doChangeLocale(response.data.results[0].locale))
           dispatch(profileSuccess())
           dispatch(getSession(false))
         } else {

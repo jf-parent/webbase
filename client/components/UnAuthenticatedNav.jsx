@@ -30,13 +30,13 @@ class UnAuthenticatedNav extends BaseComponent {
             </div>
             <div id='navbar-collapse' className='navbar-collapse collapse'>
               <ul className='nav navbar-nav'>
-                <NavItem to='/register'>
+                <NavItem name='register-link' to='/register'>
                   <FormattedMessage
                     id='nav.Register'
                     defaultMessage='Register'
                   />
                 </NavItem>
-                <NavItem to='/login'>
+                <NavItem name='login-link' to='/login'>
                   <FormattedMessage
                     id='nav.Login'
                     defaultMessage='Login'

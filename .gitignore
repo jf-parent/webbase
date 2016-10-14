@@ -1,4 +1,9 @@
 *.bak
+*.log*
+*.json
+*.pkl
+*.yml
+*.yaml
 *.swp
 *.egg
 *.egg-info
@@ -9,6 +14,7 @@
 *.so
 *.tar.gz
 *~
+.vagrant
 .DS_Store
 .Python
 .cache
@@ -25,7 +31,6 @@ build
 cover
 coverage
 develop-eggs
-logs
 dist-dev
 docs/_build/
 eggs
@@ -47,3 +52,6 @@ configs/*.json
 data
 configs/monitrc
 last-report.html
+tests/tests/states
+tests/tb_results
+pid

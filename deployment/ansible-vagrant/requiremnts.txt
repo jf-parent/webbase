@@ -1,0 +1,5 @@
+ice9js.mongodb
+olibob.nodejs
+ontic.redis
+samsixtyone.epel
+FrogyYen.centos7-nginx

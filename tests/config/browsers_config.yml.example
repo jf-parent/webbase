@@ -1,0 +1,8 @@
+Firefox:
+  browserName: 'Firefox'
+
+Chrome:
+  browserName: 'Chrome'
+
+PhantomJS:
+  browserName: 'PhantomJS'

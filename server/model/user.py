@@ -33,9 +33,7 @@ class User(BaseModel):
     enable = BoolField(default=True)
     email_confirmed = BoolField(default=False)
     gravatar_url = StringField(default="")
-    # settings =
-    # social_id =
-    # social_provider =
+    locale = EnumField(StringField(), 'en', 'fr', default='en')
 
     # PASSWORD
     hashed_password = StringField(required=True)
@@ -96,6 +94,7 @@ class User(BaseModel):
             else:
                 editable_fields = [
                     'name',
+                    'locale',
                     'email',
                     'old_password',
                     'new_password'
@@ -141,6 +140,11 @@ class User(BaseModel):
         role = data.get('role')
         if role:
             self.role = role
+
+        # LOCALE
+        locale = data.get('locale')
+        if locale:
+            self.locale = locale
 
         # ENABLE
         enable = data.get('enable')
@@ -265,6 +269,7 @@ class User(BaseModel):
         data = {}
         data['uid'] = self.get_uid()
         data['name'] = self.name
+        data['locale'] = self.locale
         data['local_time'] = convert_tz_datetime(
             datetime.now(pytz.utc),
             ws_session['tz']

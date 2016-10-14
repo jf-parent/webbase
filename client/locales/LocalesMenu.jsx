@@ -28,7 +28,7 @@ class LocalesMenu extends BaseComponent {
   onClick (event) {
     this.debug('Changing locale')
 
-    this.props.actions.doChangeLocale(event.target.value)
+    this.props.actions.doChangeLocale(event.target.dataset.locale)
   }
 
   render () {
@@ -37,10 +37,10 @@ class LocalesMenu extends BaseComponent {
     return (
       <ul className='list-inline pull-right'>
         <li>
-          <a className='btn btn-link' onClick={this.onClick} value='en'>English</a>
+          <a className='btn btn-link' onClick={this.onClick} data-locale='en'>English</a>
         </li>
         <li>
-          <a className='btn btn-link' onClick={this.onClick} value='fr' >Français</a>
+          <a className='btn btn-link' onClick={this.onClick} data-locale='fr' >Français</a>
         </li>
       </ul>
     )

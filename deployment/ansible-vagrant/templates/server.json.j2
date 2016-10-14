@@ -1,0 +1,43 @@
+{
+    "WEBBASE_PID_PATH": "/var/run/webbase",
+    "PYTHON_PATH": "python3.5",
+    "WEBBASE_ROOT": "/home/vagrant/webbase",
+    "WEBBASE_LOG_PATH": "/var/log/webbase",
+    "rest_api_id": "",
+    "rest_api_secret": "",
+    "redis_database": 0,
+    "log_level": "DEBUG",
+    "env": "development",
+    "release": "latest",
+    "mongo_database_name": "webbase-dev",
+    "mongo_host": "127.0.0.1",
+    "server_port": 8000,
+    "server_host": "127.0.0.1",
+    "admin": {
+        "env": "development",
+        "log_level": "DEBUG",
+        "debug": true,
+        "username": "admin",
+        "password": "password",
+        "host": "0.0.0.0",
+        "port": 31337
+    },
+    "email_confirmation_email": {
+        "subject": "Webbase Email Account Confirmation",
+        "html": "<p>Please click <a href='https://domain.com/confirm-email/{email_validation_token}'>here</a> to confirm your email account</p>",
+        "text": "Please click here to confirm your email account: https://domain.com/confirm-email/{email_validation_token}",
+        "from": {"name": "Webbase", "email": "no-reply@domain.com"},
+        "to": [{
+            "name": "{user_name}", "email": "{user_email}"
+        }]
+    },
+    "reset_password_email": {
+        "subject": "Webbase Reset Password",
+        "html": "<p>Please click <a href='http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}'>here</a> to reset your password.</p>",
+        "text": "Please click here to reset your password: http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}",
+        "from": {"name": "Webbase", "email": "parent.j.f@gmail.com"},
+        "to": [{
+            "name": "{user_name}", "email": "{user_email}"
+        }]
+    }
+}

@@ -21,7 +21,7 @@ export function doChangeLocale (locale) {
   }
 }
 
-function changeLocale (locale, messages) {
+export function changeLocale (locale, messages) {
   return {
     type: LOCALE_CHANGE,
     locale,

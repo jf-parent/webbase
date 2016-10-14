@@ -19,7 +19,7 @@ class Dashboard extends BaseComponent {
     let successMsg = this.props.state.dashboard.successMsgId ? <SuccessMsg msgId={this.props.state.dashboard.successMsgId} /> : null
     return (
       <div>
-        <h1>Dashboard</h1>
+        <h1 name='dashboard-page'>Dashboard</h1>
         {successMsg}
         <p>Welcome to Webbase {this.props.state.session.user.name}</p>
       </div>

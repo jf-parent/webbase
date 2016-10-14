@@ -2,6 +2,7 @@
   -webkit-perspective: 600;
   perspective: 600;
   opacity: 0;
+  z-index: 999;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.5);

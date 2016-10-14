@@ -80,7 +80,7 @@ class ForgottenPassword extends BaseComponent {
 
       return (
         <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
-          <h2 className={SecureFormStyle['form-signin-heading']}>
+          <h2 name='forgotten-password-page' className={SecureFormStyle['form-signin-heading']}>
 
             <FormattedMessage
               id='forgottenPassword.SubmitSendResetPasswordToken'

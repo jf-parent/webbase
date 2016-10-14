@@ -7,7 +7,7 @@ import { defineMessages } from 'react-intl'
 import Pager from 'components/ux/Pager'
 import Modal from 'components/ux/Modal'
 import BaseComponent from 'core/BaseComponent'
-import { actions } from 'actions/NotificationActions'
+import { actions } from 'reducers/notification'
 import NotificationPopupStyle from './NotificationPopupStyle.postcss'
 
 const notificationMessages = defineMessages({
