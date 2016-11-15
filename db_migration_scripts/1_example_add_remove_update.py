@@ -13,13 +13,7 @@ class Migration(MigrationBase):
     def update(self, session):
         # self.create_dummy_data(session)
 
-        print('updated')
-
-        session.query(MigrationDummy)\
-            .find_and_modify()\
-            .set(MigrationDummy.field_1, 'test new')\
-            .upsert()\
-            .execute()
+        self.add_field('MigrationDummy', 'field_2', '')
 
     def roll_back(self, session):
-        print('rolled back')
+        self.remove_field('MigrationDummy', 'field_2')

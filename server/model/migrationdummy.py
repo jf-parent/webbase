@@ -11,5 +11,5 @@ class MigrationDummy(BaseModel):
     # field_1 = IntField()
     field_1 = StringField()
 
-    field_2 = StringField()
-    field_3 = IntField()
+    # field_2 = StringField()
+    # field_4 = IntField()

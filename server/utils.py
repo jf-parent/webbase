@@ -28,7 +28,7 @@ class DbSessionContext(ContextDecorator):
 
     def __exit__(self, *exc):
         self.session.end()
-        self.session.db.connection.disconnect()
+        self.session.db.client.close()
         return False
 
 
@@ -43,7 +43,7 @@ def utcnow():
 def drop_database(db_name, redis_database=0):
     mongo_client = MongoClient()
     db = getattr(mongo_client, db_name)
-    db.connection.drop_database(db_name)
+    db.client.drop_database(db_name)
 
     redis_client = StrictRedis(db=redis_database)
     redis_client.flushdb()
