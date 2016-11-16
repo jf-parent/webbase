@@ -3,7 +3,7 @@ from server.model.migrationbase import MigrationBase
 
 class Migration(MigrationBase):
     def update(self, session):
-        print('updated')
+        self.add_field('MigrationDummy', 'field_3', '')
 
     def roll_back(self, session):
-        print('rolled back')
+        self.remove_field('MigrationDummy', 'field_3')

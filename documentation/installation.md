@@ -76,6 +76,10 @@ $ make install
 & cd .. && rm -fr node-v*
 ```
 
+## Install Yarn
+
+Ref: https://yarnpkg.com/en/docs/install
+
 ## Install Mongodb
 
 Ref: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/

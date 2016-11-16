@@ -105,7 +105,7 @@ async def init(loop, config_args=None):
     async def after_request(request, response):
         if hasattr(request, 'db_session'):
             request.db_session.end()
-            request.db_session.db.connection.disconnect()
+            request.db_session.db.client.close()
             db_session_gauge.dec()
 
     app.on_response_prepare.append(after_request)

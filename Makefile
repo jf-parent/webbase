@@ -17,6 +17,7 @@ help:
 	@echo "[*] 'stop-prometheus-prod': stop the prometheus server from the pid file"
 	@echo "-DEV-----------------------------------------------------------"
 	@echo "[*] 'new-model': create a new model skeleton file in server/model/"
+	@echo "[*] 'new-migration-script': create a new migration script skeleton file in db_migration_scripts/"
 	@echo "[*] 'new-route': create a new route skeleton file in client/routes/"
 	@echo "[*] 'lint': lint the server and client code"
 	@echo "[*] 'serve-cwd': server current working directory"
@@ -35,6 +36,9 @@ deps:
 
 deps-dev:
 	pip install -r requirements-dev.txt
+
+new-migration-script:
+	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-migration-script -o db_migration_scripts
 
 new-model:
 	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o server/model/

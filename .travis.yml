@@ -7,8 +7,16 @@ services:
 before_install:
   - "nvm install 4.4.4"
   - "nvm use 4.4.4"
+  # Install Yarn
+  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq yarn
+cache:
+  directories:
+  - $HOME/.yarn-cache
 install:
-  - "npm install"
+  - "yarn install"
   - "pip install --editable ."
   - "npm run build:travis"
   - "pip install -r requirements.txt"
