@@ -128,5 +128,6 @@ Webbase is a fully functionnal web application with a lot of features
 * [Karma](https://github.com/karma-runner/karma)
 * [Bootstrap](https://github.com/twbs/bootstrap)
 * [rq](https://github.com/nvie/rq)
+* [yarn](https://github.com/yarnpkg/yarn)
 * ...
 
