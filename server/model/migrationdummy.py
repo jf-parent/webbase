@@ -1,6 +1,5 @@
 from mongoalchemy.fields import (
-    StringField,
-    IntField
+    StringField
 )
 
 from server.model.basemodel import BaseModel

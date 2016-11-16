@@ -11,6 +11,7 @@ aioredis==0.2.7
 motor==0.6.2
 cryptography
 commentjson
+pymongo==3.3.1
 MongoAlchemy
 bcrypt
 validate_email
