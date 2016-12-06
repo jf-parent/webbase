@@ -15,6 +15,8 @@
     "__DEV__"      : false,
     "__GET_SESSION_INTERVAL__": false,
     "__PROD__"     : false,
+    "__BASEURL": false,
+    "__CORDOVA__": false,
     "__DEBUG__"    : false,
     "__COVERAGE__" : false,
     "it"           : false,

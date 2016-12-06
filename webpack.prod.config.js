@@ -8,7 +8,15 @@ const APP_DIR = path.resolve(__dirname, 'client');
 const current_date = (new Date()).valueOf().toString();
 const random = Math.random().toString();
 const versionHash = crypto.createHash('sha1').update(current_date + random).digest('hex');
-const BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
+const INDEX_TPL_FILE = 'index.tpl'
+const isCordova = process.env.NODE_ENV === 'cordova';
+let BUILD_DIR
+
+if (isCordova) {
+    BUILD_DIR = path.resolve(__dirname, 'www');
+} else {
+    BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
+}
 
 var config = {
 
@@ -24,10 +32,10 @@ var config = {
    ],
 
    output: {
-     path: BUILD_DIR + '/static/',
+     path: BUILD_DIR,
      filename: 'main.[hash].js',
      chunkFilename: '[id].[hash].chunk.js',
-     publicPath: '/static/'
+     publicPath: ''
    },
 
   plugins: [
@@ -38,7 +46,7 @@ var config = {
       new HtmlWebpackPlugin({
         inject: true,
         filename: BUILD_DIR + '/index.html',
-        template: APP_DIR + '/views/index.tpl'
+        template: APP_DIR + '/views/' + INDEX_TPL_FILE
       }),
       definePlugin
   ],
@@ -68,11 +76,13 @@ var config = {
   }
 };
 
-// edit releases/last-version.txt with the current release hash
-fs.writeFile("./releases/latest.txt", versionHash, function(err) {
-    if(err) {
-        return console.error(err);
-    }
-});
+if (!isCordova) {
+    // edit releases/last-version.txt with the current release hash
+    fs.writeFile("./releases/latest.txt", versionHash, function(err) {
+        if(err) {
+            return console.error(err);
+        }
+    });
+}
 
 module.exports = config;

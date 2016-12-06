@@ -116,6 +116,16 @@ $ npm run profile
 ```bash
 $ make serve-cwd
 $ make query
-$ reset-db
-$ init-db-sample-data
+$ make reset-db
+$ make init-db-sample-data
+```
+
+## CORDOVA
+
+```bash
+$ npm install -g cordova
+$ cordova platform add %PLATFORM% # android, browser, ios
+$ cordova build android
+$ cordova run android
+$ cordova run --debug --emulator ios
 ```

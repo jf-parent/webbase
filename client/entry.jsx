@@ -4,11 +4,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { push } from 'react-router-redux'
 import log from 'loglevel'
+import axios from 'axios'
 
 require('./polyfills')
 
 import { notAuthRoutes, createRoutes } from 'routes/index'
 import BrowserSupport from 'helpers/BrowserSupport'
+
+if (__CORDOVA__) {
+  axios.defaults.baseURL = __BASEURL__
+}
 
 // ========================================================
 // Developer Tools Setup

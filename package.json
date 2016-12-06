@@ -8,9 +8,11 @@
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
     "profile": "NODE_ENV=production webpack --profile --json > stats.json && echo 'visualize => http://webpack.github.io/analyse/#modules'",
-    "build:prod": "NODE_ENV=production webpack",
-    "build:travis": "NODE_ENV=travis webpack",
-    "build:dev": "NODE_ENV=development webpack",
+    "build": "webpack --progress",
+    "build:prod": "NODE_ENV=production npm run build",
+    "build:travis": "NODE_ENV=travis npm run build",
+    "build:dev": "NODE_ENV=development npm run build",
+    "build:cordova": "NODE_ENV=cordova npm run build",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true"
   },
   "engines": {
