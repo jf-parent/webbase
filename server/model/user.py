@@ -177,6 +177,7 @@ class User(BaseModel):
         # EMAIL
         email = data.get('email')
         if email:
+            email = email.lower()
             if is_new or self.email != email:
                 is_email_valid = validate_email(email)
                 if not is_email_valid:

@@ -27,7 +27,7 @@ class Login(web.View):
             raise exceptions.InvalidRequestException('No json send')
 
         query = self.request.db_session.query(User)\
-            .filter(User.email == email)
+            .filter(User.email == email.lower())
         if query.count():
             user = query.one()
             is_password_valid = await user.check_password(password)
