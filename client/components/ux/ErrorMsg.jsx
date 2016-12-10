@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import ErrorMsgStyle from './ErrorMsgStyle.postcss'
-
 class ErrorMsg extends Component {
 
   static propTypes = {
@@ -12,7 +10,9 @@ class ErrorMsg extends Component {
 
   render () {
     return (
-      <div className={'alert alert-danger ' + ErrorMsgStyle['err-msg']} role='alert' name={this.props.name || this.props.msgId} >
+      <div className='callout alert' style={{margin: '2px'}} role='alert' name={this.props.name || this.props.msgId} >
+        <i className='fa fa-exclamation-triangle' aria-hidden='true'></i>
+        {' '}
         <FormattedMessage
           id='errorMsg.Error'
           defaultMessage='{error}'
@@ -20,10 +20,12 @@ class ErrorMsg extends Component {
             error: <strong>Error: </strong>
           }}
         />
-        <FormattedMessage
-          id={this.props.msgId}
-          defaultMessage={this.props.msgId}
-        />
+        <i>
+          <FormattedMessage
+            id={this.props.msgId}
+            defaultMessage={this.props.msgId}
+          />
+        </i>
       </div>
     )
   }

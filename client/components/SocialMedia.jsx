@@ -1,9 +1,8 @@
 import React from 'react'
-import 'font-awesome-webpack'
 
 import BaseComponent from 'core/BaseComponent'
 
-var config = require('../../configs/social_media.json')
+let config = require('../../configs/social_media.json')
 
 class SocialMedia extends BaseComponent {
 
@@ -13,9 +12,11 @@ class SocialMedia extends BaseComponent {
 
       if (href) {
         return (
-          <a className='btn btn-link' key={i} href={href} target='_blank'>
-            <i className={'fa fa-' + key} aria-hidden='true' />
-          </a>
+          <li key={i} style={{marginLeft: 15}}>
+            <a href={href} target='_blank'>
+              <i className={'fa fa-' + key} aria-hidden='true' />
+            </a>
+          </li>
         )
       }
     })
@@ -23,7 +24,7 @@ class SocialMedia extends BaseComponent {
 
   render () {
     return (
-      <ul className='nav navbar-nav navbar-left'>
+      <ul style={{display: 'flex', listStyle: 'none', marginLeft: '5em', paddingTop: '1em'}}>
         {this.getSocialMediaElement()}
       </ul>
     )

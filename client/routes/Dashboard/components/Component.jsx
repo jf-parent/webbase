@@ -11,7 +11,6 @@ class Dashboard extends BaseComponent {
   }
 
   componentWillUnmount () {
-    this.debug('componentWillUnmount')
     this.props.actions.resetDashboardState()
   }
 

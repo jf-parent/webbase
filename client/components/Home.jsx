@@ -7,13 +7,15 @@ class Home extends BaseComponent {
 
   render () {
     return (
-      <div>
-        <h1>
-          <FormattedMessage
-            id='nav.Home'
-            defaultMessage='Home'
-          />
-        </h1>
+      <div className='row'>
+        <div className='small-1 small-centered columns'>
+          <h1>
+            <FormattedMessage
+              id='nav.Home'
+              defaultMessage='Home'
+            />
+          </h1>
+        </div>
       </div>
     )
   }

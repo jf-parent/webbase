@@ -23,7 +23,6 @@ console.log('[*] APP_DIR:', APP_DIR);
 console.log('[*]', definePlugin['definitions']);
 
 var config = {
-
    resolve: {
       root: path.resolve('./client'),
       extensions: ['', '.js', '.jsx']
@@ -46,6 +45,9 @@ var config = {
       new DashboardPlugin(),
       new webpack.HotModuleReplacementPlugin(),
       new ExtractTextPlugin('style.css', { allChunks: true }),
+      new webpack.ProvidePlugin({
+        'window.Tether': 'tether',
+      }),
       new HtmlWebpackPlugin({
         inject: true,
         filename: BUILD_DIR + '/index.html',
@@ -81,6 +83,7 @@ var config = {
       },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.json$/, loader: 'json' }
+
     ]
   },
 

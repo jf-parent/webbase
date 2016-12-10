@@ -4,7 +4,6 @@ import CookieBanner from 'react-cookie-banner'
 
 import BrowserSupport from 'helpers/BrowserSupport'
 import GrowlNotification from 'components/ux/GrowlNotification'
-import CoreLayoutStyle from './CoreLayoutStyle.postcss'
 import BaseComponent from 'core/BaseComponent'
 import AuthenticatedNav from 'components/AuthenticatedNav'
 import UnAuthenticatedNav from 'components/UnAuthenticatedNav'
@@ -40,8 +39,6 @@ class CoreLayout extends BaseComponent {
   }
 
   render () {
-    this.debug('render')
-
     let Nav
     if (this.props.state.session.user) {
       Nav = <AuthenticatedNav />
@@ -56,22 +53,20 @@ class CoreLayout extends BaseComponent {
         {this.getPrivacyBanner()}
         <GrowlNotification notifications={this.props.state.session.notifications} />
         {Nav}
-        <div className='container'>
-          <div className={'jumbotron ' + CoreLayoutStyle['jumbotron']}>
-              {this.props.children || <Home />}
-          </div>
+        <div style={{minHeight: '20em', margin: '2em'}} className='row'>
+            {this.props.children || <Home />}
         </div>
-        <footer >
-          <div className='container'>
-            <div className='jumbotron'>
+        <footer>
+          <div className='row'>
+            <div className='medium-1 columns'>
               <h2>Webbase</h2>
             </div>
+            <div className='medium-11 columns'>
+              <SocialMedia />
+            </div>
           </div>
-        </footer>
-        <div className='container'>
           <LocalesMenu />
-          <SocialMedia />
-        </div>
+        </footer>
       </div>
     )
   }

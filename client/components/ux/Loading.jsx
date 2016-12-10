@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import assign from 'domkit/appendVendorPrefix'
 import insertKeyframesRule from 'domkit/insertKeyframesRule'
 
-import LoadingStyle from './LoadingStyle.postcss'
-
 var keyframes = {
   '0%': {
     transform: 'scaley(1.0)'
@@ -97,7 +95,7 @@ var Loader = React.createClass({
 class Loading extends Component {
   render () {
     return (
-      <Loader name='loader' className={LoadingStyle.loader} color='#000' size='16px' margin='4px' />
+      <Loader name='loader' className='wb-loader' color='#000' size='16px' margin='4px' />
     )
   }
 }

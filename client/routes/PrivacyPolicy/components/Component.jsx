@@ -1,16 +1,8 @@
 import React from 'react'
-// import { FormattedMessage } from 'react-intl'
 
-// import ComponentStyle from './ComponentStyle.postcss'
 import BaseComponent from 'core/BaseComponent'
 
 class PrivacyPolicy extends BaseComponent {
-  constructor (props) {
-    super(props)
-
-    this._initLogger()
-  }
-
   render () {
     return (
       <div>

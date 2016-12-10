@@ -24,25 +24,20 @@ class Pager extends BaseComponent {
   }
 
   onFirstClick () {
-    this.debug('onFirstClick')
     this.props.fetchData(0)
   }
 
   onPreviousClick () {
-    this.debug('onPreviousClick')
     let newSkippedItem = this.props.skippedItem - this.props.itemPerPage
     this.props.fetchData(newSkippedItem)
   }
 
   onNextClick () {
-    this.debug('onNextClick')
     let newSkippedItem = this.props.skippedItem + this.props.itemPerPage
     this.props.fetchData(newSkippedItem)
   }
 
   onLastClick () {
-    this.debug('onLastClick')
-
     let newSkippedItem
     if (!(this.props.totalItem % this.props.itemPerPage)) {
       newSkippedItem = this.props.totalItem - this.props.itemPerPage
@@ -58,11 +53,11 @@ class Pager extends BaseComponent {
     let first
     let previous
     if (firstDisabled) {
-      first = <a className='btn btn-default btn-link' disabled>&lt;&lt;</a>
-      previous = <a className='btn btn-default btn-link' disabled>&lt;</a>
+      first = <a>&lt;&lt;</a>
+      previous = <a>&lt;</a>
     } else {
-      first = <a onClick={this.onFirstClick} className='btn btn-default btn-link'>&lt;&lt;</a>
-      previous = <a onClick={this.onPreviousClick} className='btn btn-default btn-link'>&lt;</a>
+      first = <a onClick={this.onFirstClick}>&lt;&lt;</a>
+      previous = <a onClick={this.onPreviousClick}>&lt;</a>
     }
 
     // NEXT & LAST
@@ -70,11 +65,11 @@ class Pager extends BaseComponent {
     let next
     let last
     if (nextDisabled) {
-      next = <a className='btn btn-default btn-link' disabled>&gt;</a>
-      last = <a className='btn btn-default btn-link' disabled>&gt;&gt;</a>
+      next = <a disabled>&gt;</a>
+      last = <a disabled>&gt;&gt;</a>
     } else {
-      next = <a onClick={this.onNextClick} className='btn btn-default btn-link'>&gt;</a>
-      last = <a onClick={this.onLastClick} className='btn btn-default btn-link'>&gt;&gt;</a>
+      next = <a onClick={this.onNextClick}>&gt;</a>
+      last = <a onClick={this.onLastClick}>&gt;&gt;</a>
     }
 
     if (nextDisabled && firstDisabled) {
@@ -83,8 +78,11 @@ class Pager extends BaseComponent {
       return (
         <div name='pager'>
           {first}
+          {'  '}
           {previous}
+          {' ... '}
           {next}
+          {'  '}
           {last}
         </div>
       )

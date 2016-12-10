@@ -1,21 +1,20 @@
 import React from 'react'
-import { defineMessages, FormattedMessage } from 'react-intl'
+// import { defineMessages, FormattedMessage } from 'react-intl'
 
-import ErrorMsg from 'components/ux/ErrorMsg'
+// import ErrorMsg from 'components/ux/ErrorMsg'
 import SuccessMsg from 'components/ux/SuccessMsg'
-import LaddaButton from 'components/ux/LaddaButton'
-import ValidatedInput from 'components/ux/Input'
-import SecureFormStyle from 'components/ux/SecureFormStyle.postcss'
-import SecureForm from 'components/ux/SecureForm'
+// import LaddaButton from 'components/ux/LaddaButton'
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
 
+/*
 const forgottenPasswordMessages = defineMessages({
   emailPlaceholder: {
     id: 'general.EmailPlaceholder',
     defaultMessage: 'Email address'
   }
 })
+*/
 
 class ForgottenPassword extends BaseComponent {
   constructor (props) {
@@ -74,6 +73,10 @@ class ForgottenPassword extends BaseComponent {
 
     // SEND RESET PASSWORD TOKEN
     } else {
+      return (
+        <div>TODO</div>
+      )
+      /*
       const { formatMessage } = this._reactInternalInstance._context.intl
       const emailPlaceholder = formatMessage(forgottenPasswordMessages.emailPlaceholder)
       const errorMsg = this.props.state.forgottenpassword.errorMsgId ? <ErrorMsg msgId={this.props.state.forgottenpassword.errorMsgId} /> : null
@@ -97,6 +100,7 @@ class ForgottenPassword extends BaseComponent {
           <center>{errorMsg}</center>
         </SecureForm>
       )
+      */
     }
   }
 }

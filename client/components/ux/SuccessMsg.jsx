@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import SuccessMsgStyle from './SuccessMsgStyle.postcss'
-
 class SuccessMsg extends Component {
 
   static propTypes = {
@@ -12,7 +10,9 @@ class SuccessMsg extends Component {
 
   render () {
     return (
-      <div className={'alert alert-success ' + SuccessMsgStyle['success-msg']} role='alert' name={this.props.name || this.props.msgId} >
+      <div className='callout success' style={{margin: '2px'}} role='alert' name={this.props.name || this.props.msgId} >
+        <i className='fa fa-thumbs-up' aria-hidden='true'></i>
+        {' '}
         <FormattedMessage
           id={this.props.msgId}
           defaultMessage={this.props.msgId}

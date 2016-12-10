@@ -43,6 +43,7 @@
   "profile.settingsSaveSuccessfully": "Paramètres de profil sauvegarder avec succès!",
   "profile.OldPasswordPlaceholder": "Ancien mot de passe",
   "profile.NewPasswordPlaceholder": "Nouveau mot de passe",
+  "profile.EmailVerified": "Courriel vérifié",
   "profile.EmailNotVerified": "Courriel non vérifié",
   "register.AlreadyHaveAnAccount": "Vous avez déjà un compte? cliquer ici",
   "register.Registration": "Enregistrement",

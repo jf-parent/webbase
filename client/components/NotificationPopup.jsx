@@ -8,7 +8,6 @@ import Pager from 'components/ux/Pager'
 import Modal from 'components/ux/Modal'
 import BaseComponent from 'core/BaseComponent'
 import { actions } from 'reducers/notification'
-import NotificationPopupStyle from './NotificationPopupStyle.postcss'
 
 const notificationMessages = defineMessages({
   markAllAsRead: {
@@ -62,7 +61,7 @@ class NotificationPopup extends BaseComponent {
       defaultMessage: value.message
     }
     const message = formatMessage(messageConfig, value.template_data)
-    const className = value.seen ? NotificationPopupStyle['seen'] : NotificationPopupStyle['unseen']
+    const className = value.seen ? 'wb-notification-seen' : 'wb-notification-unseen'
 
     return (
       <div className={className}>
@@ -92,23 +91,36 @@ class NotificationPopup extends BaseComponent {
     return (
       <Modal ref='modal' isOpen={isPopupOpen} onClose={this.closePopup} overlayStyle={overlayStyle} title='Notifications'>
         <p>
-          <a className='btn btn-default btn-link' onClick={this.markAllNotificationAsSeen}>
+          <a className='button' onClick={this.markAllNotificationAsSeen}>
             <span>
               {markAllAsRead}
             </span>
           </a>
         </p>
-        <ul className='list-unstyled'>
+        <ul style={{listStyle: 'none'}}>
           {this.props.state.notification.notifications.map((value, index) => {
             if (value.target_url !== '') {
               return (
-                <Link data-seen={value.seen} data-uid={value.uid} key={index} className={NotificationPopupStyle['anchor']} onClick={this.navToTarget} to={value.target_url}>
+                <Link
+                  data-seen={value.seen}
+                  data-uid={value.uid}
+                  key={index}
+                  className='wb-notification-anchor'
+                  onClick={this.navToTarget}
+                  to={value.target_url}
+                >
                   {this.renderNotification(value, index)}
                 </Link>
               )
             } else {
               return (
-                <a data-seen={value.seen} data-uid={value.uid} key={index} className={NotificationPopupStyle['anchor']} onClick={this.navToTarget}>
+                <a
+                  data-seen={value.seen}
+                  data-uid={value.uid}
+                  key={index}
+                  className='wb-notification-anchor'
+                  onClick={this.navToTarget}
+                >
                   {this.renderNotification(value, index)}
                 </a>
               )

@@ -113,8 +113,8 @@ export function doLogout (token) {
       .then((response) => {
         logger.debug('/api/logout (response)', response)
         if (response.data.success) {
-          dispatch(routerActions.push('/'))
           dispatch(logoutSuccess())
+          dispatch(routerActions.push('/'))
         } else {
           dispatch(logoutError(response.data.error))
         }

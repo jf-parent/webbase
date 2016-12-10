@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl'
 import { updateSessionNotifications } from 'reducers/session'
 
 import BaseComponent from 'core/BaseComponent'
-import GrowlNotificationStyle from './GrowlNotificationStyle.postcss'
 
 const actions = {
   updateSessionNotifications
@@ -51,26 +50,26 @@ class GrowlNotification extends BaseComponent {
 
     this._initLogger()
 
-    this._bind('closeNotification', 'onCloseNotification')
+    this._bind(
+      'closeNotification',
+       'onCloseNotification'
+    )
   }
 
   closeNotification (index) {
-    this.debug('closeNotification')
     let notifications = this.props.state.session.notifications
     notifications.splice(index, 1)
     this.props.actions.updateSessionNotifications(notifications)
   }
 
   onCloseNotification (event) {
-    this.debug('onCloseNotification')
     this.closeNotification(event.target.dataset.index)
   }
 
   render () {
-    this.debug('render')
     if (this.props.state.session.notifications.length) {
       return (
-        <div className={GrowlNotificationStyle['notification-container']}>
+        <div className='wb-notification-container'>
           <ReactCSSTransitionGroup transitionName='alert' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
             {this.props.state.session.notifications.map((item, index) => {
               if (['success', 'info', 'warning', 'danger'].indexOf(item.type) < 0) {

@@ -3,50 +3,40 @@ import Ladda from 'react-ladda'
 import 'ladda/dist/ladda-themeless.min.css'
 
 class LaddaButton extends Component {
-  static propTypes = {
-    isDisabled: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    btnClass: PropTypes.string,
-    children: PropTypes.any
-  }
-
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      isDisabled: props.isDisabled,
-      isLoading: props.isLoading
-    }
-  }
-
   render () {
     let btnClass = this.props.btnClass
-    if (this.state.isDisabled) {
-      btnClass = btnClass + ' btn-danger'
+    if (this.props.isDisabled) {
+      btnClass = btnClass + ' error'
     } else {
-      btnClass = btnClass + ' btn-success'
+      btnClass = btnClass + ' success'
     }
 
     return (
       <center>
         <Ladda
-          disabled={this.state.isDisabled}
+          disabled={this.props.isDisabled}
           className={btnClass}
           onClick={this.props.onSubmit}
           loading={this.props.isLoading}
           buttonStyle='zoom-out'
-          {...this.props}
         >
-          {this.props.children}
+          <b>{this.props.children}</b>
         </Ladda>
       </center>
     )
   }
 }
 
+LaddaButton.propTypes = {
+  isDisabled: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  btnClass: PropTypes.string,
+  children: PropTypes.any
+}
+
 LaddaButton.defaultProps = {
-  btnClass: 'btn btn-lg btn-primary btn-block'
+  btnClass: 'large button'
 }
 
 module.exports = LaddaButton

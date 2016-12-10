@@ -5,6 +5,7 @@
 - [x] Cookie Banner
 - [ ] Cookiecutter configuration
 - [ ] EC2 deployment
+- [ ] OpenBSD deployment
 - [ ] Os X deployment
 - [ ] Documentation
 - [ ] Amazon SES

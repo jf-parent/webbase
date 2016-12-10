@@ -3,8 +3,13 @@ import { Component } from 'react'
 class BaseComponent extends Component {
 
   _bind (...methods) {
-    // eslint-disable-next-line
-    methods.forEach((method) => this[method] = this[method].bind(this))
+    methods.map((method) => {
+      try {
+        this[method] = this[method].bind(this)
+      } catch (e) {
+        this.error(`the method("${method}") is not defined in the class; See the _bind method in the constructor of ${this.constructor.name}.`)
+      }
+    })
   }
 
   trace (...msg) {

@@ -22,6 +22,22 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
+[client/**.css]
+indent_style = space
+indent_size = 2
+
+[client/**.postcss]
+indent_style = space
+indent_size = 2
+
+[client/**.scss]
+indent_style = space
+indent_size = 2
+
+[client/**.sass]
+indent_style = space
+indent_size = 2
+
 [client/**.less]
 indent_style = space
 indent_size = 2

@@ -93,7 +93,7 @@ export function getNotifications (session, skip = 0) {
         {
           action: 'read',
           model: 'notification',
-          limit: 10,
+          limit: 5,
           skip: skip,
           descending: 'created_ts',
           filters: {
@@ -163,7 +163,7 @@ export const actions = {
 }
 
 const initialState = {
-  limit: 10,
+  limit: 5,
   skip: 0,
   notificationPopupOpened: false,
   notifications: [],

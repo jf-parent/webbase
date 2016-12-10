@@ -1,56 +1,94 @@
 import React from 'react'
-import { Link } from 'react-router'
-import activeComponent from 'react-router-active-component'
-import { FormattedMessage } from 'react-intl'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
+import NotificationPopup from './NotificationPopup'
 import BaseComponent from 'core/BaseComponent'
-import CoreLayoutStyle from 'layouts/CoreLayout/CoreLayoutStyle.postcss'
-import UserNav from 'components/UserNav'
+import Navbar from 'components/Navbar'
+import { actions } from 'reducers/notification'
+import { actions as AuthActions } from 'reducers/session'
 
 class AuthenticatedNav extends BaseComponent {
 
+  constructor (props) {
+    super(props)
+
+    this._initLogger()
+    this._bind(
+      'onOpenNotification',
+      'doLogout'
+    )
+  }
+
+  doLogout () {
+    this.props.authActions.doLogout(this.props.state.session.token)
+  }
+
+  onOpenNotification (event) {
+    this.props.actions.doOpenNotificationPopup()
+  }
+
   render () {
-    let NavItem = activeComponent('li')
+    let notificationNumber = null
+    if (this.props.state.notification.newNotificationNumber > 0) {
+      notificationNumber = <span className='wb-notification-number'>{this.props.state.notification.newNotificationNumber}</span>
+    }
+    const notification = <span>
+      <button onClick={this.onOpenNotification} style={{'fontSize': '24px'}}>
+        <i className='fa fa-bell-o'></i>
+      </button>
+      {notificationNumber}
+    </span>
+
+    const routes = [
+      {
+        name: 'Home',
+        text: 'Home',
+        href: '/'
+      }, {
+        name: 'Dashboard',
+        text: 'Dashboard',
+        href: '/dashboard'
+      }, {
+        name: 'ComponentLibrary',
+        text: 'Library',
+        href: '/component-library'
+      }, {
+      // RIGHT first is last
+        alignment: 'right',
+        component: notification
+      }, {
+        name: 'Logout',
+        text: 'Logout',
+        alignment: 'right',
+        onClick: this.doLogout
+      }, {
+        name: 'Profile',
+        text: 'Profile',
+        alignment: 'right',
+        href: '/profile'
+      }
+    ]
     return (
-      <div className='container'>
-        <nav className={'navbar navbar-default ' + CoreLayoutStyle['nav-bar']} role='navigation'>
-          <div className='container-fluid'>
-            <div className='navbar-header'>
-              <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='#navbar-collapse' aria-expanded='false'>
-                <span className='sr-only'>Toggle navigation</span>
-                <span className='icon-bar'></span>
-                <span className='icon-bar'></span>
-                <span className='icon-bar'></span>
-              </button>
-              <Link name='home-link' className='navbar-brand' to='/'>
-                <FormattedMessage
-                  id='nav.Home'
-                  defaultMessage='Home'
-                />
-              </Link>
-            </div>
-            <div id='navbar-collapse' className='navbar-collapse collapse'>
-              <ul className='nav navbar-nav'>
-                <NavItem to='/dashboard'>
-                  <FormattedMessage
-                    id='nav.Dashboard'
-                    defaultMessage='Dashboard'
-                  />
-                </NavItem>
-                <NavItem to='/component-library'>
-                  <FormattedMessage
-                    id='nav.ComponentLibrary'
-                    defaultMessage='ComponentLibrary'
-                  />
-                </NavItem>
-              </ul>
-              <UserNav />
-            </div>
-          </div>
-        </nav>
+      <div>
+        <NotificationPopup />
+        <Navbar routes={routes} />
       </div>
     )
   }
 }
 
-export default AuthenticatedNav
+function mapStateToProps (state) {
+  return {
+    state
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+    authActions: bindActionCreators(AuthActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatedNav)

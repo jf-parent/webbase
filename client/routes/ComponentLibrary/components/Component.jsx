@@ -1,15 +1,4 @@
 import React from 'react'
-import ReactDataGrid from 'react-data-grid'
-import 'react-data-grid/themes/react-data-grid.css'
-import {
-  Jumbotron,
-  Container,
-  Row,
-  Col,
-  InputGroup,
-  InputGroupAddon,
-  Input
-} from 'reactstrap'
 import Select from 'react-select'
 import 'layouts/react-select.css'
 
@@ -54,55 +43,14 @@ class Settings extends BaseComponent {
   }
 
   getGrid () {
-    let columns = [
-      {key: 'id', name: 'ID'},
-      {key: 'title', name: 'Title'},
-      {key: 'count', name: 'Count'}
-    ]
     return (
-      <Row>
-        <ReactDataGrid
-          columns={columns}
-          rowGetter={this.getRow}
-          rowsCount={this.state.rows.length}
-          minHeight={500}
-        />
-      </Row>
+      <div>Todo</div>
     )
   }
 
   getForm () {
     return (
-      <Jumbotron style={{backgroundColor: 'white'}}>
-        <InputGroup>
-          <InputGroupAddon>@</InputGroupAddon>
-          <Input placeholder='username' />
-        </InputGroup>
-        <br />
-        <InputGroup>
-          <InputGroupAddon>
-            <Input addon type='checkbox' aria-label='Checkbox for following text input' />
-          </InputGroupAddon>
-          <Input placeholder='Check it out' />
-        </InputGroup>
-        <br />
-        <InputGroup>
-          <Input placeholder='username' />
-          <InputGroupAddon>@example.com</InputGroupAddon>
-        </InputGroup>
-        <br />
-        <InputGroup>
-          <InputGroupAddon>$</InputGroupAddon>
-          <Input placeholder='Dollar' />
-          <InputGroupAddon>$</InputGroupAddon>
-        </InputGroup>
-        <br />
-        <InputGroup>
-          <InputGroupAddon>$</InputGroupAddon>
-          <Input placeholder='Amount' type='number' step='1' />
-          <InputGroupAddon>.00</InputGroupAddon>
-        </InputGroup>
-      </Jumbotron>
+      <div>TODO</div>
     )
   }
 
@@ -120,29 +68,8 @@ class Settings extends BaseComponent {
   }
 
   render () {
-    let component = null
-    if (this.state.component === 'form') {
-      component = this.getForm()
-    } else if (this.state.component === 'grid') {
-      component = this.getGrid()
-    }
-    // https://reactstrap.github.io/components/buttons/
     return (
-      <Container>
-        <h1 name='components-library-page'>
-          Component Library
-        </h1>
-        <Row style={{marginBottom: 20}}>
-          <Col>
-            {this.getComponentDropdown()}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {component}
-          </Col>
-        </Row>
-      </Container>
+      <div>TODO</div>
     )
   }
 }
