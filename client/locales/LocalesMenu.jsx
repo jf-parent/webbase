@@ -34,10 +34,9 @@ class LocalesMenu extends BaseComponent {
   render () {
     return (
       <div className='row'>
-        <div className='medium-1 medium-offset-10 columns'>
+        <div className='medium-2 medium-offset-10 columns end'>
           <a onClick={this.onClick} data-locale='en'>English</a>
-        </div>
-        <div className='medium-1 columns'>
+          {' - '}
           <a onClick={this.onClick} data-locale='fr' >Français</a>
         </div>
       </div>

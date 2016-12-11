@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { defineMessages } from 'react-intl'
+import { defineMessages, injectIntl } from 'react-intl'
+import { Pagination } from 'antd'
 
-import Pager from 'components/ux/Pager'
 import Modal from 'components/ux/Modal'
 import BaseComponent from 'core/BaseComponent'
 import { actions } from 'reducers/notification'
@@ -32,7 +32,7 @@ class NotificationPopup extends BaseComponent {
   }
 
   fetchNotificaton (skip) {
-    this.props.actions.getNotifications(this.props.state.session, skip)
+    this.props.actions.getNotifications(this.props.state.session, (skip - 1))
   }
 
   markAllNotificationAsSeen (event) {
@@ -127,11 +127,12 @@ class NotificationPopup extends BaseComponent {
             }
           })}
         </ul>
-        <Pager
-          totalItem={this.props.state.notification.totalNotifications}
-          skippedItem={this.props.state.notification.skip}
-          fetchData={this.fetchNotificaton}
-          itemPerPage={this.props.state.notification.limit}
+        <Pagination
+          total={this.props.state.notification.totalNotifications}
+          size='small'
+          current={this.props.state.notification.skip + 1}
+          onChange={this.fetchNotificaton}
+          pageSize={this.props.state.notification.limit}
         />
       </Modal>
     )
@@ -150,4 +151,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationPopup)
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NotificationPopup))

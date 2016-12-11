@@ -188,14 +188,14 @@ class Profile extends BaseComponent {
       color: 'red',
       position: 'relative',
       top: '1em',
-      right: '-6em'
+      left: '8em'
     }
 
     const emailConfirmedStyle = {
       color: 'green',
       position: 'relative',
       top: '1em',
-      right: '-6em'
+      left: '8em'
     }
 
     // EMAIL CONFIRMATION
@@ -222,7 +222,7 @@ class Profile extends BaseComponent {
       <div style={{marginTop: '1em'}}>
         <form>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <h2>
                 <FormattedMessage
                   id='profile.SaveSettingsHeader'
@@ -232,7 +232,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-2 medium-offset-4 columns'>
+            <div className='medium-2 columns'>
               <h5>
                 <FormattedMessage
                   id='profile.LocalTime'
@@ -240,29 +240,29 @@ class Profile extends BaseComponent {
                 />
               </h5>
             </div>
-            <div className='medium-3 columns end'>
+            <div className='medium-4 columns end'>
               <h5>
                 {moment(this.props.state.session.user.local_time).format('DD/MM/Y hh:mm:ss A')}
               </h5>
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               {errorMsg}
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               {successMsg}
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               {emailConfirmed}
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={emailPlaceholder}
                 type='text'
@@ -273,7 +273,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={namePlaceholder}
                 type='text'
@@ -284,7 +284,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={oldPasswordPlaceholder}
                 type='password'
@@ -295,7 +295,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={newPasswordPlaceholder}
                 type='password'
@@ -306,7 +306,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <Select
                 style={{marginBottom: 10}}
                 name='locale'
@@ -318,7 +318,7 @@ class Profile extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <LaddaButton ref='button' name='profile-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='profile.SubmitBtn'

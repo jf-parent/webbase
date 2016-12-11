@@ -4,6 +4,11 @@ import 'layouts/react-select.css'
 
 import BaseComponent from 'core/BaseComponent'
 
+/*
+[*] [https://ant.design/ Antd]
+[*] https://react.rocks/
+*/
+
 class Settings extends BaseComponent {
 
   constructor (props) {

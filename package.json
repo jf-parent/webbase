@@ -36,7 +36,9 @@
     "url": "https://github.com/jf-parent/webbase/issues"
   },
   "homepage": "https://github.com/jf-parent/webbase#readme",
-  "dependencies": {},
+  "dependencies": {
+    "antd": "^2.5.2"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "axios": "^0.11.1",
@@ -117,12 +119,14 @@
     "react-addons-pure-render-mixin": "^15.1.0",
     "react-addons-test-utils": "^15.1.0",
     "react-addons-transition-group": "^15.3.2",
+    "react-burger-menu": "^1.10.9",
     "react-cookie-banner": "0.0.15",
     "react-dom": "^15.0.2",
     "react-intl": "^2.1.2",
     "react-ladda": "^4.0.3",
     "react-modal": "^1.3.0",
     "react-redux": "^4.4.5",
+    "react-responsive": "^1.2.5",
     "react-router": "^2.4.1",
     "react-router-redux": "^4.0.4",
     "react-select": "^1.0.0-rc.2",

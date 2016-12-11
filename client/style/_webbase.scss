@@ -1,3 +1,101 @@
+// START - GENERAL
+
+
+@media screen and (max-width: 640px) {
+  .bm-menu-wrap {
+    top: 0;
+    width: 70% !important;
+  }
+
+  #wb-root-container {
+    top: 50px;
+    position: relative;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .bm-menu-wrap {
+    top: 0;
+  }
+
+  #wb-root-container {
+    left: 25%;
+    position: relative;
+    width: 75%
+  }
+}
+
+
+// END - GENERAL
+
+// START - PRIVACY BANNER
+// ref: https://github.com/buildo/react-cookie-banner
+
+.wb-privacy-banner {
+  padding-left: 1em;
+  text-align: left !important;
+}
+
+.cookie-link {
+  margin-left: 0 !important;
+}
+
+// END - PRIVACY BANNER
+
+// START - BURGER SIDE MENU
+// ref: https://github.com/negomi/react-burger-menu
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 12px;
+  top: 20px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #373a47;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  top: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+// END = BURGER SIDE MENU
+
 // START - GROWL NOTIFICATION
 
 .wb-notification-container {
@@ -76,10 +174,53 @@
   border-radius: 10px;
   background: #fa3f40;
   position: relative;
-  top: -15px;
+  left: 10px;
+  top: -35px;
 }
 // END - NOTIFICATION
+
 // START - MODAL
+
+.ReactModal__Overlay {
+  -webkit-perspective: 600;
+  perspective: 600;
+  opacity: 0;
+  z-index: 999;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+
+.ReactModal__Content {
+  -webkit-transform: scale(0.5) rotateX(-30deg);
+  transform: scale(0.5) rotateX(-30deg);
+}
+
+.ReactModal__Content--after-open {
+  -webkit-transform: scale(1) rotateX(0deg);
+  transform: scale(1) rotateX(0deg);
+  transition: all 150ms ease-in;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content--before-close {
+  -webkit-transform: scale(0.5) rotateX(30deg);
+  transform: scale(0.5) rotateX(30deg);
+  transition: all 150ms ease-in;
+}
+
+.ReactModal__Content.modal-dialog {
+  border: none;
+  background-color: transparent;
+}
 
 .wb-modal-close {
   float: right;
@@ -148,78 +289,6 @@
 }
 
 // END - MODAL
-// START - NAVBAR
-// ref: http://medialoot.com/blog/how-to-create-a-responsive-navigation-menu-using-only-css/
-
-.wb-navbar-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.wb-navbar-li-left {
-  display:inline-block;
-  float: left;
-}
-
-.wb-navbar-li-right {
-  display:inline-block;
-  float: right;
-}
-
-.wb-navbar-a {
-  display:block;
-  padding: 1em;
-  text-align: center;
-  line-height: 50px;
-  font-weight: bold;
-  color: #0a293b;
-  text-decoration: none;
-}
-
-.wb-navbar-li:hover a {
-  background: #efefef;
-}
-
-.wb-show-menu {
-  text-decoration: none;
-  text-align: center;
-  padding: 10px 0;
-  display: none;
-  font-weight: bold;
-  color: #0a293b;
-}
-
-.wb-navbar-input {
-  display: none;
-}
-
-.wb-navbar-input[type=checkbox]:checked ~ #menu{
-  display: block;
-}
-
-@media screen and (max-width : map-get($breakpoints, medium)){
-  .wb-navbar-ul {
-    position: static;
-    display: none;
-    width: 100%;
-  }
-
-  .wb-navbar-li-left {
-    margin-bottom: 1px;
-    width: 100%;
-  }
-
-  .wb-navbar-li-right {
-    margin-bottom: 1px;
-    width: 100%;
-  }
-
-  .wb-show-menu {
-    display:block;
-  }
-}
-// END - NAVBAR
 
 // START - MATERIAL INPUT
 // ref: http://codepen.io/havardob/pen/ZWoQaP

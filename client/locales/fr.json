@@ -15,6 +15,7 @@
   "errorMsg.InvalidPasswordException": "mot de passe invalide",
   "errorMsg.InvalidEmailException": "courriel invalide",
   "errorMsg.WrongEmailOrPasswordException": "mot de passe ou courriel incorrect",
+  "errorMsg.WrongPasswordException": "l'ancien mot de passe est incorrect",
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Courriel de réinitialisation de mot de passe envoyé avec succès!",
   "forgottenPassword.ResetPasswordHeader": "Veuillez saisir votre nouveau mot de passe",
   "forgottenPassword.SubmitSendResetPasswordToken": "Réinitialiser votre mot de passe",

@@ -8,7 +8,7 @@ class Home extends BaseComponent {
   render () {
     return (
       <div className='row'>
-        <div className='small-1 small-centered columns'>
+        <div className='small-1 columns'>
           <h1>
             <FormattedMessage
               id='nav.Home'

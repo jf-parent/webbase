@@ -13,6 +13,7 @@
   "errorMsg.InvalidPasswordException": "invalid password",
   "errorMsg.InvalidEmailException": "invalid email",
   "errorMsg.WrongEmailOrPasswordException": "wrong email or password",
+  "errorMsg.WrongPasswordException": "the old password is incorrect",
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Reset password email send successfully!",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Reset password token invalid",
   "notification.PleaseConfirmYourEmail": "Please confirm your email: {email}",

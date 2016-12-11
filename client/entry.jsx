@@ -19,6 +19,7 @@ if (__CORDOVA__) {
 // STYLES
 // ========================================================
 
+import 'antd/dist/antd.css'
 import 'font-awesome-webpack'
 import '!style-loader!css-loader!sass-loader!style/app.scss'
 

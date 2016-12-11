@@ -10,6 +10,8 @@ export const OPEN_NOTIFICATION_POPUP = 'OPEN_NOTIFICATION_POPUP'
 export const MARK_NOTIFICATION_AS_SEEN = 'MARK_NOTIFICATION_AS_SEEN'
 export const MARK_ALL_NOTIFICATION_AS_SEEN = 'MARK_ALL_NOTIFICATION_AS_SEEN'
 
+const LIMIT = 5
+
 // ====================================
 // Logger
 // ====================================
@@ -93,8 +95,8 @@ export function getNotifications (session, skip = 0) {
         {
           action: 'read',
           model: 'notification',
-          limit: 5,
-          skip: skip,
+          limit: LIMIT,
+          skip: skip * LIMIT,
           descending: 'created_ts',
           filters: {
             user_uid: session.user.uid
@@ -163,7 +165,7 @@ export const actions = {
 }
 
 const initialState = {
-  limit: 5,
+  limit: LIMIT,
   skip: 0,
   notificationPopupOpened: false,
   notifications: [],

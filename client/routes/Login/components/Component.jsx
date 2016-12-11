@@ -113,7 +113,7 @@ class Login extends BaseComponent {
       <div style={{marginTop: '1em'}}>
         <form>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <h2>
                 <FormattedMessage
                   id='login.PleaseLogin'
@@ -123,7 +123,7 @@ class Login extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={emailPlaceholder}
                 type='text'
@@ -133,7 +133,7 @@ class Login extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={passwordPlaceholder}
                 type='password'
@@ -143,7 +143,7 @@ class Login extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <LaddaButton name='login-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='login.SubmitBtn'
@@ -153,13 +153,13 @@ class Login extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               {errorMsg}
             </div>
           </div>
         </form>
         <div className='row'>
-          <div className='medium-6 medium-offset-5 columns'>
+          <div className='medium-6 columns'>
             <Link name='dont-have-account-link' to='/register'>
               <FormattedMessage
                 id='login.RegisterRedirect'
@@ -169,7 +169,7 @@ class Login extends BaseComponent {
           </div>
         </div>
         <div className='row'>
-          <div className='medium-6 medium-offset-5 columns'>
+          <div className='medium-6 columns'>
             <Link name='forgottenpassword-link' to='/forgottenpassword'>
               <FormattedMessage
                 id='login.ForgottenPassword-btn'

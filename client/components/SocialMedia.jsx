@@ -24,7 +24,7 @@ class SocialMedia extends BaseComponent {
 
   render () {
     return (
-      <ul style={{display: 'flex', listStyle: 'none', marginLeft: '5em', paddingTop: '1em'}}>
+      <ul style={{display: 'flex', listStyle: 'none', marginLeft: '7em', paddingTop: '2em'}}>
         {this.getSocialMediaElement()}
       </ul>
     )

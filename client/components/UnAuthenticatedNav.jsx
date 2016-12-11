@@ -1,28 +1,40 @@
 import React from 'react'
+import { FormattedMessage } from 'react-intl'
 
-import Navbar from 'components/Navbar'
+import Sidemenu from 'components/Sidemenu'
 import BaseComponent from 'core/BaseComponent'
 
 class UnAuthenticatedNav extends BaseComponent {
 
   render () {
-    const routes = [
-      {
-        name: 'Home',
-        text: 'Home',
-        href: '/'
-      }, {
-        name: 'Register',
-        text: 'Register',
-        href: '/register'
-      }, {
-        name: 'Login',
-        text: 'Login',
-        href: '/login'
-      }
+    const links = [
+      <span to='/'>
+        <i className='fa fa-home' aria-hidden='true'></i>
+        {' '}
+        <FormattedMessage
+          id='nav.Home'
+          defaultMessage='Home'
+        />
+      </span>,
+      <span to='/register'>
+        <i className='fa fa-id-card-o' aria-hidden='true'></i>
+        {' '}
+        <FormattedMessage
+          id='nav.Register'
+          defaultMessage='Register'
+        />
+      </span>,
+      <span to='/login'>
+        <i className='fa fa-sign-in' aria-hidden='true'></i>
+        {' '}
+        <FormattedMessage
+          id='nav.Login'
+          defaultMessage='Login'
+        />
+      </span>
     ]
     return (
-      <Navbar routes={routes} />
+      <Sidemenu links={links} />
     )
   }
 }

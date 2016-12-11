@@ -141,7 +141,7 @@ class Register extends BaseComponent {
       <div style={{marginTop: '1em'}}>
         <form>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <h2>
                 <FormattedMessage
                   id='register.Registration'
@@ -151,7 +151,7 @@ class Register extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={emailPlaceholder}
                 type='text'
@@ -161,7 +161,7 @@ class Register extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={namePlaceholder}
                 type='text'
@@ -171,7 +171,7 @@ class Register extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <MaterialInput
                 label={passwordPlaceholder}
                 type='password'
@@ -181,7 +181,7 @@ class Register extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               <LaddaButton name='login-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='register.RegisterBtn'
@@ -191,13 +191,13 @@ class Register extends BaseComponent {
             </div>
           </div>
           <div className='row'>
-            <div className='medium-6 medium-offset-4 columns'>
+            <div className='medium-6 columns'>
               {errorMsg}
             </div>
           </div>
         </form>
         <div className='row'>
-          <div className='medium-6 medium-offset-4 columns'>
+          <div className='medium-6 columns'>
             <Link name='already-having-account-link' to='/login'>
               <FormattedMessage
                 id='register.AlreadyHaveAnAccount'

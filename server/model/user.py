@@ -168,7 +168,7 @@ class User(BaseModel):
                 if is_password_valid:
                     await self.set_password(new_password)
                 else:
-                    raise exceptions.WrongEmailOrPasswordException()
+                    raise exceptions.WrongPasswordException()
             else:
                 raise exceptions.InvalidRequestException(
                     'Missing old password'

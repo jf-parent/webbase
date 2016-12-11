@@ -29,10 +29,13 @@ class CoreLayout extends BaseComponent {
   }
 
   getPrivacyBanner () {
+    // ref: https://github.com/buildo/react-cookie-banner
     return (
       <CookieBanner
-        message='Webbase is using cookie.'
-        link={{msg: 'Here is the privacy policy', url: '/privacy-policy'}}
+        message='Webbase is using '
+        link={{msg: 'cookie', url: '/privacy-policy'}}
+        className='wb-privacy-banner'
+        dismissOnScroll={false}
         cookie='user-has-accepted-cookies'
       />
     )
@@ -47,26 +50,29 @@ class CoreLayout extends BaseComponent {
     } else {
       Nav = <UnAuthenticatedNav />
     }
-
     return (
       <div>
         {this.getPrivacyBanner()}
-        <GrowlNotification notifications={this.props.state.session.notifications} />
-        {Nav}
-        <div style={{minHeight: '20em', margin: '2em'}} className='row'>
-            {this.props.children || <Home />}
+        <div id='wb-sidemenu'>
+          {Nav}
         </div>
-        <footer>
-          <div className='row'>
-            <div className='medium-1 columns'>
-              <h2>Webbase</h2>
-            </div>
-            <div className='medium-11 columns'>
-              <SocialMedia />
-            </div>
+        <div id='wb-root-container'>
+          <GrowlNotification notifications={this.props.state.session.notifications} />
+          <div style={{minHeight: '20em', margin: '2em'}} className='row'>
+              {this.props.children || <Home />}
           </div>
-          <LocalesMenu />
-        </footer>
+          <footer>
+            <div className='row'>
+              <div className='medium-1 columns'>
+                <h2>Webbase</h2>
+              </div>
+              <div className='medium-11 columns'>
+                <SocialMedia />
+              </div>
+            </div>
+            <LocalesMenu />
+          </footer>
+        </div>
       </div>
     )
   }
