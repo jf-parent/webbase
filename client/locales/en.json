@@ -16,6 +16,10 @@
   "errorMsg.WrongPasswordException": "the old password is incorrect",
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Reset password email send successfully!",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Reset password token invalid",
+  "general.Login": "Login",
+  "general.EmailConfirmation": "Email Confirmation",
+  "general.YouAreLoggedIn": "You are logged In!",
+  "general.YourEmailIsNotConfirmed": "Your email is not confirmed",
   "notification.PleaseConfirmYourEmail": "Please confirm your email: {email}",
   "profile.settingsSaveSuccessfully": "Profile settings save successfully!",
   "resetPassword.ResetPasswordSuccess": "Your password has been changed successfully!"

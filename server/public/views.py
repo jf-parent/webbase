@@ -144,7 +144,7 @@ async def api_send_reset_password_token(request):
         resp_data = {'success': True}
 
         # TEST
-        if config.get('env', 'production') == 'test':
+        if config.get('env', 'production') in ['development', 'test']:
             resp_data['reset_password_token'] = reset_password_token.token
 
         return web.json_response(resp_data)

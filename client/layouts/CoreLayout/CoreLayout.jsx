@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CookieBanner from 'react-cookie-banner'
+import { notification } from 'antd'
+import { injectIntl } from 'react-intl'
 
 import BrowserSupport from 'helpers/BrowserSupport'
-import GrowlNotification from 'components/ux/GrowlNotification'
 import BaseComponent from 'core/BaseComponent'
 import AuthenticatedNav from 'components/AuthenticatedNav'
 import UnAuthenticatedNav from 'components/UnAuthenticatedNav'
@@ -26,6 +27,20 @@ class CoreLayout extends BaseComponent {
     this._bind(
       'getPrivacyBanner'
     )
+  }
+
+  componentDidMount () {
+    const { formatMessage } = this.props.intl
+
+    this.props.state.session.notifications.map((notif, index) => {
+      const message = formatMessage({id: notif.message})
+      const description = formatMessage({id: notif.description})
+      notification[notif.type]({
+        message,
+        duration: notif.duration,
+        description
+      })
+    })
   }
 
   getPrivacyBanner () {
@@ -57,7 +72,6 @@ class CoreLayout extends BaseComponent {
           {Nav}
         </div>
         <div id='wb-root-container'>
-          <GrowlNotification notifications={this.props.state.session.notifications} />
           <div style={{minHeight: '20em', margin: '2em'}} className='row'>
               {this.props.children || <Home />}
           </div>
@@ -77,4 +91,4 @@ class CoreLayout extends BaseComponent {
     )
   }
 }
-export default connect(mapStateToProps)(CoreLayout)
+export default injectIntl(connect(mapStateToProps)(CoreLayout))

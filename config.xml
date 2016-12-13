@@ -10,15 +10,17 @@
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" version="1" />
-    <access origin="*" />
+    <preference name="LogLevel" value="VERBOSE"/>
+    <access origin="*" subdomains="true"/>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="http://*/*" />
+    <preference name="LogLevel" value="VERBOSE"/>
     <platform name="android">
-        <preference name="SplashScreen" value="none"/>
         <allow-intent href="market:*" />
         <icon src="resources/icons/ldpi.png" density="ldpi" />
         <icon src="resources/icons/mdpi.png" density="mdpi" />
@@ -32,7 +34,6 @@
         <splash platform="android" qualifier="xhdpi" src="resources/screens/android/screen-xhdpi-portrait.png" />
     </platform>
     <platform name="ios">
-        <preference name="SplashScreen" value="none"/>
         <!-- iOS 8.0+ -->
         <!-- iPhone 6 Plus  -->
         <icon src="resources/icons/icon-60@3x.png" width="180" height="180" />

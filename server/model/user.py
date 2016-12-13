@@ -275,6 +275,24 @@ class User(BaseModel):
             datetime.now(pytz.utc),
             ws_session['tz']
         ).isoformat()
+
+        # NOTE remove these dummy notifications
+        # for testing purpose only
+        # PROD VVVVVVVVVVVVVVVVVVVVVV
+        #      data['notifications'] = []
+        data['notifications'] = [
+            {
+                'type': 'warning',
+                'message': 'general.EmailConfirmation',
+                'description': 'general.YourEmailIsNotConfirmed',
+                'duration': 0
+            }, {
+                'type': 'success',
+                'message': 'general.Login',
+                'description': 'general.YouAreLoggedIn',
+                'duration': 2
+            }
+        ]
         data['email'] = self.email
         data['email_confirmed'] = self.email_confirmed
         data['gravatar_url'] = self.gravatar_url

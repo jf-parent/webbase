@@ -4,12 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import BaseComponent from 'core/BaseComponent'
 
 class BrowserNotSupported extends BaseComponent {
-  constructor (props) {
-    super(props)
-
-    this._initLogger()
-  }
-
   render () {
     return (
       <div>

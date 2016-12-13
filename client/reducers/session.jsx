@@ -190,6 +190,7 @@ export default function session (state = initialState, action) {
         {
           loading: false,
           user: action.data.user,
+          notifications: action.data.user.notifications,
           token: action.data.token
         }
       )

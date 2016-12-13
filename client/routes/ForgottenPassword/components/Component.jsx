@@ -1,27 +1,38 @@
 import React from 'react'
-// import { defineMessages, FormattedMessage } from 'react-intl'
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-// import ErrorMsg from 'components/ux/ErrorMsg'
+import MaterialInput from 'components/ux/MaterialInput'
+import ErrorMsg from 'components/ux/ErrorMsg'
 import SuccessMsg from 'components/ux/SuccessMsg'
-// import LaddaButton from 'components/ux/LaddaButton'
+import LaddaButton from 'components/ux/LaddaButton'
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
+import { RE_EMAIL } from 'routes/Login/components/Component'
 
-/*
 const forgottenPasswordMessages = defineMessages({
   emailPlaceholder: {
     id: 'general.EmailPlaceholder',
     defaultMessage: 'Email address'
   }
 })
-*/
 
 class ForgottenPassword extends BaseComponent {
   constructor (props) {
     super(props)
 
     this._initLogger()
-    this._bind('enableButton', 'disableButton', 'onSubmit', 'validateResetPasswordToken')
+    this._bind(
+      'isFormValid',
+      'onEmailChange',
+      'onSubmit',
+      'validateResetPasswordToken'
+    )
+
+    this.state = {
+      isFormValid: false,
+      emailValidationState: 'warning',
+      emailValue: ''
+    }
 
     const resetPasswordToken = this.props.location.query['resetPasswordToken']
     if (resetPasswordToken) {
@@ -29,36 +40,53 @@ class ForgottenPassword extends BaseComponent {
     }
   }
 
-  validateResetPasswordToken (resetPasswordToken) {
-    this.debug('resetPasswordToken:', resetPasswordToken)
-    this.props.actions.doValidateResetPasswordToken({ token: this.props.state.session.token, reset_password_token: resetPasswordToken })
+  componentWillUnmount () {
+    this.props.actions.resetForgottenPasswordState()
   }
 
-  componentWillUnmount () {
-    this.debug('componentWillUnmount')
-    this.props.actions.resetForgottenPasswordState()
+  validateResetPasswordToken (resetPasswordToken) {
+    this.debug('resetPasswordToken:', resetPasswordToken)
+    this.props.actions.doValidateResetPasswordToken({
+      token: this.props.state.session.token,
+      reset_password_token: resetPasswordToken
+    })
   }
 
   onSubmit (event) {
     event.preventDefault()
-    this.debug('onSubmit')
-
-    this.props.actions.doSendResetPasswordToken(this.refs.form.getModel())
+    let data = {
+      token: this.props.state.session.token,
+      email: this.state.emailValue
+    }
+    this.props.actions.doSendResetPasswordToken(data)
   }
 
-  enableButton () {
-    this.debug('enableButton')
-    this.refs.button.setState({ isDisabled: false })
+  isFormValid (emailValidationState) {
+    if (emailValidationState === 'success') {
+      return true
+    } else {
+      return false
+    }
   }
 
-  disableButton () {
-    this.debug('disableButton')
-    this.refs.button.setState({ isDisabled: true })
+  onEmailChange (event) {
+    const emailValue = event.target.value
+    let emailValidationState
+    if (emailValue === '') {
+      emailValidationState = 'warning'
+    } else {
+      if (RE_EMAIL.test(emailValue)) {
+        emailValidationState = 'success'
+      } else {
+        emailValidationState = 'error'
+      }
+    }
+
+    let isFormValid = this.isFormValid(emailValidationState)
+    this.setState({isFormValid, emailValidationState, emailValue})
   }
 
   render () {
-    this.debug('render')
-
     // SUCCESS
     if (this.props.state.forgottenpassword.successMsgId) {
       return (
@@ -73,36 +101,53 @@ class ForgottenPassword extends BaseComponent {
 
     // SEND RESET PASSWORD TOKEN
     } else {
-      return (
-        <div>TODO</div>
-      )
-      /*
-      const { formatMessage } = this._reactInternalInstance._context.intl
+      const { formatMessage } = this.props.intl
       const emailPlaceholder = formatMessage(forgottenPasswordMessages.emailPlaceholder)
       const errorMsg = this.props.state.forgottenpassword.errorMsgId ? <ErrorMsg msgId={this.props.state.forgottenpassword.errorMsgId} /> : null
 
       return (
-        <SecureForm ref='form' onValid={this.enableButton} onInvalid={this.disableButton} session={this.props.state.session}>
-          <h2 name='forgotten-password-page' className={SecureFormStyle['form-signin-heading']}>
-
-            <FormattedMessage
-              id='forgottenPassword.SubmitSendResetPasswordToken'
-              defaultMessage='Reset my password'
-            />
-          </h2>
-          <ValidatedInput type='email' name='email' placeholder={emailPlaceholder} validations='isEmail' required autoFocus />
-          <LaddaButton ref='button' isDisabled isLoading={this.props.state.forgottenpassword.loading} onSubmit={this.onSubmit}>
-            <FormattedMessage
-              id='general.SubmitBtn'
-              defaultMessage='Submit'
-            />
-          </LaddaButton>
-          <center>{errorMsg}</center>
-        </SecureForm>
+        <div style={{marginTop: '1em'}}>
+          <form>
+            <div className='row'>
+              <div className='medium-6 columns'>
+                <h2 name='forgotten-password-page'>
+                  <FormattedMessage
+                    id='forgottenPassword.SubmitSendResetPasswordToken'
+                    defaultMessage='Reset my password'
+                  />
+                </h2>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='medium-6 columns'>
+                <MaterialInput
+                  label={emailPlaceholder}
+                  type='text'
+                  validationState={this.state.emailValidationState}
+                  onChange={this.onEmailChange}
+                />
+              </div>
+            </div>
+            <div className='row'>
+              <div className='medium-6 columns'>
+                <LaddaButton isDisabled={!this.state.isFormValid} isLoading={this.props.state.forgottenpassword.loading} onSubmit={this.onSubmit}>
+                  <FormattedMessage
+                    id='general.SubmitBtn'
+                    defaultMessage='Submit'
+                  />
+                </LaddaButton>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='medium-6 columns'>
+                {errorMsg}
+              </div>
+            </div>
+          </form>
+        </div>
       )
-      */
     }
   }
 }
 
-module.exports = ForgottenPassword
+module.exports = injectIntl(ForgottenPassword)
