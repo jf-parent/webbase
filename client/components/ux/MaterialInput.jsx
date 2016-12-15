@@ -9,6 +9,7 @@ class MaterialInput extends BaseComponent {
       <label className='wb-input'>
         <input
           className={'wb-input_field wb-input_field_' + this.props.validationState}
+          name={this.props.name}
           type={this.props.type}
           onChange={this.props.onChange}
           placeholder=' '
@@ -22,9 +23,14 @@ class MaterialInput extends BaseComponent {
 
 MaterialInput.propTypes = {
   value: PropTypes.string,
+  name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  validationState: PropTypes.string.isRequired, // warning || error || success
+  validationState: PropTypes.string, // warning || error || success
   type: PropTypes.string.isRequired
+}
+
+MaterialInput.defaultProps = {
+  validationState: 'warning'
 }
 
 export default MaterialInput

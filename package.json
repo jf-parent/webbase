@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Base for web",
   "scripts": {
-    "start": "NODE_ENV=development ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "start": "NODE_ENV=development ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress",
     "start-wd": "NODE_ENV=development webpack-dashboard -- ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.js",
     "test:watch": "npm run test -- --watch",
@@ -36,10 +36,9 @@
     "url": "https://github.com/jf-parent/webbase/issues"
   },
   "homepage": "https://github.com/jf-parent/webbase#readme",
-  "dependencies": {
-    "antd": "^2.5.2"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "antd": "^2.5.2",
     "autoprefixer": "^6.3.6",
     "axios": "^0.11.1",
     "babel": "^6.5.2",
@@ -143,6 +142,7 @@
     "string-replace-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "validator": "^6.2.0",
     "webpack": "^1.13.1",
     "webpack-dashboard": "^0.1.8",
     "webpack-dev-server": "^1.14.1",

@@ -5,6 +5,7 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 import MaterialInput from 'components/ux/MaterialInput'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
+import Form from 'components/ux/Form'
 import LaddaButton from 'components/ux/LaddaButton'
 
 const loginMessages = defineMessages({
@@ -26,31 +27,12 @@ class Login extends BaseComponent {
 
     this._initLogger()
     this._bind(
-      'isFormValid',
-      'onEmailChange',
-      'onPasswordChange',
       'onSubmit'
     )
-
-    this.state = {
-      emailValidationState: 'warning',
-      emailValue: '',
-      passwordValidationState: 'warning',
-      passwordValue: '',
-      isFormValid: false
-    }
   }
 
   componentWillUnmount () {
     this.props.actions.resetLoginState()
-  }
-
-  isFormValid (emailValidationState, passwordValidationState) {
-    if (emailValidationState === 'success' && passwordValidationState === 'success') {
-      return true
-    } else {
-      return false
-    }
   }
 
   onSubmit (event) {
@@ -62,45 +44,11 @@ class Login extends BaseComponent {
     }
 
     let data = {
-      email: this.state.emailValue,
-      password: this.state.passwordValue,
+      email: this.refs.form.state.values['email'],
+      password: this.refs.form.state.values['password'],
       token: this.props.state.session.token
     }
     this.props.actions.doLogin(data, nextPath)
-  }
-
-  onEmailChange (event) {
-    const emailValue = event.target.value
-    let emailValidationState
-    if (emailValue === '') {
-      emailValidationState = 'warning'
-    } else {
-      if (RE_EMAIL.test(emailValue)) {
-        emailValidationState = 'success'
-      } else {
-        emailValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(emailValidationState, this.state.passwordValidationState)
-    this.setState({isFormValid, emailValidationState, emailValue})
-  }
-
-  onPasswordChange (event) {
-    const passwordValue = event.target.value
-    let passwordValidationState
-    if (passwordValue === '') {
-      passwordValidationState = 'warning'
-    } else {
-      if (passwordValue.length >= 6) {
-        passwordValidationState = 'success'
-      } else {
-        passwordValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, passwordValidationState)
-    this.setState({isFormValid, passwordValidationState, passwordValue})
   }
 
   render () {
@@ -111,7 +59,7 @@ class Login extends BaseComponent {
 
     return (
       <div style={{marginTop: '1em'}}>
-        <form>
+        <Form ref='form'>
           <div className='row'>
             <div className='medium-6 columns'>
               <h2>
@@ -126,9 +74,11 @@ class Login extends BaseComponent {
             <div className='medium-6 columns'>
               <MaterialInput
                 label={emailPlaceholder}
+                validate
+                isEmail
+                isRequired
+                name='email'
                 type='text'
-                validationState={this.state.emailValidationState}
-                onChange={this.onEmailChange}
               />
             </div>
           </div>
@@ -136,15 +86,17 @@ class Login extends BaseComponent {
             <div className='medium-6 columns'>
               <MaterialInput
                 label={passwordPlaceholder}
+                validate
+                name='password'
+                isRequired
+                isLongerThan={5}
                 type='password'
-                validationState={this.state.passwordValidationState}
-                onChange={this.onPasswordChange}
                />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
-              <LaddaButton name='login-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
+              <LaddaButton name='login-btn' type='submit' isLoading={this.props.state.login.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='login.SubmitBtn'
                   defaultMessage='Login'
@@ -157,7 +109,7 @@ class Login extends BaseComponent {
               {errorMsg}
             </div>
           </div>
-        </form>
+        </Form>
         <div className='row'>
           <div className='medium-6 columns'>
             <Link name='dont-have-account-link' to='/register'>

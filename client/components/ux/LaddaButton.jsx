@@ -28,7 +28,7 @@ class LaddaButton extends Component {
 }
 
 LaddaButton.propTypes = {
-  isDisabled: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool,
   isLoading: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   btnClass: PropTypes.string,
@@ -36,7 +36,8 @@ LaddaButton.propTypes = {
 }
 
 LaddaButton.defaultProps = {
-  btnClass: 'large button'
+  btnClass: 'large button',
+  isDisabled: false
 }
 
 module.exports = LaddaButton
