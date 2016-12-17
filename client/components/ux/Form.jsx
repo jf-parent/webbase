@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import validator from 'validator'
+import { Tooltip } from 'antd'
 
 import BaseComponent from 'core/BaseComponent'
 
@@ -11,10 +12,11 @@ EXAMPLE:
       <div className='medium-6 columns'>
         <MaterialInput
           label={emailPlaceholder}
-->          validate // tell the Form that this field need to be validated
-->          isEmail // validator
-->          isRequired // validator
-->          name='email' // name is required
+->        validate // tell the Form that this field need to be validated
+->        validationMsgId='email.EmailValidationMsg' // message shown when the input is invalid
+->        isEmail // validator
+->        isRequired // validator
+->        name='email' // name is required
           type='text'
         />
       </div>
@@ -23,7 +25,7 @@ EXAMPLE:
       <div className='medium-6 columns'>
         <LaddaButton
           name='login-btn'
-->          type='submit' // tell the Form that this button need to be disabled if the form is invalid
+->        type='submit' // tell the Form that this button need to be disabled if the form is invalid
           isLoading={this.props.state.login.loading}
           onSubmit={this.onSubmit}
         >
@@ -40,6 +42,7 @@ EXAMPLE:
 // VALIDATORS CONFIG
 // Don't reinvent the wheel => https://github.com/chriso/validator.js
 // Add validators here
+// |||||||||||||||||||
 // VVVVVVVVVVVVVVVVVVV
 const VALIDATORS = {
   'isRequired': (value, args) => { return !validator.isEmpty(value || '') },
@@ -61,12 +64,13 @@ class Form extends BaseComponent {
     )
 
     // validators
-    let validators = []
     let validatorsByName = {}
     let validationsState = {}
     let values = {}
+    let joinWith = {}
     const injectPropsFunc = function (component, children, index) {
       let injectedProps = {}
+      let clonedComponent
 
       // Validated Input
       // TODO walk the props object and if one props
@@ -87,14 +91,18 @@ class Form extends BaseComponent {
           throw new Error('Fatal error in <Form />')
         }
 
+        if (component.props.joinWith) {
+          joinWith[componentName] = component.props.joinWith
+        }
+
         // Init the validators configs
         validatorsByName[componentName] = []
         Object.keys(component.props).map((key, index) => {
           // Match only props that start with 'is' followed by a capital letter
-          if (key.match(/is{1}[A-Z]{1}/)) {
+          if (Object.keys(VALIDATORS).indexOf(key) !== -1) {
             let effectiveValidator = this.getValidator(key)
             let validatorConfig = {
-              componentName: componentName,
+              componentName,
               name: key,
               func: effectiveValidator,
               extraArgs: [
@@ -102,29 +110,52 @@ class Form extends BaseComponent {
               ]
             }
             validatorsByName[componentName].push(validatorConfig)
-            validators.push(validatorConfig)
           }
         })
+
+        if (component.props['validatorFunc']) {
+          let validatorConfig = {
+            name: 'validatorFunc',
+            componentName,
+            func: component.props.validatorFunc,
+            extraArgs: []
+          }
+          validatorsByName[componentName].push(validatorConfig)
+        }
 
         // Set the initial validation state of the component
         let validationState = this.validateField(validatorsByName[componentName], component.props['value'] || '')
         validationsState[componentName] = validationState
         injectedProps['validationState'] = validationState
-      }
 
-      // Clone the component with the new injected props
-      const clonedComponent = <component.type key={index} {...component.props} {...injectedProps}>
-        {children}
-      </component.type>
+        if (component.props.validationMsgId) {
+          const { formatMessage } = this.props.intl
+          clonedComponent = <Tooltip title={formatMessage({'id': component.props.validationMsgId})}>
+            <div>
+              <component.type key={index} {...component.props} {...injectedProps}>
+                {children}
+              </component.type>
+            </div>
+          </Tooltip>
+        } else {
+          clonedComponent = <component.type key={index} {...component.props} {...injectedProps}>
+            {children}
+          </component.type>
+        }
+      } else {
+        clonedComponent = <component.type key={index} {...component.props} {...injectedProps}>
+          {children}
+        </component.type>
+      }
 
       return clonedComponent
     }.bind(this)
 
     const children = this.traverseChildren(this.props.children, injectPropsFunc)
     this.state = {
-      validators,
       validationsState,
       validatorsByName,
+      joinWith,
       values,
       children
     }
@@ -140,11 +171,15 @@ class Form extends BaseComponent {
         return this.traverseChildren(c, func, index)
       })
     } else {
-      if (component.props.children) {
-        return func(component, this.traverseChildren(component.props.children, func, index), index)
-      // Leaf of the tree
+      if (component.props === undefined) {
+        return component
       } else {
-        return func(component, null, index)
+        if (component.props.children) {
+          return func(component, this.traverseChildren(component.props.children, func, index), index)
+        // Leaf of the tree
+        } else {
+          return func(component, null, index)
+        }
       }
     }
   }
@@ -181,12 +216,16 @@ class Form extends BaseComponent {
     let { values, validationsState } = this.state
     values[targetName] = targetValue
     validationsState[targetName] = this.validateField(this.state.validatorsByName[targetName], targetValue)
+    if (this.state.joinWith[targetName]) {
+      let joinedWithComponentName = this.state.joinWith[targetName]
+      validationsState[joinedWithComponentName] = this.validateField(this.state.validatorsByName[joinedWithComponentName], this.state.values[joinedWithComponentName])
+    }
     this.setState({values, validationsState})
   }
 
   isFormInvalid () {
-    const validations = this.state.validators.map((validatorConfig) => {
-      return validatorConfig.func(this.state.values[validatorConfig.componentName], validatorConfig.extraArgs)
+    const validations = Object.keys(this.state.validatorsByName).map((componentName) => {
+      return this.validateField(this.state.validatorsByName[componentName], this.state.values[componentName]) !== 'error'
     })
     const isValid = validations.reduce((a, b) => { return a && b })
     return !isValid
@@ -209,9 +248,21 @@ class Form extends BaseComponent {
         injectedProps['validationState'] = this.state['validationsState'][componentName]
       }
 
-      const clonedComponent = <component.type key={index} {...component.props} {...injectedProps}>
+      let clonedComponent = <component.type key={index} {...component.props} {...injectedProps}>
         {children}
       </component.type>
+
+      if (component.props.validationMsgId) {
+        const { formatMessage } = this.props.intl
+        clonedComponent = <Tooltip title={formatMessage({'id': component.props.validationMsgId})}>
+          <div>
+            <component.type key={index} {...component.props} {...injectedProps}>
+              {children}
+            </component.type>
+          </div>
+        </Tooltip>
+      }
+
       return clonedComponent
     }.bind(this)
 
@@ -226,7 +277,8 @@ class Form extends BaseComponent {
 }
 
 Form.PropTypes = {
-  children: PropTypes.array.isRequired
+  children: PropTypes.array.isRequired,
+  intl: PropTypes.object.isRequired
 }
 
 export default Form

@@ -1,27 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { defineMessages, FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
+import Form from 'components/ux/Form'
 import MaterialInput from 'components/ux/MaterialInput'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
 import LaddaButton from 'components/ux/LaddaButton'
-import { RE_EMAIL } from 'routes/Login/components/Component'
-
-const registerMessages = defineMessages({
-  emailPlaceholder: {
-    id: 'general.EmailPlaceholder',
-    defaultMessage: 'Email address'
-  },
-  namePlaceholder: {
-    id: 'general.NamePlaceholder',
-    defaultMessage: 'Name'
-  },
-  passwordPlaceholder: {
-    id: 'general.PasswordPlaceholder',
-    defaultMessage: 'Password'
-  }
-})
 
 class Register extends BaseComponent {
   constructor (props) {
@@ -29,77 +14,19 @@ class Register extends BaseComponent {
 
     this._initLogger()
     this._bind(
-      'isFormValid',
-      'onEmailChange',
-      'onPasswordChange',
-      'onNameChange',
-      'onSubmit'
+      'onSubmit',
+      'validatePasswordEqual'
     )
-
-    this.state = {
-      emailValidationState: 'warning',
-      emailValue: '',
-      passwordValidationState: 'warning',
-      passwordValue: '',
-      nameValidationState: 'warning',
-      nameValue: '',
-      isFormValid: false
-    }
   }
 
   componentWillUnmount () {
     this.props.actions.resetRegisterState()
   }
 
-  onEmailChange (event) {
-    const emailValue = event.target.value
-    let emailValidationState
-    if (emailValue === '') {
-      emailValidationState = 'warning'
-    } else {
-      if (RE_EMAIL.test(emailValue)) {
-        emailValidationState = 'success'
-      } else {
-        emailValidationState = 'error'
-      }
+  validatePasswordEqual (value) {
+    if (this.refs.form) {
+      return value === this.refs.form.state.values['password']
     }
-
-    let isFormValid = this.isFormValid(emailValidationState, this.state.passwordValidationState, this.state.nameValidationState)
-    this.setState({isFormValid, emailValidationState, emailValue})
-  }
-
-  onNameChange (event) {
-    const nameValue = event.target.value
-    let nameValidationState
-    if (nameValue === '') {
-      nameValidationState = 'warning'
-    } else {
-      if (nameValue.length >= 2) {
-        nameValidationState = 'success'
-      } else {
-        nameValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, this.state.passwordValidationState, nameValidationState)
-    this.setState({isFormValid, nameValidationState, nameValue})
-  }
-
-  onPasswordChange (event) {
-    const passwordValue = event.target.value
-    let passwordValidationState
-    if (passwordValue === '') {
-      passwordValidationState = 'warning'
-    } else {
-      if (passwordValue.length >= 6) {
-        passwordValidationState = 'success'
-      } else {
-        passwordValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, passwordValidationState, this.state.nameValidationState)
-    this.setState({isFormValid, passwordValidationState, passwordValue})
   }
 
   onSubmit (event) {
@@ -112,34 +39,19 @@ class Register extends BaseComponent {
 
     let data = {
       token: this.props.state.session.token,
-      email: this.state.emailValue,
-      name: this.state.nameValue,
-      password: this.state.passwordValue
+      email: this.refs.form.state.values.email,
+      name: this.refs.form.state.values.name,
+      password: this.refs.form.state.values.password
     }
     this.props.actions.doRegister(data, nextPath)
   }
 
-  isFormValid (emailValidationState, passwordValidationState, nameValidationState) {
-    if (emailValidationState === 'success' &&
-        passwordValidationState === 'success' &&
-        nameValidationState === 'success'
-        ) {
-      return true
-    } else {
-      return false
-    }
-  }
-
   render () {
-    const { formatMessage } = this._reactInternalInstance._context.intl
     const errorMsg = this.props.state.register.errorMsgId ? <ErrorMsg msgId={this.props.state.register.errorMsgId} /> : null
-    const emailPlaceholder = formatMessage(registerMessages.emailPlaceholder)
-    const namePlaceholder = formatMessage(registerMessages.namePlaceholder)
-    const passwordPlaceholder = formatMessage(registerMessages.passwordPlaceholder)
 
     return (
       <div style={{marginTop: '1em'}}>
-        <form>
+        <Form ref='form' intl={this._reactInternalInstance._context.intl}>
           <div className='row'>
             <div className='medium-6 columns'>
               <h2>
@@ -153,36 +65,61 @@ class Register extends BaseComponent {
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={emailPlaceholder}
+                label='general.EmailPlaceholder'
+                validate
                 type='text'
-                validationState={this.state.emailValidationState}
-                onChange={this.onEmailChange}
+                name='email'
+                isEmail
+                isRequired
+                validationMsgId='general.EmailValidation'
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={namePlaceholder}
+                label='general.NamePlaceholder'
+                validationMsgId='general.NameValidation'
+                name='name'
+                validate
+                isRequired
+                isLongerThan={1}
                 type='text'
-                validationState={this.state.nameValidationState}
-                onChange={this.onNameChange}
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={passwordPlaceholder}
+                label='general.PasswordPlaceholder'
+                validationMsgId='general.PasswordValidation'
+                name='password'
+                validate
+                isRequired
+                joinWith='passwordConfirm'
+                isLongerThan={5}
                 type='password'
-                validationState={this.state.passwordValidationState}
-                onChange={this.onPasswordChange}
                />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
-              <LaddaButton name='login-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>
+              <MaterialInput
+                label='general.ConfirmPasswordPlaceholder'
+                validationMsgId='general.ConfirmPasswordValidation'
+                name='passwordConfirm'
+                joinWith='password'
+                validate
+                isRequired
+                isLongerThan={5}
+                validatorFunc={this.validatePasswordEqual}
+                type='password'
+               />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='medium-6 columns'>
+              <LaddaButton name='login-btn' type='submit' isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='register.RegisterBtn'
                   defaultMessage='Register'
@@ -195,7 +132,7 @@ class Register extends BaseComponent {
               {errorMsg}
             </div>
           </div>
-        </form>
+        </Form>
         <div className='row'>
           <div className='medium-6 columns'>
             <Link name='already-having-account-link' to='/login'>

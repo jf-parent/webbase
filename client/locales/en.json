@@ -20,7 +20,18 @@
   "general.EmailConfirmation": "Email Confirmation",
   "general.YouAreLoggedIn": "You are logged In!",
   "general.YourEmailIsNotConfirmed": "Your email is not confirmed",
+  "general.EmailPlaceholder": "Email",
+  "general.NamePlaceholder": "Name",
+  "general.PasswordPlaceholder": "Password",
+  "general.ConfirmPasswordPlaceholder": "Password (confirm)",
+  "general.EmailValidation": "Your email need to be valid.",
+  "general.NameValidation": "Your name must contains at least 6 characters.",
+  "general.PasswordValidation": "Your password need to contains at least 6 characters.",
+  "general.ConfirmPasswordValidation": "Your password must match",
   "notification.PleaseConfirmYourEmail": "Please confirm your email: {email}",
   "profile.settingsSaveSuccessfully": "Profile settings save successfully!",
+  "profile.OldPasswordPlaceholder": "Old password",
+  "profile.NewPasswordPlaceholder": "New password",
+  "profile.NewPasswordConfirmPlaceholder": "New password (confirm)",
   "resetPassword.ResetPasswordSuccess": "Your password has been changed successfully!"
 }

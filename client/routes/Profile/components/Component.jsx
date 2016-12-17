@@ -1,34 +1,15 @@
 import React from 'react'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 import moment from 'moment'
 import Select from 'react-select'
 import 'layouts/react-select.css'
 
-import { RE_EMAIL } from 'routes/Login/components/Component'
 import MaterialInput from 'components/ux/MaterialInput'
+import Form from 'components/ux/Form'
 import ErrorMsg from 'components/ux/ErrorMsg'
 import SuccessMsg from 'components/ux/SuccessMsg'
 import LaddaButton from 'components/ux/LaddaButton'
 import BaseComponent from 'core/BaseComponent'
-
-const profileMessages = defineMessages({
-  emailPlaceholder: {
-    id: 'general.EmailPlaceholder',
-    defaultMessage: 'Email address'
-  },
-  namePlaceholder: {
-    id: 'general.NamePlaceholder',
-    defaultMessage: 'Name'
-  },
-  oldPasswordPlaceholder: {
-    id: 'profile.OldPasswordPlaceholder',
-    defaultMessage: 'Old password'
-  },
-  newPasswordPlaceholder: {
-    id: 'profile.NewPasswordPlaceholder',
-    defaultMessage: 'New password'
-  }
-})
 
 class Profile extends BaseComponent {
   constructor (props) {
@@ -38,25 +19,12 @@ class Profile extends BaseComponent {
     this._bind(
       'onSubmit',
       'onLocaleChange',
-      'isFormValid',
-      'onEmailChange',
-      'onNameChange',
-      'onOldPasswordChange',
-      'onNewPasswordChange',
+      'validatePasswordEqual'
     )
 
     const user = this.props.state.session.user
     this.state = {
-      locale: user.locale,
-      emailValidationState: 'success',
-      emailValue: user.email,
-      nameValidationState: 'success',
-      nameValue: user.name,
-      oldPasswordValidationState: 'success',
-      oldPasswordValue: '',
-      newPasswordValidationState: 'success',
-      newPasswordValue: '',
-      isFormValid: true
+      locale: user.locale
     }
   }
 
@@ -64,88 +32,14 @@ class Profile extends BaseComponent {
     this.props.actions.resetProfileState()
   }
 
+  validatePasswordEqual (value) {
+    if (this.refs.form) {
+      return value === this.refs.form.state.values['newPassword']
+    }
+  }
+
   onLocaleChange (locale) {
     this.setState({locale: locale.value})
-  }
-
-  isFormValid (emailValidationState, oldPasswordValidationState, newPasswordValidationState, nameValidationState) {
-    if (emailValidationState === 'success' &&
-        newPasswordValidationState === 'success' &&
-        oldPasswordValidationState === 'success' &&
-        nameValidationState === 'success'
-        ) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  onEmailChange (event) {
-    const emailValue = event.target.value
-    let emailValidationState
-    if (emailValue === '') {
-      emailValidationState = 'warning'
-    } else {
-      if (RE_EMAIL.test(emailValue)) {
-        emailValidationState = 'success'
-      } else {
-        emailValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(emailValidationState, this.state.oldPasswordValidationState, this.state.newPasswordValidationState, this.state.nameValidationState)
-    this.setState({isFormValid, emailValidationState, emailValue})
-  }
-
-  onNameChange (event) {
-    const nameValue = event.target.value
-    let nameValidationState
-    if (nameValue === '') {
-      nameValidationState = 'warning'
-    } else {
-      if (nameValue.length >= 2) {
-        nameValidationState = 'success'
-      } else {
-        nameValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, this.state.oldPasswordValidationState, this.state.newPasswordValidationState, nameValidationState)
-    this.setState({isFormValid, nameValidationState, nameValue})
-  }
-
-  onOldPasswordChange (event) {
-    const oldPasswordValue = event.target.value
-    let oldPasswordValidationState
-    if (oldPasswordValue === '') {
-      oldPasswordValidationState = 'warning'
-    } else {
-      if (oldPasswordValue.length >= 6) {
-        oldPasswordValidationState = 'success'
-      } else {
-        oldPasswordValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, oldPasswordValidationState, this.state.newPasswordValidationState, this.state.nameValidationState)
-    this.setState({isFormValid, oldPasswordValidationState, oldPasswordValue})
-  }
-
-  onNewPasswordChange (event) {
-    const newPasswordValue = event.target.value
-    let newPasswordValidationState
-    if (newPasswordValue === '') {
-      newPasswordValidationState = 'warning'
-    } else {
-      if (newPasswordValue.length >= 6) {
-        newPasswordValidationState = 'success'
-      } else {
-        newPasswordValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(this.state.emailValidationState, this.state.oldPasswordValidationState, newPasswordValidationState, this.state.nameValidationState)
-    this.setState({isFormValid, newPasswordValidationState, newPasswordValue})
   }
 
   onSubmit (event) {
@@ -159,10 +53,10 @@ class Profile extends BaseComponent {
         uid: this.props.state.session.user.uid,
         data: {
           locale: this.state.locale,
-          old_password: this.state.oldPasswordValue,
-          new_password: this.state.newPasswordValue,
-          name: this.state.nameValue,
-          email: this.state.emailValue
+          old_password: this.refs.form.state.values.oldPassword,
+          new_password: this.refs.form.state.values.newPassword,
+          name: this.refs.form.state.values.name,
+          email: this.refs.form.state.values.email
         }
       }
     }
@@ -170,13 +64,8 @@ class Profile extends BaseComponent {
   }
 
   render () {
-    const { formatMessage } = this._reactInternalInstance._context.intl
     const errorMsg = this.props.state.profile.errorMsgId ? <ErrorMsg msgId={this.props.state.profile.errorMsgId} /> : null
     const successMsg = this.props.state.profile.successMsgId ? <SuccessMsg msgId={this.props.state.profile.successMsgId} /> : null
-    const emailPlaceholder = formatMessage(profileMessages.emailPlaceholder)
-    const namePlaceholder = formatMessage(profileMessages.namePlaceholder)
-    const oldPasswordPlaceholder = formatMessage(profileMessages.oldPasswordPlaceholder)
-    const newPasswordPlaceholder = formatMessage(profileMessages.newPasswordPlaceholder)
     let localeOptions = [
       {
         value: 'en', label: 'English'
@@ -220,42 +109,54 @@ class Profile extends BaseComponent {
 
     return (
       <div style={{marginTop: '1em'}}>
-        <form>
-          <div className='row'>
-            <div className='medium-6 columns'>
-              <h2>
-                <FormattedMessage
-                  id='profile.SaveSettingsHeader'
-                  defaultMessage='Settings'
-                />
-              </h2>
-            </div>
+        <div className='row'>
+          <div className='medium-6 columns'>
+            <h2>
+              <FormattedMessage
+                id='profile.SaveSettingsHeader'
+                defaultMessage='Settings'
+              />
+            </h2>
           </div>
-          <div className='row'>
-            <div className='medium-2 columns'>
-              <h5>
-                <FormattedMessage
-                  id='profile.LocalTime'
-                  defaultMessage='Local time:'
-                />
-              </h5>
-            </div>
-            <div className='medium-4 columns end'>
-              <h5>
-                {moment(this.props.state.session.user.local_time).format('DD/MM/Y hh:mm:ss A')}
-              </h5>
-            </div>
+        </div>
+        <div className='row'>
+          <div className='medium-2 columns'>
+            <h5>
+              <FormattedMessage
+                id='profile.LocalTime'
+                defaultMessage='Local time:'
+              />
+            </h5>
           </div>
-          <div className='row'>
-            <div className='medium-6 columns'>
-              {errorMsg}
-            </div>
+          <div className='medium-4 columns end'>
+            <h5>
+              {moment(this.props.state.session.user.local_time).format('DD/MM/Y hh:mm:ss A')}
+            </h5>
           </div>
-          <div className='row'>
-            <div className='medium-6 columns'>
-              {successMsg}
-            </div>
+        </div>
+        <div className='row'>
+          <div className='medium-6 columns'>
+            {errorMsg}
           </div>
+        </div>
+        <div className='row'>
+          <div className='medium-6 columns'>
+            {successMsg}
+          </div>
+        </div>
+        <div className='row'>
+          <div className='medium-6 columns'>
+            <Select
+              style={{marginBottom: 10}}
+              name='locale'
+              value={this.state.locale}
+              options={localeOptions}
+              clearable={false}
+              onChange={this.onLocaleChange}
+            />
+          </div>
+        </div>
+        <Form ref='form' intl={this.props.intl}>
           <div className='row'>
             <div className='medium-6 columns'>
               {emailConfirmed}
@@ -264,62 +165,73 @@ class Profile extends BaseComponent {
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={emailPlaceholder}
+                label='general.EmailPlaceholder'
                 type='text'
-                validationState={this.state.emailValidationState}
-                value={this.state.emailValue}
-                onChange={this.onEmailChange}
+                value={this.props.state.session.user.email}
+                validate
+                name='email'
+                isEmail
+                isRequired
+                validationMsgId='general.EmailValidation'
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={namePlaceholder}
+                label='general.NamePlaceholder'
+                validationMsgId='general.NameValidation'
+                name='name'
+                validate
+                isRequired
+                isLongerThan={1}
                 type='text'
-                validationState={this.state.nameValidationState}
-                value={this.state.nameValue}
-                onChange={this.onNameChange}
+                value={this.props.state.session.user.name}
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={oldPasswordPlaceholder}
+                label='profile.OldPasswordPlaceholder'
                 type='password'
-                validationState={this.state.oldPasswordValidationState}
-                value={this.state.oldPasswordValue}
-                onChange={this.onOldPasswordChange}
+                validationMsgId='general.PasswordValidation'
+                name='oldPassword'
+                validate
+                isLongerThan={5}
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={newPasswordPlaceholder}
+                label='profile.NewPasswordPlaceholder'
                 type='password'
-                validationState={this.state.newPasswordValidationState}
-                value={this.state.newPasswordValue}
-                onChange={this.onNewPasswordChange}
+                validationMsgId='general.PasswordValidation'
+                name='newPassword'
+                validate
+                joinWith='newPasswordConfirm'
+                isLongerThan={5}
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
-              <Select
-                style={{marginBottom: 10}}
-                name='locale'
-                value={this.state.locale}
-                options={localeOptions}
-                clearable={false}
-                onChange={this.onLocaleChange}
+              <MaterialInput
+                label='profile.NewPasswordConfirmPlaceholder'
+                type='password'
+                validationMsgId='general.PasswordValidation'
+                validatorFunc={this.validatePasswordEqual}
+                name='newPasswordConfirm'
+                validate
+                joinWith='newPassword'
+                isLongerThan={5}
               />
             </div>
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
-              <LaddaButton ref='button' name='profile-btn' isDisabled={!this.state.isFormValid} isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
+              <LaddaButton type='submit' name='profile-btn' isLoading={this.props.state.profile.loading} onSubmit={this.onSubmit}>
                 <FormattedMessage
                   id='profile.SubmitBtn'
                   defaultMessage='Save'
@@ -327,7 +239,7 @@ class Profile extends BaseComponent {
               </LaddaButton>
             </div>
           </div>
-        </form>
+        </Form>
       </div>
     )
   }

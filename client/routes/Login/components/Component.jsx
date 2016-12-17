@@ -1,25 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 import MaterialInput from 'components/ux/MaterialInput'
 import BaseComponent from 'core/BaseComponent'
 import ErrorMsg from 'components/ux/ErrorMsg'
 import Form from 'components/ux/Form'
 import LaddaButton from 'components/ux/LaddaButton'
-
-const loginMessages = defineMessages({
-  emailPlaceholder: {
-    id: 'general.EmailPlaceholder',
-    defaultMessage: 'Email address'
-  },
-  passwordPlaceholder: {
-    id: 'general.PasswordPlaceholder',
-    defaultMessage: 'Password'
-  }
-})
-
-export const RE_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 class Login extends BaseComponent {
   constructor (props) {
@@ -52,14 +39,11 @@ class Login extends BaseComponent {
   }
 
   render () {
-    const { formatMessage } = this.props.intl
     const errorMsg = this.props.state.login.errorMsgId ? <ErrorMsg msgId={this.props.state.login.errorMsgId} /> : null
-    const emailPlaceholder = formatMessage(loginMessages.emailPlaceholder)
-    const passwordPlaceholder = formatMessage(loginMessages.passwordPlaceholder)
 
     return (
       <div style={{marginTop: '1em'}}>
-        <Form ref='form'>
+        <Form ref='form' intl={this._reactInternalInstance._context.intl}>
           <div className='row'>
             <div className='medium-6 columns'>
               <h2>
@@ -73,10 +57,11 @@ class Login extends BaseComponent {
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={emailPlaceholder}
+                label='general.EmailPlaceholder'
                 validate
                 isEmail
                 isRequired
+                validationMsgId='general.EmailValidation'
                 name='email'
                 type='text'
               />
@@ -85,8 +70,9 @@ class Login extends BaseComponent {
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
-                label={passwordPlaceholder}
+                label='general.PasswordPlaceholder'
                 validate
+                validationMsgId='general.PasswordValidation'
                 name='password'
                 isRequired
                 isLongerThan={5}
@@ -135,4 +121,4 @@ class Login extends BaseComponent {
   }
 }
 
-export default injectIntl(Login)
+export default Login

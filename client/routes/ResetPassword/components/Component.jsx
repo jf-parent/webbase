@@ -1,19 +1,13 @@
 import React from 'react'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { injectIntl, FormattedMessage } from 'react-intl'
 
 import MaterialInput from 'components/ux/MaterialInput'
+import Form from 'components/ux/Form'
 import SuccessMsg from 'components/ux/SuccessMsg'
 import ErrorMsg from 'components/ux/ErrorMsg'
 import LaddaButton from 'components/ux/LaddaButton'
 import BaseComponent from 'core/BaseComponent'
 import Loading from 'components/ux/Loading'
-
-const resetPasswordMessages = defineMessages({
-  passwordPlaceholder: {
-    id: 'general.PasswordPlaceholder',
-    defaultMessage: 'Password'
-  }
-})
 
 class ResetPassword extends BaseComponent {
   constructor (props) {
@@ -21,24 +15,11 @@ class ResetPassword extends BaseComponent {
 
     this._initLogger()
     this._bind(
-      'isFormValid',
-      'onPasswordChange',
       'onSubmit'
     )
 
     this.state = {
-      resetPasswordToken: this.props.location.query['resetPasswordToken'],
-      passwordValidationState: 'warning',
-      passwordValue: '',
-      isFormValid: false
-    }
-  }
-
-  isFormValid (passwordValidationState) {
-    if (passwordValidationState === 'success') {
-      return true
-    } else {
-      return false
+      resetPasswordToken: this.props.location.query['resetPasswordToken']
     }
   }
 
@@ -47,26 +28,9 @@ class ResetPassword extends BaseComponent {
     let data = {
       token: this.props.state.session.token,
       reset_password_token: this.state.resetPasswordToken,
-      password: this.state.passwordValue
+      password: this.refs.form.state.values.password
     }
     this.props.actions.doResetPassword(data)
-  }
-
-  onPasswordChange (event) {
-    const passwordValue = event.target.value
-    let passwordValidationState
-    if (passwordValue === '') {
-      passwordValidationState = 'warning'
-    } else {
-      if (passwordValue.length >= 6) {
-        passwordValidationState = 'success'
-      } else {
-        passwordValidationState = 'error'
-      }
-    }
-
-    let isFormValid = this.isFormValid(passwordValidationState)
-    this.setState({isFormValid, passwordValidationState, passwordValue})
   }
 
   render () {
@@ -82,13 +46,11 @@ class ResetPassword extends BaseComponent {
       )
     // RESET PASSWORD
     } else {
-      const { formatMessage } = this.props.intl
       const errorMsg = this.props.state.resetpassword.errorMsgId ? <ErrorMsg msgId={this.props.state.resetpassword.errorMsgId} /> : null
-      const passwordPlaceholder = formatMessage(resetPasswordMessages.passwordPlaceholder)
 
       return (
         <div style={{marginTop: '1em'}}>
-          <form>
+          <Form ref='form' intl={this.props.intl}>
             <div className='row'>
               <div className='medium-6 columns'>
                 <h2>
@@ -102,16 +64,19 @@ class ResetPassword extends BaseComponent {
             <div className='row'>
               <div className='medium-6 columns'>
                 <MaterialInput
-                  label={passwordPlaceholder}
+                  label='general.PasswordPlaceholder'
                   type='password'
-                  validationState={this.state.passwordValidationState}
-                  onChange={this.onPasswordChange}
+                  name='password'
+                  validationMsgId='general.PasswordValidation'
+                  validate
+                  isRequired
+                  isLongerThan={5}
                 />
               </div>
             </div>
             <div className='row'>
               <div className='medium-6 columns'>
-                <LaddaButton isDisabled={!this.state.isFormValid} isLoading={this.props.state.resetpassword.loading} onSubmit={this.onSubmit}>
+                <LaddaButton type='submit' isLoading={this.props.state.resetpassword.loading} onSubmit={this.onSubmit}>
                   <FormattedMessage
                     id='general.SubmitBtn'
                     defaultMessage='Submit'
@@ -124,7 +89,7 @@ class ResetPassword extends BaseComponent {
                 {errorMsg}
               </div>
             </div>
-          </form>
+          </Form>
         </div>
       )
     }

@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react'
+import { injectIntl } from 'react-intl'
 
 import BaseComponent from 'core/BaseComponent'
 
 class MaterialInput extends BaseComponent {
 
   render () {
+    const { formatMessage } = this.props.intl
     return (
       <label className='wb-input'>
         <input
@@ -15,7 +17,7 @@ class MaterialInput extends BaseComponent {
           placeholder=' '
           value={this.props.value}
         />
-        <span className='wb-input_name'>{this.props.label}</span>
+        <span className='wb-input_name'>{formatMessage({id: this.props.label})}</span>
       </label>
     )
   }
@@ -33,4 +35,4 @@ MaterialInput.defaultProps = {
   validationState: 'warning'
 }
 
-export default MaterialInput
+export default injectIntl(MaterialInput)
