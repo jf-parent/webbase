@@ -19,7 +19,8 @@ class Profile extends BaseComponent {
     this._bind(
       'onSubmit',
       'onLocaleChange',
-      'validatePasswordEqual'
+      'validatePasswordEqual',
+      'validateConfirmPasswordEqual'
     )
 
     const user = this.props.state.session.user
@@ -30,6 +31,12 @@ class Profile extends BaseComponent {
 
   componentWillUnmount () {
     this.props.actions.resetProfileState()
+  }
+
+  validateConfirmPasswordEqual (value) {
+    if (this.refs.form) {
+      return value === this.refs.form.state.values['newPasswordConfirm']
+    }
   }
 
   validatePasswordEqual (value) {
@@ -134,28 +141,6 @@ class Profile extends BaseComponent {
             </h5>
           </div>
         </div>
-        <div className='row'>
-          <div className='medium-6 columns'>
-            {errorMsg}
-          </div>
-        </div>
-        <div className='row'>
-          <div className='medium-6 columns'>
-            {successMsg}
-          </div>
-        </div>
-        <div className='row'>
-          <div className='medium-6 columns'>
-            <Select
-              style={{marginBottom: 10}}
-              name='locale'
-              value={this.state.locale}
-              options={localeOptions}
-              clearable={false}
-              onChange={this.onLocaleChange}
-            />
-          </div>
-        </div>
         <Form ref='form' intl={this.props.intl}>
           <div className='row'>
             <div className='medium-6 columns'>
@@ -209,6 +194,7 @@ class Profile extends BaseComponent {
                 type='password'
                 validationMsgId='general.PasswordValidation'
                 name='newPassword'
+                validatorFunc={this.validateConfirmPasswordEqual}
                 validate
                 joinWith='newPasswordConfirm'
                 isLongerThan={5}
@@ -227,6 +213,28 @@ class Profile extends BaseComponent {
                 joinWith='newPassword'
                 isLongerThan={5}
               />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='medium-6 columns'>
+              <Select
+                style={{marginBottom: 10}}
+                name='locale'
+                value={this.state.locale}
+                options={localeOptions}
+                clearable={false}
+                onChange={this.onLocaleChange}
+              />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='medium-6 columns'>
+              {errorMsg}
+            </div>
+          </div>
+          <div className='row'>
+            <div className='medium-6 columns'>
+              {successMsg}
             </div>
           </div>
           <div className='row'>
