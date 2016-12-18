@@ -2,6 +2,7 @@ from server.public.views import (
     index,
     api_get_session,
     api_validate_reset_password_token,
+    api_check_email_disponibility,
     api_send_reset_password_token
 )
 from server.auth.views import (
@@ -21,6 +22,12 @@ routes = [
     # API ROUTES
     ('POST', '/api/get_session', api_get_session, 'get_session'),
     ('GET', '/api/admin', api_admin, 'admin'),
+    (
+        'POST',
+        '/api/check_email_disponibility',
+        api_check_email_disponibility,
+        'api_check_email_disponibility'
+    ),
     ('POST', '/api/confirm_email', api_confirm_email, 'api_confirm_email'),
     ('POST', '/api/reset_password', api_reset_password, 'api_reset_password'),
     (

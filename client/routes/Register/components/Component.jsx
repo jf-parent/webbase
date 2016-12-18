@@ -15,12 +15,19 @@ class Register extends BaseComponent {
     this._initLogger()
     this._bind(
       'onSubmit',
-      'validatePasswordEqual'
+      'validatePasswordEqual',
+      'onEmailBlur'
     )
   }
 
   componentWillUnmount () {
     this.props.actions.resetRegisterState()
+  }
+
+  onEmailBlur (event) {
+    this.props.actions.doCheckEmailDisponibility(
+      this.refs.form.state.values.email
+    )
   }
 
   validatePasswordEqual (value) {
@@ -62,6 +69,37 @@ class Register extends BaseComponent {
               </h2>
             </div>
           </div>
+          {(() => {
+            const emailIsAvailable = this.props.state.register.emailIsAvailable
+            let divStyle = {
+              position: 'relative',
+              bottom: '-1em',
+              left: '5em'
+            }
+            if (emailIsAvailable === false) {
+              divStyle['color'] = 'red'
+              return (
+                <div style={divStyle}>
+                  <FormattedMessage
+                    id='register.EmailNotAvailable'
+                    defaultMessage='This email is not available!'
+                  />
+                </div>
+              )
+            } else if (emailIsAvailable === true) {
+              divStyle['color'] = 'green'
+              return (
+                <div style={divStyle}>
+                  <FormattedMessage
+                    id='register.EmailNotAvailable'
+                    defaultMessage='This email is available!'
+                  />
+                </div>
+              )
+            } else {
+              return null
+            }
+          })()}
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
@@ -71,6 +109,7 @@ class Register extends BaseComponent {
                 name='email'
                 isEmail
                 isRequired
+                onBlur={this.onEmailBlur}
                 validationMsgId='general.EmailValidation'
               />
             </div>

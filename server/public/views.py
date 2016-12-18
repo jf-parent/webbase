@@ -152,3 +152,20 @@ async def api_send_reset_password_token(request):
     # EMAIL NOT FOUND
     else:
         raise exceptions.EmailNotFound(email)
+
+
+@exception_handler()
+async def api_check_email_disponibility(request):
+    logger.debug('check_email_disponibility')
+
+    try:
+        data = await request.json()
+        email = data['email']
+    except:
+        raise exceptions.InvalidRequestException('Missing json data')
+
+    available = not request.db_session.query(User)\
+        .filter(User.email == email).count()
+
+    resp_data = {'success': True, 'available': available}
+    return web.json_response(resp_data)

@@ -14,6 +14,7 @@ class MaterialInput extends BaseComponent {
           name={this.props.name}
           type={this.props.type}
           onChange={this.props.onChange}
+          onBlur={this.props.onBlur}
           placeholder=' '
           value={this.props.value}
         />
@@ -28,7 +29,8 @@ MaterialInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   validationState: PropTypes.string, // warning || error || success
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  onBlur: PropTypes.func
 }
 
 MaterialInput.defaultProps = {

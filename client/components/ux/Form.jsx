@@ -144,7 +144,9 @@ class Form extends BaseComponent {
         return this.traverseChildren(c, func, index)
       })
     } else {
-      if (component.props === undefined) {
+      if (component === null) {
+        return component
+      } else if (component.props === undefined) {
         return component
       } else {
         if (component.props.children) {
