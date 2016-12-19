@@ -3,10 +3,16 @@
 - [x] Ansible deployment
 - [x] Not supported browser system
 - [x] Cookie Banner
+- [x] Style Upgrade
 - [ ] Cookiecutter configuration
+ - [ ] Registration
+ - [ ] Closed Registration
+ - [ ] Login
+ - [ ] Cordova
+ - [ ] Component Library
 - [ ] EC2 deployment
 - [ ] OpenBSD deployment
-- [ ] Os X deployment
+- [ ] OsX deployment
 - [ ] Documentation
 - [ ] Amazon SES
 - [ ] OpenID (twitter / facebook / google / github)

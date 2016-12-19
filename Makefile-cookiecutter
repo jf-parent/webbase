@@ -1,0 +1,27 @@
+# https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html
+escape-all-bracket: sed-escape-right-bracket sed-escape-left-bracket 
+
+sed-escape-right-bracket:
+	find "{{cookiecutter.project_name}}" -print -type f -exec sed -i '' 's/\([^}]}\{2\}\)\([^}]\)/\1 }}\2/g' {} \;
+
+sed-escape-left-bracket:
+	find "{{cookiecutter.project_name}}" -print -type f -exec sed -i '' 's/\([^{]\)\({\{2\}[^{]\)/\1{{ \2/g' {} \;
+
+copy-webbase:
+	rm -fr "{{cookiecutter.project_name}}"
+	mkdir "{{cookiecutter.project_name}}"
+	cp -r ../webbase/* "{{cookiecutter.project_name}}"
+	rm -fr "{{cookiecutter.project_name}}/.git"
+	rm -fr "{{cookiecutter.project_name}}/platforms"
+	rm -fr "{{cookiecutter.project_name}}/node_modules"
+	rm -fr "{{cookiecutter.project_name}}/yarn-lock"
+	rm -fr "{{cookiecutter.project_name}}/build"
+	rm -fr "{{cookiecutter.project_name}}/www"
+	rm -fr "{{cookiecutter.project_name}}/Webbase.egg-info/"
+	rm -fr "{{cookiecutter.project_name}}/pid"
+	rm -fr "{{cookiecutter.project_name}}/dist-dev"
+	rm -fr "{{cookiecutter.project_name}}/dist"
+	rm -fr "{{cookiecutter.project_name}}/releases"
+	rm -fr "{{cookiecutter.project_name}}/logs"
+	rm -fr "{{cookiecutter.project_name}}/__pycache__"
+	find "{{cookiecutter.project_name}}" -name "*.pyc" -exec rm -rf {} \;
