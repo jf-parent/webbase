@@ -3,6 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
 from mongoalchemy.fields import (
+    BoolField,
     DateTimeField
 )
 
@@ -13,6 +14,7 @@ from jobs.send_email import send_email
 
 class Resetpasswordtoken(BaseToken):
     expiration_datetime = DateTimeField(required=True)
+    password_reset = BoolField(default=False)
 
     async def validate_and_save(self, context):
         NOW = datetime.now()
@@ -42,6 +44,11 @@ class Resetpasswordtoken(BaseToken):
         else:
             TOMORROW = NOW + relativedelta(days=+1)
             self.expiration_datetime = TOMORROW
+
+        # PASSWORD RESET
+        password_reset = data.get('password_reset')
+        if password_reset is not None:
+            self.password_reset = password_reset
 
         # SAVE
         if save:

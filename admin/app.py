@@ -7,7 +7,7 @@ import sys
 import asyncio
 
 from cryptography import fernet
-import pymongo
+from pymongo import MongoClient
 from bson.objectid import ObjectId
 from wtforms import form, fields, validators
 from flask import Flask, url_for, redirect, request, flash
@@ -70,8 +70,8 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # MONGO
-conn = pymongo.Connection()
-db = getattr(conn, config.get('mongo_database_name'))
+pymongo_client = MongoClient()
+db = pymongo_client[config.get('mongo_database_name')]
 
 # APP
 app = Flask(__name__)
@@ -109,7 +109,7 @@ class BaseView(ModelView):
         with DbSessionContext(config.get('mongo_database_name')) as session:
             try:
                 m = importlib.import_module(
-                    'webbaseserver.model.{model}'
+                    'server.model.{model}'
                     .format(model=self.name.lower())
                 )
                 model_class = getattr(m, self.name)
@@ -165,7 +165,7 @@ class UidToEmailView(BaseView):
         count, data = super(UidToEmailView, self).get_list(*args, **kwargs)
 
         query = {'_id': {'$in': [x['user_uid'] for x in data]}}
-        users = db.User.find(query, fields=('email',))
+        users = db.User.find(query, projection=['email'])
 
         users_map = dict((x['_id'], x['email']) for x in users)
 
@@ -175,7 +175,7 @@ class UidToEmailView(BaseView):
         return count, data
 
     def _feed_user_choices(self, form):
-        users = db.User.find(fields=('email',))
+        users = db.User.find(projection=['email'])
         form.user_uid.choices = [(str(x['_id']), x['email']) for x in users]
         return form
 
@@ -199,7 +199,7 @@ class UidToEmailView(BaseView):
 
     def _search(self, query, search_term):
         m = importlib.import_module(
-            'webbaseserver.model.{model}'.format(model=self.name.lower())
+            'server.model.{model}'.format(model=self.name.lower())
         )
         model_class = getattr(m, self.name)
         with DbSessionContext(config.get('mongo_database_name')) as session:
@@ -233,6 +233,7 @@ class ResetPasswordTokenForm(form.Form):
     token = fields.TextField()
     expiration_datetime = fields.TextField()
     used = fields.BooleanField()
+    password_reset = fields.BooleanField()
 
 
 class ResetPasswordTokenView(UidToEmailView):

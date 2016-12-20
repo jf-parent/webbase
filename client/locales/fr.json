@@ -20,6 +20,7 @@
   "forgottenPassword.ResetPasswordHeader": "Veuillez saisir votre nouveau mot de passe",
   "forgottenPassword.SubmitSendResetPasswordToken": "Réinitialiser votre mot de passe",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Code de réinitialisation de mot de passe incorrect",
+  "forgottenPassword.TokenAlreadyUsedException": "Ce code de réinitialisation de mot de passe a déjà été utilisé.",
   "general.Login": "Connection",
   "general.EmailConfirmation": "Confirmation courriel",
   "general.YouAreLoggedIn": "Vous êtes maintenant connecté",
@@ -59,5 +60,6 @@
   "register.AlreadyHaveAnAccount": "Vous avez déjà un compte? cliquer ici",
   "register.Registration": "Enregistrement",
   "register.RegisterBtn": "Enregistrez-vous",
-  "resetPassword.ResetPasswordSuccess": "Votre mot de passe a été réinitialiser avec succès!"
+  "resetPassword.ResetPasswordSuccess": "Votre mot de passe a été réinitialiser avec succès!",
+  "resetpassword.ResetPasswordHeader": "Réinitialisation de mot de passe"
 }

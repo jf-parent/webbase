@@ -198,8 +198,7 @@ async def api_reset_password(request):
         'db_session': request.db_session,
         'ws_session': session,
         'method': 'update',
-        'queue': request.app.queue,
-        'data': {'password': new_password}
+        'queue': request.app.queue
     }
 
     token_query = request.db_session.query(Resetpasswordtoken)\
@@ -207,7 +206,21 @@ async def api_reset_password(request):
         .filter(Resetpasswordtoken.user_uid == user.get_uid())
     if token_query.count():
         reset_password_token = token_query.one()
+
+        # TOKEN ALREADY USED
+        if reset_password_token.password_reset:
+            raise exceptions.TokenAlreadyUsedException()
+
+        context.update({
+            'data': {
+                'password_reset': True,
+                'token': reset_password_token.token
+            }
+        })
+        await reset_password_token.validate_and_save(context)
+
         if reset_password_token.token == token:
+            context.update({'data': {'password': new_password}})
             await user.validate_and_save(context)
 
             resp_data = {'success': True}
