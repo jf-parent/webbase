@@ -16,9 +16,7 @@ class ErrorMsg extends Component {
         <FormattedMessage
           id='errorMsg.Error'
           defaultMessage='{error}'
-          values={{
-            error: <strong>Error: </strong>
-          }}
+          values={{error: <strong>Error: </strong>}}
         />
         <i>
           <FormattedMessage
