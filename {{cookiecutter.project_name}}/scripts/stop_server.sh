@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source scripts/env.sh
-kill `cat $WEBBASE_PID_PATH/server.pid`
+kill `cat ${{cookiecutter.project_name|upper}}_PID_PATH/server.pid`

@@ -18,6 +18,13 @@
 # Monit
 ![alt text](./screenshots/Webbase-monit.png "Webbase-monit")
 
+# Installation
+
+```bash
+$ pip install cookiecutter
+$ cookiecutter .
+```
+
 # [Documentation](./{{cookiecutter.project_name}}/documentation)
 
 # Version

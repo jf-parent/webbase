@@ -147,22 +147,22 @@ set httpd port 2812 and
 #
 #
 
-## WEBBASE ADMIN WEBSERVER
+## {{cookiecutter.project_name|upper}} ADMIN WEBSERVER
 
-check process webbase_admin with pidfile /var/run/webbase/webbase_admin.pid
-    start program = "/path/to/webbase/scripts/start_admin.sh" # CHANGEME
-    stop program = "/path/to/webbase/scripts/stop_admin.sh" # CHANGEME
+check process {{cookiecutter.project_name|lower}} with pidfile /var/run/{{cookiecutter.project_name|lower}}/{{cookiecutter.project_name|lower}}_admin.pid
+    start program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/start_admin.sh" # CHANGEME
+    stop program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/stop_admin.sh" # CHANGEME
     if failed port $PORT protocol http then restart #CHANGEME
     if 5 restarts within 5 cycles then timeout
-    if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Webbase server CPU >60%' 'SLACK_API_KEY'" #CHANGEME
-    if failed port $PORT protocol http then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Webbase server not running' 'SLACK_API_KEY'" #CHANGEME
+    if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' '{{cookiecutter.project_name}} server CPU >60%' 'SLACK_API_KEY'" #CHANGEME
+    if failed port $PORT protocol http then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' '{{cookiecutter.project_name}} server not running' 'SLACK_API_KEY'" #CHANGEME
 
-## WEBBASE QUEUE
+## {{cookiecutter.project_name|upper}} QUEUE
 
 check process rq
     matching "rq"
-    start program = "/path/to/webbase/scripts/start_queue.sh" # CHANGEME
-    stop program = "/path/to/webbase/scripts/stop_queue.sh" # CHANGEME
+    start program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/start_queue.sh" # CHANGEME
+    stop program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/stop_queue.sh" # CHANGEME
     if 5 restarts within 5 cycles then timeout
 
 ## MONGOD
@@ -172,26 +172,26 @@ check process mongodb with pidfile /var/run/mongodb/mongod.pid
     stop program = "/usr/bin/systemctl stop mongod" # CHANGEME
     if failed port 27017 then restart
     if 5 restarts within 5 cycles then timeout
-    if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Mongodb CPU >60%' 'SLACK_API_KEY'" # CHANGEME
+    if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' 'Mongodb CPU >60%' 'SLACK_API_KEY'" # CHANGEME
 
-## WEBBASE WEBSERVER
+## {{cookiecutter.project_name|upper}} WEBSERVER
 
-check process webserver with pidfile /var/run/webbase/server.pid
-   start program = "/path/to/webbase/scripts/start_server.sh" #CHANGEME
-   stop program = "/path/to/webbase/scripts/stop_server.sh" #CHANGEME
-   if failed port $PORT protocol http then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Webbase server not running' 'SLACK_API_KEY'" #CHANGEME
+check process webserver with pidfile /var/run/{{cookiecutter.project_name|lower}}/server.pid
+   start program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/start_server.sh" #CHANGEME
+   stop program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/stop_server.sh" #CHANGEME
+   if failed port $PORT protocol http then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' '{{cookiecutter.project_name}} server not running' 'SLACK_API_KEY'" #CHANGEME
    if failed port $PORT protocol http then restart #CHANGEME
    if 5 restart within 5 cycles then timeout
-   if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Webbase server CPU >60%' 'SLACK_API_KEY'" #CHANGEME
+   if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' '{{cookiecutter.project_name}} server CPU >60%' 'SLACK_API_KEY'" #CHANGEME
 
 ## PROMETHEUS
 
-check process prometheus with pidfile /var/run/webbase/prometheus.pid
-   start program = "/path/to/webbase/scripts/start_prometheus.sh" #CHANGEME
-   stop program = "/path/to/webbase/scripts/stop_prometheus.sh" #CHANGEME
+check process prometheus with pidfile /var/run/{{cookiecutter.project_name|lower}}/prometheus.pid
+   start program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/start_prometheus.sh" #CHANGEME
+   stop program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/stop_prometheus.sh" #CHANGEME
    if failed port 9090 protocol http then restart
    if 5 restart within 5 cycles then timeout
-   if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg 'webbase-bot' 'Prometheus CPU >60%' 'SLACK_API_KEY" #CHANGEME
+   if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' 'Prometheus CPU >60%' 'SLACK_API_KEY" #CHANGEME
 
 ## SSHD
 

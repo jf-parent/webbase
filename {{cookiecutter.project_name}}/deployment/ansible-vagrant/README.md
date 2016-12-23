@@ -25,7 +25,7 @@ vagrant ssh
 
 ### GUEST
 ```bash
-cd webbase
+cd {{cookiecutter.project_name}}
 npm install
 make deps-dev
 make start-prod-server
@@ -33,4 +33,4 @@ npm run start-wd
 ```
 
 ### HOST
-* Visit http://webbase.com
+* Visit http://{{cookiecutter.project_name}}.com

@@ -16,3 +16,4 @@ def remove_file(filepath):
 if __name__ == '__main__':
     if '{{ cookiecutter.include_registration }}' != 'y':
         remove_dir('client/routes/Register')
+        remove_file('server/tests/test_register.py')

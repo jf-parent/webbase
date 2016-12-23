@@ -9,7 +9,7 @@ class PrivacyPolicy extends BaseComponent {
         <h1 name='privacy-policy-page'>Privacy Policy</h1>
         <p>This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.</p>
         <p>If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.</p>
-        <p>The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at https://github.com/jf-parent/webbase , unless otherwise defined in this Privacy Policy. For an example of a privacy policy, visit proxysitereviews.com.</p>
+        <p>The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at {{cookiecutter.repo_url}} , unless otherwise defined in this Privacy Policy. For an example of a privacy policy, visit proxysitereviews.com.</p>
         <h2>Information Collection and Use</h2>
         <p>For a better experience while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to your name, phone number, and postal address. The information that we collect will be used to contact or identify you.</p>
         <h2>Log Data</h2>

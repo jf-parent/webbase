@@ -1,10 +1,10 @@
 # CONFIGURATION
 
 ```bash
-$ mkdir /var/log/webbase/
-$ mkvirtualenv webbase
-$ git clone https://github.com/jf-parent/webbase
-$ cd webbase
+$ mkdir /var/log/{{cookiecutter.project_name|lower}}/
+$ mkvirtualenv {{cookiecutter.project_name|lower}}
+$ git clone {{cookiecutter.repo_url}}
+$ cd {{cookiecutter.project_name|lower}}
 $ make deps
 $ npm install
 ```
@@ -21,7 +21,7 @@ $ wget https://github.com/prometheus/prometheus/releases/download/0.18.0/prometh
 $ tar xvf prometheus-0.18.0.linux-amd64.tar.gz
 $ mv prometheus-0.18.0.linux-amd64 prometheus
 $ mv prometheus /opt
-$ ln -s -f $WEBBASE/configs/prometheus.yml /opt/prometheus/
+$ ln -s -f ${{cookiecutter.project_name|upper}}/configs/prometheus.yml /opt/prometheus/
 ```
 
 ### GRAFANA
@@ -127,10 +127,10 @@ $ sudo systemctl start mongodb_exporter.service
 
 Edit the prometheus config:
 ```bash
-$ vim $WEBBASE_PATH/configs/prometheus.yml
+$ vim ${{cookiecutter.project_name|upper}}_PATH/configs/prometheus.yml
 ```
 
-$WEBBASE_PATH/configs/prometheus.yml
+${{cookiecutter.project_name|upper}}_PATH/configs/prometheus.yml
 ```
 scrape_configs:
   - job_name: "node"
@@ -150,13 +150,13 @@ scrape_configs:
 ## MONIT
 
 ```bash
-$ mkdir /var/run/webbase
+$ mkdir /var/run/{{cookiecutter.project_name|lower}}
 $ yum install epel-release
 $ yum install monit
 $ cp configs/monitrc.example monitrc
 $ cp configs/monitrc configs/mymonitrc
 $ vim configs/mymonicrc # username/password, port, slack_api_key
-$ ln -sf $WEBBASE/configs/mymonitrc /etc/monitrc
+$ ln -sf ${{cookiecutter.project_name|upper}}/configs/mymonitrc /etc/monitrc
 $ chmod 700 config/monitrc
 $ systemctl enable monit
 $ systemctl start monit

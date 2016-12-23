@@ -47,8 +47,8 @@ config.configure(config_path)
 werkzeug_logger = logging.getLogger('werkzeug')
 werkzeug_logger.setLevel(logging.ERROR)
 
-# WEBBASE ADMIN
-logger = logging.getLogger('webbase_admin')
+# {{cookiecutter.project_name|upper}} ADMIN
+logger = logging.getLogger('{{cookiecutter.project_name|lower}}_admin')
 logger.setLevel(getattr(logging, config.get('admin').get('log_level', 'INFO')))
 
 formatter = logging.Formatter(
@@ -386,7 +386,7 @@ init_login()
 
 admin = admin.Admin(
     app,
-    'Webbase - admin',
+    '{{cookiecutter.project_name}} - admin',
     index_view=MyAdminIndexView(),
     base_template='my_master.html'
 )

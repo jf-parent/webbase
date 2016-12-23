@@ -1,15 +1,15 @@
 {
-    "WEBBASE_PID_PATH": "/var/run/webbase", #CHANGEME
+    "{{cookiecutter.project_name|upper}}_PID_PATH": "/var/run/{{cookiecutter.project_name|lower}}", #CHANGEME
     "PYTHON_PATH": "python3.5", #CHANGEME
-    "WEBBASE_ROOT": "/home/centos/webbase", #CHANGEME
-    "WEBBASE_LOG_PATH": "/var/log/webbase", #CHANGEME
+    "{{cookiecutter.project_name|upper}}_ROOT": "/home/centos/{{cookiecutter.project_name|lower}}", #CHANGEME
+    "{{cookiecutter.project_name|upper}}_LOG_PATH": "/var/log/{{cookiecutter.project_name|lower}}", #CHANGEME
     "rest_api_id": "", #CHANGEME
     "rest_api_secret": "", #CHANGEME
     "redis_database": 0, #CHANGEME
     "log_level": "DEBUG",
     "env": "development",
     "release": "latest",
-    "mongo_database_name": "webbase-dev",
+    "mongo_database_name": "{{cookiecutter.project_name|lower}}-dev",
     "mongo_host": "127.0.0.1",
     "server_port": 8000,
     "server_host": "127.0.0.1",
@@ -23,19 +23,19 @@
         "port": 31337
     },
     "email_confirmation_email": {
-        "subject": "Webbase Email Account Confirmation",
+        "subject": "{{cookiecutter.project_name}} Email Account Confirmation",
         "html": "<p>Please click <a href='https://domain.com/confirm-email/{email_validation_token}'>here</a> to confirm your email account</p>",
         "text": "Please click here to confirm your email account: https://domain.com/confirm-email/{email_validation_token}",
-        "from": {"name": "Webbase", "email": "no-reply@domain.com"},
+        "from": {"name": "{{cookiecutter.project_name}}", "email": "no-reply@domain.com"},
         "to": [{
             "name": "{user_name}", "email": "{user_email}"
         }]
     },
     "reset_password_email": {
-        "subject": "Webbase Reset Password",
+        "subject": "{{cookiecutter.project_name}} Reset Password",
         "html": "<p>Please click <a href='http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}'>here</a> to reset your password.</p>",
         "text": "Please click here to reset your password: http://192.168.1.5:8080/forgottenpassword?resetPasswordToken={reset_password_token}",
-        "from": {"name": "Webbase", "email": "parent.j.f@gmail.com"},
+        "from": {"name": "{{cookiecutter.project_name}}", "email": "{{cookiecutter.author_email}}"},
         "to": [{
             "name": "{user_name}", "email": "{user_email}"
         }]

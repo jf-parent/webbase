@@ -1,12 +1,12 @@
 # INSTALLATION [CentOS-7]
 
-## Webbase OS Variables
+## {{cookiecutter.project_name}} OS Variables
 
 Set in scripts/env.sh
 ```bash
-export WEBBASE_LOG_PATH=/path/to/webbase/pid/
-export WEBBASE_PID_PATH=/path/to/webbase/pid/
-export WEBBASE_ROOT=/path/to/webbase/
+export {{cookiecutter.project_name|upper}}_LOG_PATH=/path/to/{{cookiecutter.project_name|lower}}/pid/
+export {{cookiecutter.project_name|upper}}_PID_PATH=/path/to/{{cookiecutter.project_name|lower}}/pid/
+export {{cookiecutter.project_name|upper}}_ROOT=/path/to/{{cookiecutter.project_name|lower}}/
 export PYTHON_PATH=/path/to/python
 ```
 

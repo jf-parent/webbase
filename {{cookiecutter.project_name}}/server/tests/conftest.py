@@ -26,7 +26,7 @@ def client():
 
     config = {
         "env": "test",
-        "mongo_database_name": "webbase_test",
+        "mongo_database_name": "{{cookiecutter.project_name|lower}}-test",
         "redis_database": 13,
         "mongo_host": "127.0.0.1",
         "server_port": 1337,

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.webbase.cordova" version="1.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.{{cookiecutter.project_name}}.cordova" version="1.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <hook src="hooks/build.sh" type="before_prepare" />
-    <name>Webbase</name>
+    <name>{{cookiecutter.project_name}}</name>
     <description>
-        Boilerplate for React-Redux-Router and Aiohttp
+        {{cookiecutter.project_description}}
     </description>
-    <author email="parent.j.f@gmail.com">
-        Jean-François Parent
+    <author email="{{cookiecutter.author_email}}">
+        {{cookiecutter.author_name}}
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" version="1" />

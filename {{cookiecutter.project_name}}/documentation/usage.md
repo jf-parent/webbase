@@ -5,8 +5,8 @@
 * [Grafana](http://127.0.0.1:3000)
 * [Monit](http://127.0.0.1:2812)
 * [Admin](http://127.0.0.1:31337)
-* [Webbase-webpack](http://127.0.0.1:8080)
-* [Webbase](http://127.0.0.1:8000)
+* [{{cookiecutter.project_name}}-webpack](http://127.0.0.1:8080)
+* [{{cookiecutter.project_name}}](http://127.0.0.1:8000)
 
 ## DEV
 
