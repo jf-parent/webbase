@@ -1,0 +1,59 @@
+root = true
+
+# General settings for whole project
+[*]
+indent_style = space
+indent_size = 4
+
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Format specific overrides
+[*.md]
+trim_trailing_whitespace = false
+
+[Vagrantfile]
+indent_style = space
+indent_size = 2
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[client/**.css]
+indent_style = space
+indent_size = 2
+
+[client/**.postcss]
+indent_style = space
+indent_size = 2
+
+[client/**.scss]
+indent_style = space
+indent_size = 2
+
+[client/**.sass]
+indent_style = space
+indent_size = 2
+
+[client/**.less]
+indent_style = space
+indent_size = 2
+
+[client/**.js]
+indent_style = space
+indent_size = 2
+
+[client/**.jsx]
+indent_style = space
+indent_size = 2
+
+[client/**.json]
+indent_style = space
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+indent_size = 8
