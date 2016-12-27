@@ -1,6 +1,7 @@
 ### GENERAL
 
 - [x] Ansible deployment
+  - [ ] replace npm with yarn
 - [x] Not supported browser system
 - [x] Cookie Banner
 - [x] Style Upgrade
