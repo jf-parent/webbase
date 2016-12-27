@@ -6,17 +6,16 @@
 - [x] Style Upgrade
 - [x] Form Validation System
 - [ ] Component Library
-- [ ] Cookiecutter configuration
- - [ ] Registration
- - [ ] Closed Registration
- - [ ] Cordova
+- [x] Cookiecutter configuration
+ - [x] Registration
+ - [x] Closed Registration
+ - [x] Cordova
  - [ ] Component Library
 - [ ] EC2 deployment
 - [ ] OpenBSD deployment
 - [ ] OsX deployment
 - [ ] Documentation
 - [ ] Amazon SES
-- [ ] FixmyJS / FixmyPython
 - [ ] Sqlalchemy [postgresql / mysql]
 - [ ] Electron / ReactNative?
 - [ ] Netdata

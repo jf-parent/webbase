@@ -120,6 +120,7 @@ $ make reset-db
 $ make init-db-sample-data
 ```
 
+{%- if cookiecutter.include_cordova %}
 ## CORDOVA
 
 ```bash
@@ -129,3 +130,4 @@ $ cordova build android
 $ cordova run android
 $ cordova run --debug --emulator ios
 ```
+{%- endif %}

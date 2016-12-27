@@ -14,6 +14,15 @@ def remove_file(filepath):
     os.remove(os.path.join(PROJECT_DIRECTORY, filepath))
 
 if __name__ == '__main__':
+
+    # REGISTRATION
     if '{{ cookiecutter.include_registration }}' != 'y':
         remove_dir('client/routes/Register')
         remove_file('server/tests/test_register.py')
+
+    # CORDOVA
+    if '{{ cookiecutter.include_cordova }}' != 'y':
+        remove_dir('hooks')
+        remove_dir('www')
+        remove_dir('resources')
+        remove_file('config.xml')

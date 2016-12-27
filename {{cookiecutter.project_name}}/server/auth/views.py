@@ -5,7 +5,7 @@ from server import exceptions
 from server.model.user import User
 from server.model.emailconfirmationtoken import Emailconfirmationtoken
 from server.model.resetpasswordtoken import Resetpasswordtoken
-from server.settings import logger
+from server.settings import logger, config
 from server.server_decorator import (
     require,
     exception_handler,
@@ -76,6 +76,14 @@ class Register(web.View):
             'method': 'create',
             'queue': self.request.app.queue
         }
+
+        {%- if cookiecutter.closed_registration == 'y' %}
+        # ClOSED REGISTRATION
+        registration_token = data.get('registration_token')
+        if registration_token != \
+                config.get('registration_token'):
+            raise exceptions.InvalidRegistrationTokenException()
+        {%- endif %}
 
         # INIT USER
         user = User()

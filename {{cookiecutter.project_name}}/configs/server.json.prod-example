@@ -9,6 +9,9 @@
     "log_level": "ERROR",
     "env": "production",
     "release": "latest",
+    {%- if cookiecutter.closed_registration %}
+    "registration_token": "", #CHANGEME
+    {%- endif %}
     "mongo_database_name": "{{cookiecutter.project_name|lower}}-prod",
     "mongo_host": "127.0.0.1",
     "server_port": 80,

@@ -47,7 +47,7 @@ class CoreLayout extends BaseComponent {
     // ref: https://github.com/buildo/react-cookie-banner
     return (
       <CookieBanner
-        message='Webbase is using '
+        message='{{cookiecutter.project_name}} is using '
         link={{"{{"}}msg: 'cookie', url: '/privacy-policy'{{"}}"}}
         className='wb-privacy-banner'
         dismissOnScroll={false}
@@ -78,7 +78,7 @@ class CoreLayout extends BaseComponent {
           <footer>
             <div className='row'>
               <div className='medium-1 columns'>
-                <h2>Webbase</h2>
+                <h2>{{ cookiecutter.project_name }}</h2>
               </div>
               <div className='medium-11 columns'>
                 <SocialMedia />

@@ -46,6 +46,9 @@ class Register extends BaseComponent {
 
     let data = {
       token: this.props.state.session.token,
+      {%- if cookiecutter.closed_registration == 'y' %}
+      registration_token: this.refs.form.state.values.registration_token,
+      {%- endif %}
       email: this.refs.form.state.values.email,
       name: this.refs.form.state.values.name,
       password: this.refs.form.state.values.password
@@ -114,6 +117,20 @@ class Register extends BaseComponent {
               />
             </div>
           </div>
+          {%- if cookiecutter.closed_registration == 'y' %}
+          <div className='row'>
+            <div className='medium-6 columns'>
+              <MaterialInput
+                label='general.RegistrationToken'
+                validationMsgId='general.RegistrationTokenValidation'
+                name='registration_token'
+                validate
+                isRequired
+                type='password'
+              />
+            </div>
+          </div>
+          {%- endif %}
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
