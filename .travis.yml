@@ -17,7 +17,7 @@ cache:
   directories:
   - $HOME/.yarn-cache
 install:
-  - cookiecutter . --config-file cookiecutter.yml
+  - cookiecutter . --config-file cookiecutter.yml --no-input
   - cd Webbase
   - yarn install
   - pip install --editable .
