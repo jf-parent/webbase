@@ -5,7 +5,7 @@ from server import exceptions
 from server.model.user import User
 from server.model.emailconfirmationtoken import Emailconfirmationtoken
 from server.model.resetpasswordtoken import Resetpasswordtoken
-from server.settings import logger, config
+from server.settings import logger, config  # noqa
 from server.server_decorator import (
     require,
     exception_handler,
@@ -59,7 +59,7 @@ class Login(web.View):
         return web.json_response(resp_data)
 
 
-{%- if cookiecutter.include_registration == 'y' %}
+{% if cookiecutter.include_registration == 'y' -%}
 class Register(web.View):
 
     @exception_handler()

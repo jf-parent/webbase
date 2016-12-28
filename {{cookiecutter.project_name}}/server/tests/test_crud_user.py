@@ -653,7 +653,7 @@ def test_crud_update_new_password_old_password_incorrect(client):
     )
     assert response.status_code == 200
     assert not response.json['success']
-    assert response.json['error'] == 'WrongEmailOrPasswordException'
+    assert response.json['error'] == 'WrongPasswordException'
 
 
 def test_crud_update_new_password_missing_old_password(client):

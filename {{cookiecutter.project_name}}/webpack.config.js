@@ -1,12 +1,18 @@
 const webpack = require('webpack');
 
-const isDev = process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'travis';
-const isTravis = process.env.NODE_ENV == 'travis';
-const isProd = process.env.NODE_ENV == 'production';
-const isTest = process.env.NODE_ENV == 'test';
+const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'travis' || process.env.NODE_ENV === 'build-development'
+const isTravis = process.env.NODE_ENV === 'travis';
+const isProd = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
 const isCordova = process.env.NODE_ENV === 'cordova';
 const logLevel = isDev ? "'debug'" : "'error'";
 
+let NODE_ENV = process.env.NODE_ENV
+if (process.env.NODE_ENV === 'build-development') {
+    NODE_ENV = 'development'
+}
+
+// BASE URL
 let baseUrl = ''
 if (isCordova) {
     const serverConfig = require('./configs/server');
@@ -14,6 +20,7 @@ if (isCordova) {
     console.log('baseUrl=', baseUrl)
 }
 
+// PLUGINS
 definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,
   __GET_SESSION_INTERVAL__: 3000,
@@ -23,7 +30,7 @@ definePlugin = new webpack.DefinePlugin({
   __PROD__: isProd,
   __DEBUG__: isDev,
   '__LOGLEVEL__': logLevel,
- 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+ 'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
 });
 
 var config;

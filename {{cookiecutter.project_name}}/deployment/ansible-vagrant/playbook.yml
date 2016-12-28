@@ -102,7 +102,7 @@
     - name: Project config
       template: src=templates/project.yml.j2 dest=/home/vagrant/project.yml
     - name: Configure project
-      shell: python /srv/python3.5.1/lib/python3.5/site-packages/cookiecutter/cli.py https://github.com/audreyr/cookiecutter-pypackage --checkout dev --config-file /home/vagrant/project.yml
+      shell: python /srv/python3.5.1/lib/python3.5/site-packages/cookiecutter/cli.py https://github.com/jf-parent/webbase --config-file /home/vagrant/project.yml
     - name: pip deps-dev
       pip: executable="pip3.5" requirements=/home/vagrant/{{cookiecutter.project_name}}/requirements-dev.txt
       become: true

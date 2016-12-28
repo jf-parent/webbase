@@ -3,12 +3,12 @@ class ServerBaseException(Exception):
         return self.__repr__().split('(')[0]
 
 
-{%- if cookiecutter.closed_registration %}
+{% if cookiecutter.closed_registration -%}
 class InvalidRegistrationTokenException(ServerBaseException):
     pass
 
 
-{%- endif %}
+{% endif -%}
 class WrongPasswordException(ServerBaseException):
     pass
 
