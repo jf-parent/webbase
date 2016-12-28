@@ -2,85 +2,30 @@
 [![Python Version](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/downloads/release/python-350/)
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?maxAge=2592000)](https://opensource.org/licenses/MIT)
 
-Webbase is a fully functionnal web application with a lot of features
-
 # Webbase Front-End
-![alt text](./documentation/screenshots/Webbase-front-end-1.png "Webbase-front-end-1")
-![alt text](./documentation/screenshots/Webbase-front-end-2.png "Webbase-front-end-2")
+![alt text](./screenshots/Webbase-front-end-registration.png "Webbase-front-end-1")
+![alt text](./screenshots/Webbase-front-end-profile.png "Webbase-front-end-2")
+
+# Webbase Front-End Cordova ios
+![alt text](./screenshots/Webbase-iphone-cordova-login.png "Webbase-cordova-iphone-login")
 
 # Webbase Admin
-![alt text](./documentation/screenshots/Webbase-admin.png "Webbase-admin")
+![alt text](./screenshots/Webbase-admin.png "Webbase-admin")
 
 # Grafana
-![alt text](./documentation/screenshots/Webbase-grafana.png "Webbase-grafana")
+![alt text](./screenshots/Webbase-grafana.png "Webbase-grafana")
 
 # Monit
-![alt text](./documentation/screenshots/Webbase-monit.png "Webbase-monit")
+![alt text](./screenshots/Webbase-monit.png "Webbase-monit")
 
-# [Documentation](./documentation)
+# Installation
 
-# Features
+```bash
+$ pip install cookiecutter
+$ cookiecutter .
+```
 
-* Performance of asyncio
-* Responsive design
-* I18N
-
-## App
-
-* Registration
-* Login / Logout
-* Forgotten password
-* Email confirmation
-* Notification system
-
-## Test
-
-* Server-side unittests
-* Client-side unittests
-* Travis CI
-
-## Security
-
-* CSRF protection system
-* XSS protection system
-* Permission on model and model instance
-* Route authorization
-
-# Server
-
-* Powerful CRUD
-
-# Admin
-
-* Flask-admin application for the models
-
-## Build
-
-* Build for dev, test and production using webpack
-* HMR configured
-
-## Queue
-
-* Add a new job in the queue easily from the server
-
-## Devs
-
-* Configured logger for client-side and server-side
-
-### Commands
-
-* make new-route
-* make new-model
-* make stats
-* make start-server
-* make init-db-sample-data
-* make test
-* etc
-
-## Monitoring
-
-* Monitoring with prometheus and monit
-* Notification on Slack
+# [Documentation](./{{cookiecutter.project_name}}/documentation)
 
 # Version
 
@@ -122,12 +67,11 @@ Webbase is a fully functionnal web application with a lot of features
 * [Flask-admin](https://github.com/flask-admin/flask-admin)
 * [MongoAlchemy](https://github.com/jeffjenkins/MongoAlchemy)
 * [Cookiecutter](https://github.com/audreyr/cookiecutter)
-* [Postcss](https://github.com/postcss/postcss)
 * [Pytest](https://github.com/pytest-dev/pytest)
 * [Enzyme](https://github.com/airbnb/enzyme)
 * [Karma](https://github.com/karma-runner/karma)
-* [Bootstrap](https://github.com/twbs/bootstrap)
 * [rq](https://github.com/nvie/rq)
 * [yarn](https://github.com/yarnpkg/yarn)
+* [cordova](https://cordova.apache.org/)
 * ...
 

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.{{cookiecutter.project_name}}.cordova" version="1.1.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <hook src="hooks/build.sh" type="before_prepare" />
+    <name>{{cookiecutter.project_name}}</name>
+    <description>
+        {{cookiecutter.project_description}}
+    </description>
+    <author email="{{cookiecutter.author_email}}">
+        {{cookiecutter.author_name}}
+    </author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" version="1" />
+    <preference name="LogLevel" value="VERBOSE"/>
+    <access origin="*" subdomains="true"/>
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-navigation href="http://*/*" />
+    <preference name="LogLevel" value="VERBOSE"/>
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon src="resources/icons/ldpi.png" density="ldpi" />
+        <icon src="resources/icons/mdpi.png" density="mdpi" />
+        <icon src="resources/icons/hdpi.png" density="hdpi" />
+        <icon src="resources/icons/xhdpi.png" density="xhdpi" />
+        <icon src="resources/icons/xxhdpi.png" density="xxhdpi" />
+        <icon src="resources/icons/xxxhdpi.png" density="xxxhdpi" />
+        <splash platform="android" qualifier="ldpi" src="resources/screens/android/screen-ldpi-portrait.png" />
+        <splash platform="android" qualifier="mdpi" src="resources/screens/android/screen-mdpi-portrait.png" />
+        <splash platform="android" qualifier="hdpi" src="resources/screens/android/screen-hdpi-portrait.png" />
+        <splash platform="android" qualifier="xhdpi" src="resources/screens/android/screen-xhdpi-portrait.png" />
+    </platform>
+    <platform name="ios">
+        <!-- iOS 8.0+ -->
+        <!-- iPhone 6 Plus  -->
+        <icon src="resources/icons/icon-60@3x.png" width="180" height="180" />
+        <!-- iOS 7.0+ -->
+        <!-- iPhone / iPod Touch  -->
+        <icon src="resources/icons/icon-60.png" width="60" height="60" />
+        <icon src="resources/icons/icon-60@2x.png" width="120" height="120" />
+        <!-- iPad -->
+        <icon src="resources/icons/icon-76.png" width="76" height="76" />
+        <icon src="resources/icons/icon-76@2x.png" width="152" height="152" />
+        <!-- Spotlight Icon -->
+        <icon src="resources/icons/icon-40.png" width="40" height="40" />
+        <icon src="resources/icons/icon-40@2x.png" width="80" height="80" />
+        <!-- iOS 6.1 -->
+        <!-- iPhone / iPod Touch -->
+        <icon src="resources/icons/icon.png" width="57" height="57" />
+        <icon src="resources/icons/icon@2x.png" width="114" height="114" />
+        <!-- iPad -->
+        <icon src="resources/icons/icon-72.png" width="72" height="72" />
+        <icon src="resources/icons/icon-72@2x.png" width="144" height="144" />
+        <!-- iPhone Spotlight and Settings Icon -->
+        <icon src="resources/icons/icon-small.png" width="29" height="29" />
+        <icon src="resources/icons/icon-small@2x.png" width="58" height="58" />
+        <!-- iPad Spotlight and Settings Icon -->
+        <icon src="resources/icons/icon-60.png" width="50" height="50" />
+        <icon src="resources/icons/icon-60@2x.png" width="100" height="100" />
+        <!-- iPad Pro -->
+        <icon src="resources/icons/icon-72.png" width="167" height="167" />
+        <splash platform="ios" src="resources/screens/ios/screen-iphone-portrait.png" width="320" height="480" />
+        <splash platform="ios" src="resources/screens/ios/screen-iphone-portrait-2x.png" width="640" height="960" />
+        <splash platform="ios" src="resources/screens/ios/screen-iphone-portrait-568h-2x.png" width="640" height="1136" />
+        <splash platform="ios" src="resources/screens/ios/screen-iphone-portrait-667h.png" width="750" height="1334" />
+        <splash platform="ios" src="resources/screens/ios/screen-iphone-portrait-736h.png" width="1242" height="2208" />
+        <splash platform="ios" src="resources/screens/ios/screen-ipad-portrait.png" width="768" height="1024" />
+        <splash platform="ios" src="resources/screens/ios/screen-ipad-portrait-2x.png" width="1536" height="2048" />
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <engine name="ios" spec="~4.3.1" />
+</widget>
