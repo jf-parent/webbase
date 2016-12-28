@@ -12,15 +12,18 @@ before_install:
   - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq yarn
+  - pip install cookiecutter
 cache:
   directories:
   - $HOME/.yarn-cache
 install:
-  - "yarn install"
-  - "pip install --editable ."
-  - "npm run build:travis"
-  - "pip install -r requirements.txt"
-  - "pip install -r requirements-dev.txt"
+  - cookiecutter . --config-file cookiecutter.yml
+  - cd Webbase
+  - yarn install
+  - pip install --editable .
+  - npm run build:travis
+  - pip install -r Webbase/requirements-dev.txt
+before_script: cd Webbase
 script:
   - make test-prod
-  - npm run test
+#  - npm run test

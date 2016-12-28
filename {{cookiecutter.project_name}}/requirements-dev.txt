@@ -1,0 +1,19 @@
+-r requirements.txt
+ipython
+ipdb
+pdbpp
+flake8
+pip-save
+tmuxp
+webtest-aiohttp
+pytest
+pytest-xdist
+pytest-instafail
+pytest-html
+pytest-mock
+mock
+q
+freezegun
+cookiecutter
+# brome
+Faker
