@@ -1,0 +1,6 @@
+ice9js.mongodb
+olibob.nodejs
+samsixtyone.epel
+FrogyYen.centos7-nginx
+jffz.netdata
+geerlingguy.redis

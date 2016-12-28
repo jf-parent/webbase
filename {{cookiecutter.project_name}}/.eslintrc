@@ -1,0 +1,47 @@
+{
+  "parser"  : "babel-eslint",
+  "extends" : [
+    "standard",
+    "standard-react"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "globals" : {
+    "__DEV__"      : false,
+    "__GET_SESSION_INTERVAL__": false,
+    "__PROD__"     : false,
+    "__BASEURL__"  : false,
+    "__CORDOVA__"  : false,
+    "__DEBUG__"    : false,
+    "__COVERAGE__" : false,
+    "it"           : false,
+    "__LOGLEVEL__" : false,
+    "beforeEach"   : false,
+    "describe"     : false,
+    "__BASENAME__" : false
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-console": 0,
+    "new-cap": 0,
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "no-use-before-define": 0,
+    "eol-last": 0,
+    "jsx-quotes": [2, "prefer-single"],
+    "react/jsx-no-undef": 1,
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1
+  }
+}
