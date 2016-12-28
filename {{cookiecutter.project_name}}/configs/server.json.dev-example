@@ -16,6 +16,7 @@
     "mongo_host": "127.0.0.1",
     "server_port": 8000,
     "server_host": "127.0.0.1",
+    "cordova_base_url": "127.0.0.1:8000",
     "admin": {
         "env": "development",
         "log_level": "DEBUG",

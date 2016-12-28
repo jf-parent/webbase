@@ -1,0 +1,14 @@
+{
+  "project_name": "Webbase",
+  "author_name": "Jean-Francois Parent",
+  "author_email": "parent.j.f@gmail.com",
+  "repo_url": "https://github.com/jf-parent/webbase",
+  "project_description": "Boilerplate for React-Redux-Router & Aiohttp",
+  "include_registration": "y",
+  "closed_registration": "n",
+  "include_cordova": "y",
+  "_copy_without_render": [
+    "*.html",
+    "configs/Prometheus-Grafana-Dashboard.json"
+  ]
+}
