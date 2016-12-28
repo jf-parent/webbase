@@ -113,3 +113,6 @@
     - shell: yarn install
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
+    - shell: npm run build:dev
+      args:
+        chdir: /home/vagrant/{{cookiecutter.project_name}}
