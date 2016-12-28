@@ -22,8 +22,7 @@ install:
   - yarn install
   - pip install --editable .
   - npm run build:travis
-  - pip install -r Webbase/requirements-dev.txt
-before_script: cd Webbase
+  - pip install -r requirements-dev.txt
 script:
   - make test-prod
 #  - npm run test
