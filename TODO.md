@@ -12,6 +12,7 @@
  - [x] Closed Registration
  - [x] Cordova
  - [ ] Component Library
+- [ ] Fix client-side unittest
 - [ ] EC2 deployment
 - [ ] OpenBSD deployment
 - [ ] OsX deployment
