@@ -9,7 +9,6 @@
   "include_cordova": "y",
   "_copy_without_render": [
     "*.html",
-    "Makefile-cookiecutter",
     "configs/Prometheus-Grafana-Dashboard.json"
   ]
 }
