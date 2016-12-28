@@ -29,24 +29,40 @@ $ cookiecutter .
 
 # Version
 
+* 0.0.3 - 2016-12-28 - New features & bug fixes
 * 0.0.2 - 2016-10-14 - New features & bug fixes
 * 0.0.1 - 2016-06-28 - Initial Release
 
-# New in 0.0.2
+# New in 0.0.3
 
-- [x] Ansible deployment
-- [x] Not supported browser system
-- [x] Cookie Banner
-- [x] Selenium test suite
-- [x] DB migration system
+## Added
+- Cookiecutter configuration
+- Foundation 6 sass
+- Mongo Migration System
+- Cordova Support
+- Material Input
+- Style Refactoring
+## Removed
+- postcss
+- bootstrap
 
 # Coming up next
 
-- [ ] Cookiecutter configuration
 - [ ] EC2 deployment
-- [ ] Os X deployment
+- [ ] OpenBSD deployment
+- [ ] OsX deployment
 - [ ] Documentation
 - [ ] Amazon SES
+- [ ] Sqlalchemy [postgresql / mysql]
+- [ ] Electron / ReactNative?
+- [ ] Netdata
+- [ ] Load Testing
+- [ ] Backend Webserver 
+    - [ ] golang server
+    - [ ] Nodejs server
+    - [ ] Isomorphic server
+- [ ] Webpack 2
+- [ ] auth redis / mongod
 - [ ] OpenID (twitter / facebook / google / github)
 
 # License

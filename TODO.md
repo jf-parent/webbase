@@ -2,16 +2,7 @@
 
 - [x] Ansible deployment
   - [ ] replace npm with yarn
-- [x] Not supported browser system
-- [x] Cookie Banner
-- [x] Style Upgrade
-- [x] Form Validation System
 - [ ] Component Library
-- [x] Cookiecutter configuration
- - [x] Registration
- - [x] Closed Registration
- - [x] Cordova
- - [ ] Component Library
 - [ ] Fix client-side unittest
 - [ ] EC2 deployment
 - [ ] OpenBSD deployment
