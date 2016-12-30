@@ -35,9 +35,11 @@ class CRUD(web.View):
             if not type(actions) == list:
                 actions = [actions]
 
+            """
             logger.debug('actions = {actions}'.format(
                 actions=actions
             ))
+            """
 
             return actions
         except:
@@ -195,12 +197,14 @@ class CRUD(web.View):
                 # PROCESSING RESULTS
                 for result in results:
                     # AUTHORIZATION CHECK
+                    """
                     logger.debug(
                         'action_context = {action_context}'
                         .format(
                             action_context=action_context
                         )
                     )
+                    """
                     if not await result.method_autorized(action_context):
                         raise exceptions.NotAuthorizedException(
                             '{author} not authorized to {action_name} {result}'
@@ -259,12 +263,14 @@ class CRUD(web.View):
                         # NOTE the authorization check has already
                         # been performed for the read
                         if not action_name == 'read':
+                            """
                             logger.debug(
                                 'read_context = {read_context}'
                                 .format(
                                     read_context=read_context
                                 )
                             )
+                            """
                             if not await result.method_autorized(read_context):
                                 raise exceptions.NotAuthorizedException(
                                     '{author} not authorized to {action_name} {result}'  # noqa

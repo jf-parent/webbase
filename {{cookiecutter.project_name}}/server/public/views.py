@@ -3,7 +3,7 @@ import aiohttp_jinja2
 from aiohttp_session import get_session
 
 from server import exceptions
-from server.settings import logger, config
+from server.settings import config
 from server.server_decorator import exception_handler, csrf_protected
 from server.model.user import User
 from server.model.resetpasswordtoken import Resetpasswordtoken
@@ -18,14 +18,11 @@ async def set_csrf_token_session(session):
 
 @aiohttp_jinja2.template('index.html')
 async def index(request):
-    logger.debug('index')
     return {}
 
 
 @exception_handler()
 async def api_get_session(request):
-    logger.debug('get_session')
-
     session = await get_session(request)
     data = await request.json()
     await set_csrf_token_session(session)
@@ -60,8 +57,6 @@ async def api_get_session(request):
 @exception_handler()
 @csrf_protected()
 async def api_validate_reset_password_token(request):
-    logger.debug('validate_reset_password_token')
-
     session = await get_session(request)
 
     try:
@@ -106,8 +101,6 @@ async def api_validate_reset_password_token(request):
 @exception_handler()
 @csrf_protected()
 async def api_send_reset_password_token(request):
-    logger.debug('send_reset_password_token')
-
     session = await get_session(request)
 
     try:
@@ -156,8 +149,6 @@ async def api_send_reset_password_token(request):
 
 @exception_handler()
 async def api_check_email_disponibility(request):
-    logger.debug('check_email_disponibility')
-
     try:
         data = await request.json()
         email = data['email']

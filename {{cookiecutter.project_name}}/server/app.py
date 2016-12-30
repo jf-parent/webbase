@@ -10,7 +10,7 @@ import aioredis
 from aiohttp_session import redis_storage, session_middleware
 import jinja2
 import aiohttp_jinja2
-from prometheus_client import start_http_server
+# from prometheus_client import start_http_server
 from aiohttp import web
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -43,14 +43,19 @@ async def shutdown(server, app, handler):
 async def init(loop, config_args=None):
     # CONFIG
     config.configure(config_args)
-    logger.debug('Env: {env}'.format(env=config.get('env')))
+    logger.info('Env: {env}'.format(env=config.get('env')))
 
     # SESSION
+    redis_db = config.get('redis_database', 0)
     redis_pool = await aioredis.create_pool(
         ('localhost', 6379),
-        db=config.get('redis_database', 0)
+        db=redis_db
     )
-    storage = redis_storage.RedisStorage(redis_pool)
+    storage = redis_storage.RedisStorage(
+        redis_pool,
+        cookie_name="AIOHTTP_SESSION-{redis_db}"
+        .format(redis_db=redis_db)
+    )
     app = web.Application(loop=loop, middlewares=[
         session_middleware(storage),
         db_handler
@@ -120,8 +125,10 @@ async def init(loop, config_args=None):
     )
 
     # PROMETHEUS CLIENT
+    """
     if not config.get('env', 'production') == 'test':
         start_http_server(8001)
+    """
 
     return serv_generator, handler, app
 
@@ -137,7 +144,7 @@ if __name__ == '__main__':
 
     serv = loop.run_until_complete(serv_generator)
 
-    logger.debug('Server listening at %s' % str(serv.sockets[0].getsockname()))
+    logger.info('Server listening at %s' % str(serv.sockets[0].getsockname()))
     try:
         loop.run_forever()
 

@@ -5,7 +5,7 @@ import json
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 ROOT = os.path.join(HERE, '..')
-logger = logging.getLogger('server')
+logger = logging.getLogger('aiohttp.server')
 
 
 class Config(object):
@@ -31,9 +31,11 @@ class Config(object):
             )
 
             # StreamHandler
+            """
             sh = logging.StreamHandler()
             sh.setFormatter(formatter)
             logger.addHandler(sh)
+            """
 
             # FileHandler
             fh = TimedRotatingFileHandler(
