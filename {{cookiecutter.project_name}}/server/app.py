@@ -43,7 +43,7 @@ async def shutdown(server, app, handler):
 async def init(loop, config_args=None):
     # CONFIG
     config.configure(config_args)
-    logger.debug('Env: {env}'.format(env=config.get('env')))
+    logger.info('Env: {env}'.format(env=config.get('env')))
 
     # SESSION
     redis_db = config.get('redis_database', 0)
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
     serv = loop.run_until_complete(serv_generator)
 
-    logger.debug('Server listening at %s' % str(serv.sockets[0].getsockname()))
+    logger.info('Server listening at %s' % str(serv.sockets[0].getsockname()))
     try:
         loop.run_forever()
 

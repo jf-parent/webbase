@@ -5,7 +5,7 @@ from server import exceptions
 from server.model.user import User
 from server.model.emailconfirmationtoken import Emailconfirmationtoken
 from server.model.resetpasswordtoken import Resetpasswordtoken
-from server.settings import logger, config  # noqa
+from server.settings import config  # noqa
 from server.server_decorator import (
     require,
     exception_handler,
@@ -125,7 +125,6 @@ class Logout(web.View):
 @exception_handler()
 @require('admin')
 async def api_admin(request):
-    logger.debug('admin')
     session = await get_session(request)
     user = get_user_from_session(session, request.db_session)
 
@@ -144,7 +143,6 @@ async def api_admin(request):
 @exception_handler()
 @require('login')
 async def api_confirm_email(request):
-    logger.debug('confirm_email')
 
     try:
         data = await request.json()
@@ -191,8 +189,6 @@ async def api_confirm_email(request):
 @csrf_protected()
 @require('login')
 async def api_reset_password(request):
-    logger.debug('reset_password')
-
     try:
         data = await request.json()
         new_password = data['password']
