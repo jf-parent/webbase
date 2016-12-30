@@ -1,0 +1,21 @@
+session_name: webbase
+windows:
+- focus: 'true'
+  layout: a119,234x57,0,0[234x40,0,0{168x40,0,0,0,65x40,169,0,3},234x16,0,41{117x16,0,41,1,116x16,118,41,2}]
+  options:
+    automatic-rename: 'off'
+  panes:
+  - focus: 'true'
+    shell_command:
+    - workon webbase
+    - webbase
+  - shell_command:
+    - workon webbase
+    - webbase
+  - shell_command:
+    - workon webbase
+    - webbase
+  - shell_command:
+    - workon webbase
+    - webbase
+  window_name: Webbase
