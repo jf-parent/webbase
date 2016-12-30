@@ -1,7 +1,6 @@
 -r requirements.txt
 ipython
 ipdb
-pdbpp
 flake8
 pip-save
 tmuxp
@@ -12,8 +11,7 @@ pytest-instafail
 pytest-html
 pytest-mock
 mock
-q
 freezegun
 cookiecutter
-# brome
+brome
 Faker
