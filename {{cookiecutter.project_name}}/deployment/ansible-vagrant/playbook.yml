@@ -18,7 +18,7 @@
         - git
   roles:
    - { role: samsixtyone.epel, become: true }
-   - { role: FrogyYen.centos7-nginx, become: true }
+#    - { role: FrogyYen.centos7-nginx, become: true }
    - { role: geerlingguy.redis, become: true }
    - { role: olibob.nodejs, become: true }
    - { role: ice9js.mongodb, become: true }
@@ -113,6 +113,6 @@
     - shell: yarn install
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
-    - shell: npm run build:dev
+    - shell: npm run build:prod
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}

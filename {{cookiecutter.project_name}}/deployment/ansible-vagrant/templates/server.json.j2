@@ -7,7 +7,7 @@
     "rest_api_secret": "",
     "redis_database": 0,
     "log_level": "DEBUG",
-    "env": "development",
+    "env": "production",
     "release": "latest",
     {%- if cookiecutter.closed_registration %}
     "registration_token": "{{cookiecutter.project_name|lower}}",
@@ -15,7 +15,7 @@
     "mongo_database_name": "{{cookiecutter.project_name|lower}}-dev",
     "mongo_host": "127.0.0.1",
     "server_port": 8000,
-    "server_host": "127.0.0.1",
+    "server_host": "0.0.0.0",
     "admin": {
         "env": "development",
         "log_level": "DEBUG",

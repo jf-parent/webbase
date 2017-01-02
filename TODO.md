@@ -1,11 +1,10 @@
 ### GENERAL
 
+- [x] Fix client-side unittest
 - [x] Ansible deployment
-  - [ ] replace npm with yarn
+  - [x] replace npm with yarn
 - [ ] Component Library
-- [ ] Fix client-side unittest
 - [ ] EC2 deployment
-- [ ] OpenBSD deployment
 - [ ] OsX deployment
 - [ ] Documentation
 - [ ] Amazon SES
@@ -20,6 +19,7 @@
 - [ ] Webpack 2
 - [ ] auth redis / mongod
 - [ ] OpenID (twitter / facebook / google / github)
+- [ ] OpenBSD deployment
 
 ### TEST - CLIENT
 

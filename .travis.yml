@@ -25,4 +25,4 @@ install:
   - pip install -r requirements-dev.txt
 script:
   - make test-prod
-#  - npm run test
+  - npm run test
