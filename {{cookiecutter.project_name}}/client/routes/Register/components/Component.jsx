@@ -82,7 +82,7 @@ class Register extends BaseComponent {
             if (emailIsAvailable === false) {
               divStyle['color'] = 'red'
               return (
-                <div style={divStyle}>
+                <div name='emailNotAvailable' style={divStyle}>
                   <FormattedMessage
                     id='register.EmailNotAvailable'
                     defaultMessage='This email is not available!'
@@ -92,7 +92,7 @@ class Register extends BaseComponent {
             } else if (emailIsAvailable === true) {
               divStyle['color'] = 'green'
               return (
-                <div style={divStyle}>
+                <div name='emailAvailable' style={divStyle}>
                   <FormattedMessage
                     id='register.EmailNotAvailable'
                     defaultMessage='This email is available!'
@@ -117,20 +117,6 @@ class Register extends BaseComponent {
               />
             </div>
           </div>
-          {%- if cookiecutter.closed_registration == 'y' %}
-          <div className='row'>
-            <div className='medium-6 columns'>
-              <MaterialInput
-                label='general.RegistrationToken'
-                validationMsgId='general.RegistrationTokenValidation'
-                name='registration_token'
-                validate
-                isRequired
-                type='password'
-              />
-            </div>
-          </div>
-          {%- endif %}
           <div className='row'>
             <div className='medium-6 columns'>
               <MaterialInput
@@ -173,6 +159,20 @@ class Register extends BaseComponent {
                />
             </div>
           </div>
+          {%- if cookiecutter.closed_registration == 'y' %}
+          <div className='row'>
+            <div className='medium-6 columns'>
+              <MaterialInput
+                label='general.RegistrationToken'
+                validationMsgId='general.RegistrationTokenValidation'
+                name='registration_token'
+                validate
+                isRequired
+                type='password'
+              />
+            </div>
+          </div>
+          {%- endif %}
           <div className='row'>
             <div className='medium-6 columns'>
               <LaddaButton name='login-btn' type='submit' isLoading={this.props.state.register.loading} onSubmit={this.onSubmit}>

@@ -6,13 +6,12 @@ import { bindActionCreators } from 'redux'
 
 import { injectReducer } from 'store/reducers'
 import InitStoreHistory from 'helpers/InitStoreHistory'
+import messages from 'locales/messages'
 
 require('polyfills')
+require('babel-polyfill')
 
-// NOTE we provide an empty messages object
-// because we use the defaultMessage in English
-const messages = { 'en': {} }
-const intlProvider = new IntlProvider({ locale: 'en', messages }, {})
+const intlProvider = new IntlProvider({ locale: 'en', messages: messages['en'] }, {})
 const reduxProvider = new Provider({ store: InitStoreHistory.store })
 const { intl } = intlProvider.getChildContext()
 const { store } = reduxProvider.getChildContext()
