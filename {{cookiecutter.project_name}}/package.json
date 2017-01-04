@@ -58,6 +58,7 @@
     "chai": "^3.5.0",
     "cheerio": "^0.20.0",
     "clean-webpack-plugin": "^0.1.9",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.1",
     "domkit": "0.0.1",
     "dotenv": "^2.0.0",

@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const APP_DIR = path.resolve(__dirname, 'client');
@@ -11,11 +12,14 @@ const versionHash = crypto.createHash('sha1').update(current_date + random).dige
 const INDEX_TPL_FILE = 'index.tpl'
 const isCordova = process.env.NODE_ENV === 'cordova';
 let BUILD_DIR
+let publicPath
 
 if (isCordova) {
     BUILD_DIR = path.resolve(__dirname, 'www');
+    publicPath = ''
 } else {
     BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
+    publicPath = '/static/'
 }
 
 var config = {
@@ -32,14 +36,17 @@ var config = {
    ],
 
    output: {
-     path: BUILD_DIR,
+     path: BUILD_DIR + publicPath,
      filename: 'main.[hash].js',
      chunkFilename: '[id].[hash].chunk.js',
-     publicPath: ''
+     publicPath
    },
 
   plugins: [
       new ExtractTextPlugin('style.css', { allChunks: true }),
+      new CopyWebpackPlugin([
+       { from: 'client/style/app.scss', to: BUILD_DIR + '/style/app.scss' },
+      ]),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
@@ -58,11 +65,6 @@ var config = {
       {
         test: /\.css$/,
         loader: "style-loader!css-loader"
-      }, {
-        test: /\.postcss$/,
-        loader: ExtractTextPlugin.extract(
-            'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
-        )
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { expect } from 'chai'
+import sinon from 'sinon'
 
 import { mountWithContext, intl } from 'helpers/TestHelper'
 import Form from './Form'
@@ -146,6 +147,19 @@ describe('<Form />', () => {
     expect(wrapper.state().validationsState).to.deep.equal({test: 'success'})
   })
 
+  it('update the state when the value change', () => {
+    let wrapper = mountWithContext(
+      <Form intl={intl}>
+        <MaterialInput type='text' label='general.Login' value='test' name='test' validate isEmail />
+      </Form>
+    )
+    expect(wrapper.state().validationsState).to.deep.equal({test: 'error'})
+
+    let input = wrapper.find({name: 'test'})
+    input.simulate('change', {target: {name: 'test', value: 'test@test.com'}})
+    expect(wrapper.state().validationsState).to.deep.equal({test: 'success'})
+  })
+
   it('support the isLongerThan validator', () => {
     let wrapper = mountWithContext(
       <Form intl={intl}>
@@ -173,18 +187,24 @@ describe('<Form />', () => {
     ).to.throw(Error)
   })
 
-  /*
-  // TODO use sinon to spy
   it('support the validatorFunc', () => {
+    let spy = sinon.spy();
     let wrapper = mountWithContext(
       <Form intl={intl}>
+        <MaterialInput type='text' name='test' label='general.Login' validate isRequired validatorFunc={spy} />
       </Form>
     )
+    let input = wrapper.find({name: 'test'})
+    input.simulate('change', {target: {name: 'test', value: 'test@test.com'}})
+    expect(spy.called).to.be.true
   })
+
+  /*
   // TODO
   it('support the joinWith another component validation state', () => {
   })
 
   */
 })
+
 

@@ -7,7 +7,7 @@
     "rest_api_secret": "",
     "redis_database": 0,
     "log_level": "DEBUG",
-    "env": "production",
+    "env": "{{"{{"}}env{{"}}"}}",
     "release": "latest",
     {%- if cookiecutter.closed_registration %}
     "registration_token": "{{cookiecutter.project_name|lower}}",
@@ -17,11 +17,11 @@
     "server_port": 8000,
     "server_host": "0.0.0.0",
     "admin": {
-        "env": "development",
+        "env": "{{"{{"}}env{{"}}"}}",
         "log_level": "DEBUG",
         "debug": true,
         "username": "admin",
-        "password": "password",
+        "password": "{{cookiecutter.project_name|lower}}",
         "host": "0.0.0.0",
         "port": 31337
     },

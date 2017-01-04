@@ -116,3 +116,8 @@
     - shell: npm run build:prod
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
+      when: env == 'production'
+    - shell: npm run build:dev
+      args:
+        chdir: /home/vagrant/{{cookiecutter.project_name}}
+      when: env == 'development'
