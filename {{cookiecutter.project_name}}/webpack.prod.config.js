@@ -10,11 +10,15 @@ const random = Math.random().toString();
 const versionHash = crypto.createHash('sha1').update(current_date + random).digest('hex');
 const INDEX_TPL_FILE = 'index.tpl'
 const isCordova = process.env.NODE_ENV === 'cordova';
+const isElectron = process.env.NODE_ENV === 'electron';
 let BUILD_DIR
 let publicPath
 
 if (isCordova) {
     BUILD_DIR = path.resolve(__dirname, 'www');
+    publicPath = ''
+} else if (isElectron) {
+    BUILD_DIR = path.resolve(__dirname, 'electron');
     publicPath = ''
 } else {
     BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);

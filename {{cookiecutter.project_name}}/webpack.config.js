@@ -5,6 +5,7 @@ const isTravis = process.env.NODE_ENV === 'travis';
 const isProd = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 const isCordova = process.env.NODE_ENV === 'cordova';
+const isElectron = process.env.NODE_ENV === 'electron';
 const logLevel = isDev ? "'debug'" : "'error'";
 
 let NODE_ENV = process.env.NODE_ENV
@@ -14,7 +15,7 @@ if (process.env.NODE_ENV === 'build-development') {
 
 // BASE URL
 let baseUrl = ''
-if (isCordova) {
+if (isCordova || isElectron) {
     const serverConfig = require('./configs/server');
     baseUrl = serverConfig['cordova_base_url']
     console.log('baseUrl=', baseUrl)
@@ -26,6 +27,7 @@ definePlugin = new webpack.DefinePlugin({
   __GET_SESSION_INTERVAL__: 3000,
   __TEST__: isTest,
   __CORDOVA__: isCordova,
+  __ELECTRON__: isElectron,
   __BASEURL__: JSON.stringify(baseUrl),
   __PROD__: isProd,
   __DEBUG__: isDev,
@@ -34,7 +36,7 @@ definePlugin = new webpack.DefinePlugin({
 });
 
 var config;
-if (isProd || isTravis || isCordova) {
+if (isProd || isTravis || isCordova || isElectron) {
     config = require('./webpack.prod.config.js');
 } else if (isTest) {
     console.log('[*] Using TEST config');

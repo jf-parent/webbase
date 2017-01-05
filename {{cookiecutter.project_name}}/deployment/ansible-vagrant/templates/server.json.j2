@@ -14,11 +14,11 @@
     {%- endif %}
     "mongo_database_name": "{{cookiecutter.project_name|lower}}-dev",
     "mongo_host": "127.0.0.1",
-    {{"{%- if env == 'production %}"}}
+    {{"{% if env == 'production' %}"}}
     "server_port": 8080,
     {{"{% else %}"}}
     "server_port": 8000,
-    {{"{% endif %}"}}
+    {{"{%- endif %}"}}
     "server_host": "0.0.0.0",
     "admin": {
         "env": "{{"{{"}}env{{"}}"}}",

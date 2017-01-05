@@ -11,7 +11,7 @@ require('./polyfills')
 import { notAuthRoutes, createRoutes } from 'routes/index'
 import BrowserSupport from 'helpers/BrowserSupport'
 
-if (__CORDOVA__) {
+if (__CORDOVA__ || __ELECTRON__) {
   axios.defaults.baseURL = __BASEURL__
 }
 
