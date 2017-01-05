@@ -1,11 +1,12 @@
-user       www www;  ## Default: nobody
-worker_processes  5;  ## Default: 1
+user nginx;
+worker_processes  auto;
 error_log  /var/log/nginx/error.log;
 pid        /var/run/nginx.pid;
-worker_rlimit_nofile 8192;
+
+include /usr/share/nginx/modules/*.conf;
 
 events {
-  worker_connections  4096;  ## Default: 1024
+  worker_connections  1024
 }
 
 http {
@@ -29,11 +30,7 @@ http {
     access_log   /var/log/nginx/{{cookiecutter.project_name}}.access.log  main;
 
     location / {
-      {{ "{% if cookiecutter.env == 'production' %}" }}
-      proxy_pass      http://127.0.0.1:8000;
-      {{ "{% else %}" }}
       proxy_pass      http://127.0.0.1:8080;
-      {{ "{% endif %}" }}
     }
   }
 }

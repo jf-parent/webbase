@@ -18,7 +18,7 @@
         - git
   roles:
    - { role: samsixtyone.epel, become: true }
-#    - { role: FrogyYen.centos7-nginx, become: true }
+   - { role: FrogyYen.centos7-nginx, become: true }
    - { role: geerlingguy.redis, become: true }
    - { role: olibob.nodejs, become: true }
    - { role: ice9js.mongodb, become: true }
@@ -108,6 +108,9 @@
       become: true
     - name: Server config
       template: src=templates/server.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/server.json
+    - name: nginx conf
+      template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      become: true
     - name: Social config
       template: src=templates/social_media.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/social_media.json
     - shell: yarn install
@@ -121,3 +124,16 @@
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
       when: env == 'development'
+    - name: Nginx service
+      become: true
+      service: state=started name=nginx
+    - selinux:
+      become: true
+      state: disabled
+      when: env == 'development'
+    - seboolean:
+      become: true
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
+      when: env == 'production'
