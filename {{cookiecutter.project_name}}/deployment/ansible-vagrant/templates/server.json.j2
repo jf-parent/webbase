@@ -1,27 +1,31 @@
 {
     "{{cookiecutter.project_name|upper}}_PID_PATH": "/var/run/{{cookiecutter.project_name|lower}}",
     "PYTHON_PATH": "python3.5",
-    "{{cookiecutter.project_name|upper}}_ROOT": "/home/vagrant/{{cookiecutter.project_name|lower}}",
+    "{{cookiecutter.project_name|upper}}_ROOT": "/home/vagrant/{{cookiecutter.project_name}}",
     "{{cookiecutter.project_name|upper}}_LOG_PATH": "/var/log/{{cookiecutter.project_name|lower}}",
     "rest_api_id": "",
     "rest_api_secret": "",
     "redis_database": 0,
     "log_level": "DEBUG",
-    "env": "production",
+    "env": "{{"{{"}}env{{"}}"}}",
     "release": "latest",
     {%- if cookiecutter.closed_registration %}
     "registration_token": "{{cookiecutter.project_name|lower}}",
     {%- endif %}
     "mongo_database_name": "{{cookiecutter.project_name|lower}}-dev",
     "mongo_host": "127.0.0.1",
+    {{"{%- if env == 'production %}"}}
+    "server_port": 8080,
+    {{"{% else %}"}}
     "server_port": 8000,
+    {{"{% endif %}"}}
     "server_host": "0.0.0.0",
     "admin": {
-        "env": "development",
+        "env": "{{"{{"}}env{{"}}"}}",
         "log_level": "DEBUG",
         "debug": true,
         "username": "admin",
-        "password": "password",
+        "password": "{{cookiecutter.project_name|lower}}",
         "host": "0.0.0.0",
         "port": 31337
     },

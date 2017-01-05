@@ -128,6 +128,9 @@ $ npm install -g cordova
 $ cordova platform add %PLATFORM% # android, browser, ios
 $ cordova build android
 $ cordova run android
+$ cordova build ios
+$ cordova run ios
 $ cordova run --debug --emulator ios
+$ cordova run --debug android
 ```
 {%- endif %}

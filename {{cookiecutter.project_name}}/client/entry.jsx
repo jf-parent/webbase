@@ -21,6 +21,8 @@ if (__CORDOVA__) {
 
 import 'antd/dist/antd.css'
 import 'font-awesome-webpack'
+
+// TODO compile in prod
 import '!style-loader!css-loader!sass-loader!style/app.scss'
 
 // ========================================================

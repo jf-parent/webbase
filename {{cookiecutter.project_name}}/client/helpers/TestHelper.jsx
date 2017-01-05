@@ -13,8 +13,8 @@ require('babel-polyfill')
 
 const intlProvider = new IntlProvider({ locale: 'en', messages: messages['en'] }, {})
 const reduxProvider = new Provider({ store: InitStoreHistory.store })
-const { intl } = intlProvider.getChildContext()
-const { store } = reduxProvider.getChildContext()
+export const { intl } = intlProvider.getChildContext()
+export const { store } = reduxProvider.getChildContext()
 
 function nodeWithProps (node) {
   return React.cloneElement(node, { intl: intl, store: store })

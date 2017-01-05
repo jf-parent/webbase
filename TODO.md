@@ -23,9 +23,8 @@
 
 ### TEST - CLIENT
 
-- [ ] Profile
-- [ ] Notification
-- [ ] Form Validation System
+- [x] Profile
+- [x] Form Validation System
 
 ### TEST - BROME
 

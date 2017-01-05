@@ -12,7 +12,7 @@
     "build:prod": "NODE_ENV=production npm run build",
     "build:travis": "NODE_ENV=travis npm run build",
     "build:dev": "NODE_ENV=build-development npm run build",
-    "build:cordova": "NODE_ENV=cordova npm run build",
+    "build:cordova": "rm -fr www/* && NODE_ENV=cordova npm run build",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true",
     "sass": "gulp sass"
   },
@@ -58,6 +58,7 @@
     "chai": "^3.5.0",
     "cheerio": "^0.20.0",
     "clean-webpack-plugin": "^0.1.9",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.1",
     "domkit": "0.0.1",
     "dotenv": "^2.0.0",

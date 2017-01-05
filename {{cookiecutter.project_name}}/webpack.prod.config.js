@@ -11,11 +11,14 @@ const versionHash = crypto.createHash('sha1').update(current_date + random).dige
 const INDEX_TPL_FILE = 'index.tpl'
 const isCordova = process.env.NODE_ENV === 'cordova';
 let BUILD_DIR
+let publicPath
 
 if (isCordova) {
     BUILD_DIR = path.resolve(__dirname, 'www');
+    publicPath = ''
 } else {
     BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
+    publicPath = '/static/'
 }
 
 var config = {
@@ -25,17 +28,15 @@ var config = {
       extensions: ['', '.js', '.jsx']
    },
 
-   devtool: 'source-map',
-
    entry: [
        APP_DIR + '/entry.jsx'
    ],
 
    output: {
-     path: BUILD_DIR,
+     path: BUILD_DIR + publicPath,
      filename: 'main.[hash].js',
      chunkFilename: '[id].[hash].chunk.js',
-     publicPath: ''
+     publicPath
    },
 
   plugins: [
@@ -57,18 +58,17 @@ var config = {
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
-      }, {
-        test: /\.postcss$/,
-        loader: ExtractTextPlugin.extract(
-            'style-loader', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
-        )
+        loader: ExtractTextPlugin.extract('css')
+      },
+      {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract('css!sass')
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       {
         test: /\.(jpg|jpeg|gif|png|ico)$/,
         exclude: /node_modules/,
-        loader:'file-loader?name=img/[path][name].[ext]&context=./client/images'
+        loader:'file-loader?name=[path][name].[ext]&context=./client/images'
       },
       { test: /\.(ttf|eot|svg|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.json$/, loader: 'json-loader' }
