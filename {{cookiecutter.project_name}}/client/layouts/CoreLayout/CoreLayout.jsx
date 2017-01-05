@@ -45,15 +45,19 @@ class CoreLayout extends BaseComponent {
 
   getPrivacyBanner () {
     // ref: https://github.com/buildo/react-cookie-banner
-    return (
-      <CookieBanner
-        message='{{cookiecutter.project_name}} is using '
-        link={{"{{"}}msg: 'cookie', url: '/privacy-policy'{{"}}"}}
-        className='wb-privacy-banner'
-        dismissOnScroll={false}
-        cookie='user-has-accepted-cookies'
-      />
-    )
+    if (__ELECTRON__) {
+      return null
+    } else {
+      return (
+        <CookieBanner
+          message='{{cookiecutter.project_name}} is using '
+          link={{"{{"}}msg: 'cookie', url: '/privacy-policy'{{"}}"}}
+          className='wb-privacy-banner'
+          dismissOnScroll={false}
+          cookie='user-has-accepted-cookies'
+        />
+      )
+    }
   }
 
   render () {

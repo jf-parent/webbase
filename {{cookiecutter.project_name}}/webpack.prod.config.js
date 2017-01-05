@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const APP_DIR = path.resolve(__dirname, 'client');
@@ -18,7 +19,7 @@ if (isCordova) {
     BUILD_DIR = path.resolve(__dirname, 'www');
     publicPath = ''
 } else if (isElectron) {
-    BUILD_DIR = path.resolve(__dirname, 'electron');
+    BUILD_DIR = path.resolve(__dirname, 'electron-dist');
     publicPath = ''
 } else {
     BUILD_DIR = path.resolve(__dirname, 'releases', versionHash);
@@ -80,13 +81,22 @@ var config = {
   }
 };
 
-if (!isCordova) {
+if (!isCordova && !isElectron) {
     // edit releases/last-version.txt with the current release hash
     fs.writeFile("./releases/latest.txt", versionHash, function(err) {
         if(err) {
             return console.error(err);
         }
     });
+}
+
+if (isElectron) {
+    config.plugins.push(
+        new CopyWebpackPlugin([
+            { from: 'client/package.json', to: BUILD_DIR + 'package.json' },
+            { from: 'client/electron.js', to: BUILD_DIR + 'electron.js' }
+      ])
+    )
 }
 
 module.exports = config;
