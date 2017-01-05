@@ -25,12 +25,12 @@ definePlugin = new webpack.DefinePlugin({
   __DEV__: isDev,
   __GET_SESSION_INTERVAL__: 3000,
   __TEST__: isTest,
-  __CORDOVA__: JSON.stringify(isCordova),
+  __CORDOVA__: isCordova,
   __BASEURL__: JSON.stringify(baseUrl),
   __PROD__: isProd,
   __DEBUG__: isDev,
-  '__LOGLEVEL__': logLevel,
- 'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
+  __LOGLEVEL__: logLevel,
+  'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
 });
 
 var config;

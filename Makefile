@@ -16,6 +16,5 @@ sed-escape-left-bracket:
 cookiecutter:
 	rm -fr Webbase
 	cookiecutter .
-	cd Webbase
-	yarn install
-	npm run build:dev
+	cd Webbase && yarn install
+	cd Webbase && npm run build:dev

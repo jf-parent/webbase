@@ -58,13 +58,17 @@ var config = {
       { test : /\.(js|jsx)$/, include : APP_DIR, loader : 'babel' },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: ExtractTextPlugin.extract('css')
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       {
         test: /\.(jpg|jpeg|gif|png|ico)$/,
         exclude: /node_modules/,
         loader:'file-loader?name=img/[path][name].[ext]&context=./client/images'
+      },
+      {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract('css!sass')
       },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.json$/, loader: 'json' }

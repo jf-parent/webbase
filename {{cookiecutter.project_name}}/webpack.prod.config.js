@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const APP_DIR = path.resolve(__dirname, 'client');
@@ -29,8 +28,6 @@ var config = {
       extensions: ['', '.js', '.jsx']
    },
 
-   devtool: 'source-map',
-
    entry: [
        APP_DIR + '/entry.jsx'
    ],
@@ -44,9 +41,6 @@ var config = {
 
   plugins: [
       new ExtractTextPlugin('style.css', { allChunks: true }),
-      new CopyWebpackPlugin([
-       { from: 'client/style/app.scss', to: BUILD_DIR + '/style/app.scss' },
-      ]),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
@@ -64,13 +58,17 @@ var config = {
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: ExtractTextPlugin.extract('css')
+      },
+      {
+          test: /\.scss$/,
+          loader: ExtractTextPlugin.extract('css!sass')
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       {
         test: /\.(jpg|jpeg|gif|png|ico)$/,
         exclude: /node_modules/,
-        loader:'file-loader?name=img/[path][name].[ext]&context=./client/images'
+        loader:'file-loader?name=[path][name].[ext]&context=./client/images'
       },
       { test: /\.(ttf|eot|svg|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
       { test: /\.json$/, loader: 'json-loader' }
