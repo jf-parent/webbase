@@ -12,9 +12,6 @@ help:
 	@echo "[*] 'queue-dev': start the queue service without detaching"
 	@echo "[*] 'start-queue-prod': start the queue service and detach"
 	@echo "[*] 'stop-queue-prod': stop the queue service from the pid file"
-	@echo "[*] 'prometheus-dev': start the prometheus server without detaching"
-	@echo "[*] 'start-prometheus-prod': start the prometheus server and detach"
-	@echo "[*] 'stop-prometheus-prod': stop the prometheus server from the pid file"
 	@echo "-DEV-----------------------------------------------------------"
 	@echo "[*] 'new-model': create a new model skeleton file in server/model/"
 	@echo "[*] 'new-migration-script': create a new migration script skeleton file in db_migration_scripts/"
@@ -63,15 +60,6 @@ stop-queue-prod:
 
 queue-dev:
 	rq worker
-
-prometheus-dev:
-	/opt/prometheus/prometheus -config.file configs/prometheus.yml
-
-start-prometheus-prod:
-	scripts/start_prometheus.sh
-
-stop-prometheus-prod:
-	scripts/stop_prometheus.sh
 
 lint:
 	@echo "====Python flake8===="

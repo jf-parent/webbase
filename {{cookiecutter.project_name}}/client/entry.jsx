@@ -6,12 +6,15 @@ import { push } from 'react-router-redux'
 import log from 'loglevel'
 import axios from 'axios'
 
-require('./polyfills')
-
+import './polyfills'
 import { notAuthRoutes, createRoutes } from 'routes/index'
 import BrowserSupport from 'helpers/BrowserSupport'
 
-if (__CORDOVA__) {
+// ========================================================
+// BASE URL FOR API REQUEST
+// ========================================================
+
+if (__CORDOVA__ || __ELECTRON__) {
   axios.defaults.baseURL = __BASEURL__
 }
 
@@ -21,9 +24,7 @@ if (__CORDOVA__) {
 
 import 'antd/dist/antd.css'
 import 'font-awesome-webpack'
-
-// TODO compile in prod
-import '!style-loader!css-loader!sass-loader!style/app.scss'
+import 'style/app.scss'
 
 // ========================================================
 // Developer Tools Setup

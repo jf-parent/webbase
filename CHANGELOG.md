@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.4] - 2017-01-06
+### Added
+- Electron
+- Front-End Tests
+- Ansible (env) (nginx)
+
+### Removed
+- Prometheus
+- Bootstrap
+
 ## [0.0.3] - 2016-12-28
 ### Added
 - Cookiecutter configuration
@@ -10,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Cordova Support
 - Material Input
 - Style Refactoring
+
 ### Removed
 - postcss
 - bootstrap

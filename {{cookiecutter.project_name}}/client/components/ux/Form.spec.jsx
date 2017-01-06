@@ -188,7 +188,7 @@ describe('<Form />', () => {
   })
 
   it('support the validatorFunc', () => {
-    let spy = sinon.spy();
+    let spy = sinon.spy()
     let wrapper = mountWithContext(
       <Form intl={intl}>
         <MaterialInput type='text' name='test' label='general.Login' validate isRequired validatorFunc={spy} />
@@ -206,5 +206,3 @@ describe('<Form />', () => {
 
   */
 })
-
-

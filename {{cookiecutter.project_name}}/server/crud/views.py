@@ -12,9 +12,6 @@ from server.server_decorator import (
     csrf_protected
 )
 from server.auth import get_user_from_session
-from server.prometheus_instruments import (
-    serverside_unhandled_exception_counter
-)
 
 
 class CRUD(web.View):
@@ -293,7 +290,6 @@ class CRUD(web.View):
                 if isinstance(e, exceptions.ServerBaseException):
                     error_msg = e.get_name()
                 else:
-                    serverside_unhandled_exception_counter.inc()
                     error_msg = 'ServerSideError'
 
                 response_data[index] = {

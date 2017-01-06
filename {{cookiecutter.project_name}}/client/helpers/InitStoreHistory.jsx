@@ -11,7 +11,7 @@ import createStore from 'store/createStore'
 
 var browserHistory
 
-if (__CORDOVA__) {
+if (__CORDOVA__ || __ELECTRON__) {
   browserHistory = useRouterHistory(createHashHistory)({
     basename: ''
   })

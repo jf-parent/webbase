@@ -17,7 +17,6 @@ from server.utils import SafeStringField
 from server.model.basemodel import BaseModel
 from server.utils import convert_tz_datetime
 from server.model.notification import Notification
-from server.prometheus_instruments import active_user_gauge
 from server.settings import config
 from server import exceptions
 from server.model.emailconfirmationtoken import Emailconfirmationtoken
@@ -334,4 +333,3 @@ class User(BaseModel):
 
     def logout(self, session):
         del session['uid']
-        active_user_gauge.dec()

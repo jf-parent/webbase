@@ -16,6 +16,7 @@
     "__GET_SESSION_INTERVAL__": false,
     "__PROD__"     : false,
     "__BASEURL__"  : false,
+    "__ELECTRON__" : false,
     "__CORDOVA__"  : false,
     "__DEBUG__"    : false,
     "__COVERAGE__" : false,

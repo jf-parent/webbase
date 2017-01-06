@@ -33,21 +33,6 @@ $ systemctl enable redis
 $ mkdir /var/log/rqueue
 ```
 
-## Install Go
-
-Ref: http://www.starkandwayne.com/blog/how-to-install-go-on-digital-ocean/
-
-```bash
-$ yum install golang
-$ cd /usr/local/bin
-$ ln -s /usr/bin/go
-$ cd ~
-$ #add the $GOPATH to your .bashrc
-$ # export GOPATH=$HOME/$PROG/go
-$ # export PATH=$PATH":/home/$USER/bin/:/home/$USER/.local/bin:$GOPATH/bin"
-$ go version
-```
-
 ## Install Phantomjs
 
 Ref: http://sameerhalai.com/blog/how-to-install-phantomjs-on-a-centos-server/
@@ -68,7 +53,7 @@ Ref: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-
 
 ```bash
 $ su
-$ wget https://nodejs.org/dist/v4.4.4/node-v4.4.4.tar.gz
+$ wget https://nodejs.org/dist/v6.8.0/node-v6.8.0.tar.gz
 $ tar xzvf node-v* && cd node-v*
 $ ./configure
 $ make
@@ -149,7 +134,5 @@ source /usr/local/bin/virtualenvwrapper.sh
 ## Install node global package
 
 ```bash
-$ npm install webpack webpack-dev-server cloc parker -g
+$ npm install webpack webpack-dev-server cloc parker electron electron-packager -g
 ```
-
-

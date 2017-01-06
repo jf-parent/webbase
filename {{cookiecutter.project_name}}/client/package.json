@@ -1,0 +1,15 @@
+{
+  "name": "{{cookiecutter.project_name}}",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "electron .",
+    "package:osx": "electron-packager ./ {{cookiecutter.project_name}} --platform darwin",
+    "package:linux": "electron-packager ./ {{cookiecutter.project_name}} --platform linux",
+    "package:windows": "electron-packager ./ {{cookiecutter.project_name}} --platform win32"
+  },
+  "description": "{{cookiecutter.project_description}}",
+  "main": "electron.js",
+  "devDependencies": {
+    "electron": "^1.4.1"
+  }
+}

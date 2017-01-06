@@ -2,7 +2,6 @@
 
 ## SERVICE DEFAULT ADDRESS
 
-* [Grafana](http://127.0.0.1:3000)
 * [Monit](http://127.0.0.1:2812)
 * [Admin](http://127.0.0.1:31337)
 * [{{cookiecutter.project_name}}-webpack](http://127.0.0.1:8080)
@@ -83,14 +82,6 @@ $ make start-queue-prod
 $ make stop-queue-prod
 ```
 
-## PROMETHEUS
-
-```bash
-$ make prometheus-dev
-$ make start-prometheus-prod
-$ make stop-prometheus-prod
-```
-
 ## CREATE NEW MODEL
 
 ```bash
@@ -132,5 +123,18 @@ $ cordova build ios
 $ cordova run ios
 $ cordova run --debug --emulator ios
 $ cordova run --debug android
+```
+{%- endif %}
+
+{%- if cookiecutter.include_electron %}
+## ELECTRON
+
+```bash
+$ npm run build:electron
+$ cd electron-dist
+$ npm run start
+$ npm run package:osx
+$ npm run package:linux
+$ npm run package:windows
 ```
 {%- endif %}

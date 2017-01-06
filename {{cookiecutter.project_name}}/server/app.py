@@ -10,13 +10,11 @@ import aioredis
 from aiohttp_session import redis_storage, session_middleware
 import jinja2
 import aiohttp_jinja2
-# from prometheus_client import start_http_server
 from aiohttp import web
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(HERE, '..'))
 
-from server.prometheus_instruments import db_session_gauge  # noqa
 from server.routes import routes  # noqa
 from server.middlewares import db_handler  # noqa
 from server.settings import config, logger, ROOT  # noqa
@@ -111,7 +109,6 @@ async def init(loop, config_args=None):
         if hasattr(request, 'db_session'):
             request.db_session.end()
             request.db_session.db.client.close()
-            db_session_gauge.dec()
 
     app.on_response_prepare.append(after_request)
 
@@ -123,12 +120,6 @@ async def init(loop, config_args=None):
         config.get('server_host'),
         config.get('server_port')
     )
-
-    # PROMETHEUS CLIENT
-    """
-    if not config.get('env', 'production') == 'test':
-        start_http_server(8001)
-    """
 
     return serv_generator, handler, app
 

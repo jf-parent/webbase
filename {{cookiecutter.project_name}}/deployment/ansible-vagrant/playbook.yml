@@ -103,6 +103,7 @@
       template: src=templates/project.yml.j2 dest=/home/vagrant/project.yml
     - name: Configure project
       shell: python /srv/python3.5.1/lib/python3.5/site-packages/cookiecutter/cli.py https://github.com/jf-parent/webbase --config-file /home/vagrant/project.yml --no-input
+      ignore_errors: True
     - name: pip deps-dev
       pip: executable="pip3.5" requirements=/home/vagrant/{{cookiecutter.project_name}}/requirements-dev.txt
       become: true
@@ -124,16 +125,17 @@
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
       when: env == 'development'
+    - name: disable selinux
+      selinux: state=disabled
+      become: true
+      when: env == 'development'
+    - name: set httpd_can_network_connect selinux
+      seboolean: name=httpd_can_network_connect state=yes persistent=yes
+      become: true
+      when: env == 'production'
+    - shell: make server-dev
+      args:
+        chdir: /home/vagrant/{{cookiecutter.project_name}}
     - name: Nginx service
       become: true
       service: state=started name=nginx
-    - selinux:
-      become: true
-      state: disabled
-      when: env == 'development'
-    - seboolean:
-      become: true
-      name: httpd_can_network_connect
-      state: yes
-      persistent: yes
-      when: env == 'production'
