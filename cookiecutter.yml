@@ -7,3 +7,4 @@ default_context:
   include_registration: "y"
   closed_registration: "n"
   include_cordova: "y"
+  include_electron: "y"

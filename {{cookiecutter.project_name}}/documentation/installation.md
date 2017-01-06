@@ -149,7 +149,5 @@ source /usr/local/bin/virtualenvwrapper.sh
 ## Install node global package
 
 ```bash
-$ npm install webpack webpack-dev-server cloc parker -g
+$ npm install webpack webpack-dev-server cloc parker electron electron-packager -g
 ```
-
-

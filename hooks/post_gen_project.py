@@ -26,3 +26,8 @@ if __name__ == '__main__':
         remove_dir('www')
         remove_dir('resources')
         remove_file('config.xml')
+
+    # ELECTRON
+    if '{{ cookiecutter.include_electron }}' != 'y':
+        remove_file('client/electron.js')
+        remove_file('client/package.json')

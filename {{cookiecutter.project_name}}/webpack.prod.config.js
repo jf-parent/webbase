@@ -93,8 +93,8 @@ if (!isCordova && !isElectron) {
 if (isElectron) {
     config.plugins.push(
         new CopyWebpackPlugin([
-            { from: 'client/package.json', to: BUILD_DIR + 'package.json' },
-            { from: 'client/electron.js', to: BUILD_DIR + 'electron.js' }
+            { from: 'client/package.json', to: BUILD_DIR + '/package.json' },
+            { from: 'client/electron.js', to: BUILD_DIR + '/electron.js' }
       ])
     )
 }

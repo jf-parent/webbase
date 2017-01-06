@@ -134,3 +134,16 @@ $ cordova run --debug --emulator ios
 $ cordova run --debug android
 ```
 {%- endif %}
+
+{%- if cookiecutter.include_electron %}
+## ELECTRON
+
+```bash
+$ npm run build:electron
+$ cd electron-dist
+$ npm run start
+$ npm run package:osx
+$ npm run package:linux
+$ npm run package:windows
+```
+{%- endif %}
