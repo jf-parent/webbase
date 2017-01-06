@@ -29,7 +29,7 @@ class Sidemenu extends BaseComponent {
     return (
       <div>
         <MediaQuery query='(min-device-width: 1224px)'>
-          <Menu right noOverlay isOpen>
+          <Menu noOverlay isOpen>
             {(() => {
               return this.props.links.map((link, index) => {
                 return (
@@ -40,7 +40,7 @@ class Sidemenu extends BaseComponent {
           </Menu>
         </MediaQuery>
         <MediaQuery query='(max-device-width: 1224px)'>
-          <Menu right isOpen={this.state.menuOpen}>
+          <Menu isOpen={this.state.menuOpen}>
             {(() => {
               return this.props.links.map((link, index) => {
                 return (

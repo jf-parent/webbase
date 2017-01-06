@@ -1,16 +1,16 @@
 ### GENERAL
 
 - [x] Fix client-side unittest
-- [x] Ansible deployment
-  - [x] replace npm with yarn
 - [x] Electron
   - [ ] icons
   - [ ] menu
   - [ ] test linux
   - [ ] test windows
 - [ ] Component Library
-- [ ] EC2 deployment
-- [ ] OsX deployment
+- [ ] Ansible
+    - [ ] EC2 deployment
+    - [ ] OsX deployment
+    - [ ] OpenBSD deployment
 - [ ] Documentation
 - [ ] Amazon SES
 - [ ] Sqlalchemy [postgresql / mysql]
@@ -23,7 +23,6 @@
 - [ ] Webpack 2
 - [ ] auth redis / mongod
 - [ ] OpenID (twitter / facebook / google / github)
-- [ ] OpenBSD deployment
 
 ### TEST - CLIENT
 

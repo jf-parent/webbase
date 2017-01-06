@@ -4,21 +4,23 @@ error_log  /var/log/nginx/error.log;
 pid        /var/run/nginx.pid;
 
 events {
-  worker_connections  1024
+  worker_connections  1024;
 }
 
 http {
-  include    /etc/nginx/mime.types;
+  include  /etc/nginx/mime.types;
   index    index.html index.htm;
 
   default_type application/octet-stream;
+
   log_format   main '$remote_addr - $remote_user [$time_local]  $status '
     '"$request" $body_bytes_sent "$http_referer" '
     '"$http_user_agent" "$http_x_forwarded_for"';
+
   access_log   /var/log/nginx/access.log  main;
   sendfile     on;
   tcp_nopush   on;
-  server_names_hash_bucket_size 128; # this seems to be required for some vhosts
+  server_names_hash_bucket_size 128;
 
   server {
     listen       80;

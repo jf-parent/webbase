@@ -8,10 +8,6 @@ from aiohttp_session import get_session
 from server.auth import permits
 from server.settings import logger
 from server import exceptions
-from server.prometheus_instruments import (
-    security_violation_attempt_counter,
-    serverside_unhandled_exception_counter
-)
 
 
 def require(permission):
@@ -31,8 +27,6 @@ def require(permission):
             session = await get_session(request)
             has_perm = permits(request, session, permission)
             if not has_perm:
-                if permission == 'admin':
-                    security_violation_attempt_counter.inc()
                 raise exceptions.NotAuthorizedException(permission)
 
             return (await func(params))
@@ -51,7 +45,6 @@ def exception_handler():
                 else:
                     return (await func(args[-1]))
             except exceptions.CSRFMismatch as e:
-                security_violation_attempt_counter.inc()
                 data = {'success': False, 'error': 'CSRFMismatch'}
 
                 return web.json_response(data)
@@ -64,7 +57,6 @@ def exception_handler():
                 if isinstance(e, exceptions.ServerBaseException):
                     data = {'success': False, 'error': e.get_name()}
                 else:
-                    serverside_unhandled_exception_counter.inc()
                     data = {'success': False, 'error': 'ServerSideError'}
 
                 return web.json_response(data)

@@ -9,7 +9,6 @@
   "include_cordova": "y",
   "include_electron": "y",
   "_copy_without_render": [
-    "*.html",
-    "configs/Prometheus-Grafana-Dashboard.json"
+    "*.html"
   ]
 }

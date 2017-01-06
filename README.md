@@ -12,9 +12,6 @@
 # Webbase Admin
 ![alt text](./screenshots/Webbase-admin.png "Webbase-admin")
 
-# Grafana
-![alt text](./screenshots/Webbase-grafana.png "Webbase-grafana")
-
 # Monit
 ![alt text](./screenshots/Webbase-monit.png "Webbase-monit")
 
@@ -78,8 +75,6 @@ $ cookiecutter .
 * [React-router](https://github.com/reactjs/react-router)
 * [Webpack](https://github.com/webpack/webpack)
 * [Aoihttp](https://github.com/KeepSafe/aiohttp)
-* [Prometheus](https://github.com/prometheus/prometheus)
-* [Grafana](https://github.com/grafana/grafana)
 * [Monit](https://bitbucket.org/tildeslash/monit)
 * [Flask-admin](https://github.com/flask-admin/flask-admin)
 * [MongoAlchemy](https://github.com/jeffjenkins/MongoAlchemy)
@@ -91,4 +86,3 @@ $ cookiecutter .
 * [yarn](https://github.com/yarnpkg/yarn)
 * [cordova](https://cordova.apache.org/)
 * ...
-

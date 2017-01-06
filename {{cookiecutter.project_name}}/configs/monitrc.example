@@ -184,15 +184,6 @@ check process webserver with pidfile /var/run/{{cookiecutter.project_name|lower}
    if 5 restart within 5 cycles then timeout
    if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' '{{cookiecutter.project_name}} server CPU >60%' 'SLACK_API_KEY'" #CHANGEME
 
-## PROMETHEUS
-
-check process prometheus with pidfile /var/run/{{cookiecutter.project_name|lower}}/prometheus.pid
-   start program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/start_prometheus.sh" #CHANGEME
-   stop program = "/path/to/{{cookiecutter.project_name|lower}}/scripts/stop_prometheus.sh" #CHANGEME
-   if failed port 9090 protocol http then restart
-   if 5 restart within 5 cycles then timeout
-   if cpu is greater than 60% for 2 cycles then exec "/path/to/slack-notify send_msg '{{cookiecutter.project_name|lower}}-bot' 'Prometheus CPU >60%' 'SLACK_API_KEY" #CHANGEME
-
 ## SSHD
 
 check process sshd with pidfile /var/run/sshd.pid

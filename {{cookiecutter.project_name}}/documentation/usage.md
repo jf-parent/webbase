@@ -2,7 +2,6 @@
 
 ## SERVICE DEFAULT ADDRESS
 
-* [Grafana](http://127.0.0.1:3000)
 * [Monit](http://127.0.0.1:2812)
 * [Admin](http://127.0.0.1:31337)
 * [{{cookiecutter.project_name}}-webpack](http://127.0.0.1:8080)
@@ -81,14 +80,6 @@ $ npm run build:prod
 $ make queue-dev
 $ make start-queue-prod
 $ make stop-queue-prod
-```
-
-## PROMETHEUS
-
-```bash
-$ make prometheus-dev
-$ make start-prometheus-prod
-$ make stop-prometheus-prod
 ```
 
 ## CREATE NEW MODEL
