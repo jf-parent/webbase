@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Electron
 - Front-End Tests
 - Ansible (env) (nginx)
+
 ### Removed
 - Prometheus
 - Bootstrap
@@ -19,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Cordova Support
 - Material Input
 - Style Refactoring
+
 ### Removed
 - postcss
 - bootstrap

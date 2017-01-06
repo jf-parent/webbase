@@ -41,6 +41,7 @@ $ cookiecutter .
 - Electron
 - Front-End Tests
 - Ansible (env) (nginx)
+
 ### Removed
 - Prometheus
 - Bootstrap
