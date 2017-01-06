@@ -1,6 +1,5 @@
 ### GENERAL
 
-- [x] Fix client-side unittest
 - [x] Electron
   - [ ] icons
   - [ ] menu

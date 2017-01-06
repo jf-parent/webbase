@@ -8,6 +8,11 @@
 
 # Webbase Front-End Cordova ios
 ![alt text](./screenshots/Webbase-iphone-cordova-login.png "Webbase-cordova-iphone-login")
+# Webbase Front-End Cordova android
+![alt text](./screenshots/Webbase-android-cordova-login.png "Webbase-cordova-android-login")
+
+# Webbase Front-End Electron osx
+![alt text](./screenshots/Webbase-osx-electron-login.png "Webbase-osx-electron-login")
 
 # Webbase Admin
 ![alt text](./screenshots/Webbase-admin.png "Webbase-admin")
@@ -26,39 +31,41 @@ $ cookiecutter .
 
 # Version
 
+* 0.0.4 - 2017-01-06 - New features & bug fixes
 * 0.0.3 - 2016-12-28 - New features & bug fixes
 * 0.0.2 - 2016-10-14 - New features & bug fixes
 * 0.0.1 - 2016-06-28 - Initial Release
 
-# New in 0.0.3
-
-## Added
-- Cookiecutter configuration
-- Foundation 6 sass
-- Mongo Migration System
-- Cordova Support
-- Material Input
-- Style Refactoring
-
-## Removed
-- postcss
-- bootstrap
+## [0.0.4] - 2017-01-06
+### Added
+- Electron
+- Front-End Tests
+- Ansible (env) (nginx)
+### Removed
+- Prometheus
+- Bootstrap
 
 # Coming up next
 
-- [ ] EC2 deployment
-- [ ] OpenBSD deployment
-- [ ] OsX deployment
+- [x] Electron
+  - [ ] icons
+  - [ ] menu
+  - [ ] test linux
+  - [ ] test windows
+- [ ] Component Library
+- [ ] Ansible
+    - [ ] EC2 deployment
+    - [ ] OsX deployment
+    - [ ] OpenBSD deployment
 - [ ] Documentation
 - [ ] Amazon SES
 - [ ] Sqlalchemy [postgresql / mysql]
-- [ ] Electron / ReactNative?
+- [ ] ReactNative?
 - [ ] Netdata
 - [ ] Load Testing
 - [ ] Backend Webserver 
     - [ ] golang server
-    - [ ] Nodejs server
-    - [ ] Isomorphic server
+    - [ ] server-side rendering
 - [ ] Webpack 2
 - [ ] auth redis / mongod
 - [ ] OpenID (twitter / facebook / google / github)
@@ -85,4 +92,4 @@ $ cookiecutter .
 * [rq](https://github.com/nvie/rq)
 * [yarn](https://github.com/yarnpkg/yarn)
 * [cordova](https://cordova.apache.org/)
-* ...
+* [netdata](https://github.com/firehol/netdata)
