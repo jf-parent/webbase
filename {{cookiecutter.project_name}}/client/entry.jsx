@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import { push } from 'react-router-redux'
 import log from 'loglevel'
 import axios from 'axios'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import './polyfills'
 import { notAuthRoutes, createRoutes } from 'routes/index'
@@ -25,6 +26,8 @@ if (__CORDOVA__ || __ELECTRON__) {
 import 'antd/dist/antd.css'
 import 'font-awesome-webpack'
 import 'style/app.scss'
+
+injectTapEventPlugin()
 
 // ========================================================
 // Developer Tools Setup

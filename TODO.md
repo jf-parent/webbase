@@ -5,7 +5,7 @@
   - [ ] menu
   - [ ] test linux
   - [ ] test windows
-- [ ] Component Library
+- [x] Component Library
 - [ ] Ansible
     - [ ] EC2 deployment
     - [ ] OsX deployment

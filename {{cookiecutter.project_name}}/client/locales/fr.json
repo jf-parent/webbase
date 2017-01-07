@@ -1,5 +1,6 @@
 {
   "browserNotSupported.Header": "Votre navigateur n'est pas supporté.",
+  "componentLibrary.FormExample": "Exemple de formulaire",
   "confirmation.EmailConfirmationSuccessful": "Votre courriel a bien été confirmé!",
   "confirmation.EmailValidationTokenInvalidException": "code de validation courriel invalide",
   "confirmation.EmailAlreadyConfirmedException": "courriel déjà validé",
@@ -24,6 +25,8 @@
   "forgottenPassword.SubmitSendResetPasswordToken": "Réinitialiser votre mot de passe",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Code de réinitialisation de mot de passe incorrect",
   "forgottenPassword.TokenAlreadyUsedException": "Ce code de réinitialisation de mot de passe a déjà été utilisé.",
+  "general.Success": "Succès!",
+  "general.Submit": "Soumettre",
   "general.Login": "Connection",
   "general.EmailConfirmation": "Confirmation courriel",
   "general.YouAreLoggedIn": "Vous êtes maintenant connecté",

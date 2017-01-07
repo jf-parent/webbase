@@ -40,7 +40,6 @@ export function doMarkAllNotificationHasSeen (session) {
       }
     })
     .then((response) => {
-      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
         dispatch(updateNewNotificationNumber(0))
       } else {
@@ -65,7 +64,6 @@ export function doMarkNotificationHasSeen (session, uid) {
       }
     })
     .then((response) => {
-      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
         dispatch(getNotifications(session))
       } else {
@@ -113,7 +111,6 @@ export function getNotifications (session, skip = 0) {
     }
     axios.post('/api/crud', data)
     .then((response) => {
-      logger.debug('/api/crud notification (response)', response)
       if (response.data.success) {
         dispatch(updateNotifications(response.data, skip))
       } else {

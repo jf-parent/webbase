@@ -45,7 +45,6 @@ export function getSession (loadingContext = false, cb = null) {
 
     axios.post('/api/get_session', data)
       .then((response) => {
-        logger.debug('/api/get_session (response)', response)
         if (response.data.success) {
           dispatch(getSessionSuccess(response.data))
           dispatch(getNotifications(response.data))
@@ -111,7 +110,6 @@ export function doLogout (token) {
 
     axios.post('/api/logout', {token: token})
       .then((response) => {
-        logger.debug('/api/logout (response)', response)
         if (response.data.success) {
           dispatch(logoutSuccess())
           dispatch(routerActions.push('/'))
