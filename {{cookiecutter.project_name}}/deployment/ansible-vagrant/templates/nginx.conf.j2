@@ -31,4 +31,16 @@ http {
       proxy_pass      http://127.0.0.1:8080;
     }
   }
+
+  server {
+    listen       8008;
+    server_name  Webbase.com;
+    access_log   /var/log/nginx/Netdata.access.log  main;
+    auth_basic "Protected";
+    auth_basic_user_file passwords;
+
+    location / {
+        proxy_pass      http://127.0.0.1:19999;
+    }
+  }
 }

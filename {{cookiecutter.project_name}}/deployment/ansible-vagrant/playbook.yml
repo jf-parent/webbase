@@ -137,6 +137,13 @@
       become: true
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
+    - shell: printf "admin:$(openssl passwd -crypt '{{"{{"}}netdata_password{{"}}"}}')" > /etc/nginx/passwords
+      become: true
     - name: Nginx service
       become: true
-      service: state=started name=nginx
+      service: state=restarted name=nginx
+    - replace: dest=/etc/netdata/netdata.conf regexp: '# bind to = *' replace: 'bind to = localhost'
+      become: true
+    - name: Netdata service
+      become: true
+      service: state=restarted name=netdata
