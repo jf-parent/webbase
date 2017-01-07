@@ -26,8 +26,6 @@ class LocalesMenu extends BaseComponent {
   }
 
   onClick (event) {
-    this.debug('Changing locale')
-
     this.props.actions.doChangeLocale(event.target.dataset.locale)
   }
 

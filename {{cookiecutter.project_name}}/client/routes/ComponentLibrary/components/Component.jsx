@@ -2,14 +2,18 @@ import React from 'react'
 import Select from 'react-select'
 import 'layouts/react-select.css'
 
+import FormExample from './FormExample'
+import SelectExample from './SelectExample'
 import BaseComponent from 'core/BaseComponent'
 
 /*
 [*] [https://ant.design/ Antd]
 [*] https://react.rocks/
+[*] [https://github.com/callemall/material-ui Material-UI]
+[*] https://github.com/brillout/awesome-react-components
 */
 
-class Settings extends BaseComponent {
+class ComponentLibrary extends BaseComponent {
 
   constructor (props) {
     super(props)
@@ -18,24 +22,16 @@ class Settings extends BaseComponent {
     this._bind(
       'onComponentChange',
       'getForm',
-      'getGrid',
-      'getRow'
+      'getSelect',
+      'getGrid'
     )
-    let rows = []
-    for (let i = 1; i < 20; i++) {
-      rows.push({
-        id: i,
-        title: 'Title ' + i,
-        count: i * 1000
-      })
-    }
     this.state = {
-      component: '',
-      rows: rows
+      component: 'Form'
     }
     this.componentOptions = [
-      { value: 'form', label: 'Form' },
-      { value: 'grid', label: 'Grid' }
+      { value: 'Form', label: 'Form' },
+      { value: 'Select', label: 'Select' },
+      { value: 'Grid', label: 'Grid' }
     ]
   }
 
@@ -43,8 +39,8 @@ class Settings extends BaseComponent {
     this.setState({component: component.value})
   }
 
-  getRow (i) {
-    return this.state.rows[i]
+  getSelect () {
+    return <SelectExample />
   }
 
   getGrid () {
@@ -54,9 +50,7 @@ class Settings extends BaseComponent {
   }
 
   getForm () {
-    return (
-      <div>TODO</div>
-    )
+    return <FormExample />
   }
 
   getComponentDropdown () {
@@ -73,10 +67,14 @@ class Settings extends BaseComponent {
   }
 
   render () {
+    let component = this['get' + this.state.component]()
     return (
-      <div>TODO</div>
+      <div>
+        {this.getComponentDropdown()}
+        {component}
+      </div>
     )
   }
 }
 
-module.exports = Settings
+module.exports = ComponentLibrary

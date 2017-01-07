@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import CookieBanner from 'react-cookie-banner'
 import { notification } from 'antd'
 import { injectIntl } from 'react-intl'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import BrowserSupport from 'helpers/BrowserSupport'
 import BaseComponent from 'core/BaseComponent'
@@ -70,28 +71,30 @@ class CoreLayout extends BaseComponent {
       Nav = <UnAuthenticatedNav />
     }
     return (
-      <div>
-        {this.getPrivacyBanner()}
-        <div id='wb-sidemenu'>
-          {Nav}
-        </div>
-        <div id='wb-root-container'>
-          <div style={{"{{"}}minHeight: '20em', margin: '2em'{{"}}"}} className='row'>
-              {this.props.children || <Home />}
+      <MuiThemeProvider>
+        <div>
+          {this.getPrivacyBanner()}
+          <div id='wb-sidemenu'>
+            {Nav}
           </div>
-          <footer>
-            <div className='row'>
-              <div className='medium-1 columns'>
-                <h2>{{ cookiecutter.project_name }}</h2>
-              </div>
-              <div className='medium-11 columns'>
-                <SocialMedia />
-              </div>
+          <div id='wb-root-container'>
+            <div style={{"{{"}}minHeight: '20em', margin: '2em'{{"}}"}} className='row'>
+                {this.props.children || <Home />}
             </div>
-            <LocalesMenu />
-          </footer>
+            <footer>
+              <div className='row'>
+                <div className='medium-1 columns'>
+                  <h2>{{ cookiecutter.project_name }}</h2>
+                </div>
+                <div className='medium-11 columns'>
+                  <SocialMedia />
+                </div>
+              </div>
+              <LocalesMenu />
+            </footer>
+          </div>
         </div>
-      </div>
+      </MuiThemeProvider>
     )
   }
 }

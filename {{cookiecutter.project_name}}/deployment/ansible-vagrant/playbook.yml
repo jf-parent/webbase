@@ -133,7 +133,8 @@
       seboolean: name=httpd_can_network_connect state=yes persistent=yes
       become: true
       when: env == 'production'
-    - shell: make server-dev
+    - shell: make start-server-prod
+      become: true
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
     - name: Nginx service

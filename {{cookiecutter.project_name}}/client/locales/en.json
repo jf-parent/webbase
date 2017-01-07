@@ -20,6 +20,7 @@
   "forgottenPassword.SendResetPasswordTokenSuccessful": "Reset password email send successfully!",
   "forgottenPassword.ResetPasswordTokenInvalidException": "Reset password token invalid",
   "forgottenPassword.TokenAlreadyUsedException": "This token has already been used",
+  "general.Success": "Success!",
   "general.Login": "Login",
   "general.EmailConfirmation": "Email Confirmation",
   "general.YouAreLoggedIn": "You are logged In!",
