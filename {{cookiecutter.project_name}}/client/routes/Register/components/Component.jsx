@@ -26,7 +26,7 @@ class Register extends BaseComponent {
 
   onEmailBlur (event) {
     this.props.actions.doCheckEmailDisponibility(
-      this.refs.form.state.values.email
+      this.refs.form.state.values.email.toLowerCase()
     )
   }
 

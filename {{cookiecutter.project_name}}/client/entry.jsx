@@ -6,6 +6,7 @@ import { push } from 'react-router-redux'
 import log from 'loglevel'
 import axios from 'axios'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import FastClick from 'fastclick'
 
 import './polyfills'
 import { notAuthRoutes, createRoutes } from 'routes/index'
@@ -27,7 +28,12 @@ import 'antd/dist/antd.css'
 import 'font-awesome-webpack'
 import 'style/app.scss'
 
+// ========================================================
+// TAP
+// ========================================================
+
 injectTapEventPlugin()
+FastClick.attach(document.body)
 
 // ========================================================
 // Developer Tools Setup
