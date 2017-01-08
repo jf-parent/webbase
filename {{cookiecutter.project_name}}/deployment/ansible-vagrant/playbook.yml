@@ -1,13 +1,12 @@
 ---
 - hosts: all
+  become: true
   vars_files:
     - defaults/main.yml
   pre_tasks:
     - name: Install python build deps
-      become: true
       command: yum-builddep python -y
     - name: install deps
-      become: true
       yum:
         name={{"{{"}} item {{"}}"}}
         state=latest
@@ -17,18 +16,18 @@
         - policycoreutils-python
         - git
   roles:
-   - { role: samsixtyone.epel, become: true }
-   - { role: FrogyYen.centos7-nginx, become: true }
-   - { role: geerlingguy.redis, become: true }
-   - { role: olibob.nodejs, become: true }
-   - { role: ice9js.mongodb, become: true }
-   - { role: jffz.netdata, become: true }
+   - { role: samsixtyone.epel }
+   - { role: FrogyYen.centos7-nginx }
+   - { role: geerlingguy.redis }
+   - { role: olibob.nodejs }
+   - { role: ice9js.mongodb }
+   - { role: jffz.netdata }
   tasks:
     - name: install the latest version of JQ
-      become: true
       yum: name=jq state=latest
+    - name: install monit
+      yum: name=monit state=latest
     - name: py35 | Check that py35 is still not installed
-      become: true
       stat: path="{{"{{"}} py35_bin {{"}}"}}"
       register: py35_already_installed
       ignore_errors: True
@@ -46,7 +45,6 @@
         creates="{{"{{"}} py35_sources {{"}}"}}"
       when: py35_already_installed.stat.exists == false
     - name: py35 | Compile and install
-      become: true
       command: "{{"{{"}} item {{"}}"}}"
       args:
         chdir: "{{"{{"}} py35_sources {{"}}"}}"
@@ -56,47 +54,38 @@
         - make install
       when: py35_already_installed.stat.exists == false
     - name: py35 | Create python_major_version symlink
-      become: true
       file:
         src={{"{{"}} py35_bin {{"}}"}}
         dest='/bin/python3.5'
         state=link
       when: py35_already_installed.stat.exists == false
     - name: py35 | Create python_major_version symlink
-      become: true
       file:
         src={{"{{"}} py35_bin {{"}}"}}
         dest='/usr/local/bin/python'
         state=link
       when: py35_already_installed.stat.exists == false
     - name: pip35 | Create pip symlink
-      become: true
       file:
         src={{"{{"}} pip35_bin {{"}}"}}
         dest='/bin/pip3.5'
         state=link
       when: py35_already_installed.stat.exists == false
     - name: pip35 | Create pip symlink
-      become: true
       file:
         src={{"{{"}} py35_bin {{"}}"}}
         dest='/usr/local/bin/pip'
         state=link
       when: py35_already_installed.stat.exists == false
     - name: Mongo service
-      become: true
       service: state=started name=mongod
     - name: Redis service
-      become: true
       service: state=started name=redis
     - name: install the yarn's repo
-      become: true
       shell: wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
     - name: install the latest version of yarn
-      become: true
       yum: name=yarn state=latest
     - name: install cookiecutter
-      become: true
       pip: executable="pip3.5" name=cookiecutter
     # PROJECT SPECIFIC
     - name: Project config
@@ -106,12 +95,10 @@
       ignore_errors: True
     - name: pip deps-dev
       pip: executable="pip3.5" requirements=/home/vagrant/{{cookiecutter.project_name}}/requirements-dev.txt
-      become: true
     - name: Server config
       template: src=templates/server.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/server.json
     - name: nginx conf
       template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
-      become: true
     - name: Social config
       template: src=templates/social_media.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/social_media.json
     - shell: yarn install
@@ -127,23 +114,27 @@
       when: env == 'development'
     - name: disable selinux
       selinux: state=disabled
-      become: true
       when: env == 'development'
     - name: set httpd_can_network_connect selinux
       seboolean: name=httpd_can_network_connect state=yes persistent=yes
-      become: true
       when: env == 'production'
     - shell: make start-server-prod
-      become: true
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
-    - shell: printf "admin:$(openssl passwd -crypt '{{"{{"}}netdata_password{{"}}"}}')" > /etc/nginx/passwords
-      become: true
-    - name: Nginx service
-      become: true
+    - shell: make start-admin-prod
+      args:
+        chdir: /home/vagrant/{{cookiecutter.project_name}}
+    - shell: printf "admin:$(openssl passwd -crypt '{{"{{"}}admin_password{{"}}"}}')" > /etc/nginx/passwords
+    - name: Restart Nginx service
       service: state=restarted name=nginx
-    - replace: dest=/etc/netdata/netdata.conf regexp: '# bind to = *' replace: 'bind to = localhost'
-      become: true
-    - name: Netdata service
-      become: true
+    - replace: dest=/etc/netdata/netdata.conf regexp='# bind to = *' replace='bind to = localhost'
+    - name: Restart Netdata service
       service: state=restarted name=netdata
+    - name: monit conf
+      template: src=templates/monitrc.j2 dest=/etc/monitrc mode=0700
+    - name: Enable Monit service
+      service: enabled=true name=monit
+      when: env == 'production'
+    - name: Start Monit service
+      service: state=started name=monit
+      when: env == 'production'
