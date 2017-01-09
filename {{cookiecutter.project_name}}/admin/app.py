@@ -7,7 +7,6 @@ import sys
 import asyncio
 
 from cryptography import fernet
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 from wtforms import form, fields, validators
 from flask import Flask, url_for, redirect, request, flash
@@ -27,7 +26,7 @@ ROOT = os.path.join(HERE, '..')
 sys.path.append(ROOT)
 
 from server.model.user import User  # noqa
-from server.utils import DbSessionContext  # noqa
+from server.utils import DbSessionContext, get_client  # noqa
 from server.settings import config  # noqa
 from server import exceptions  # noqa
 
@@ -70,7 +69,7 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # MONGO
-pymongo_client = MongoClient()
+pymongo_client = get_client(config)
 db = pymongo_client[config.get('mongo_database_name')]
 
 # APP
@@ -106,7 +105,7 @@ class BaseView(ModelView):
 
     def on_model_change(self, form, model, is_created):
         logger.info("on_model_change")
-        with DbSessionContext(config.get('mongo_database_name')) as session:
+        with DbSessionContext(config) as session:
             try:
                 m = importlib.import_module(
                     'server.model.{model}'
@@ -202,7 +201,7 @@ class UidToEmailView(BaseView):
             'server.model.{model}'.format(model=self.name.lower())
         )
         model_class = getattr(m, self.name)
-        with DbSessionContext(config.get('mongo_database_name')) as session:
+        with DbSessionContext(config) as session:
             user_query = session.query(User)\
                 .filter(User.email == search_term)
             if user_query.count():

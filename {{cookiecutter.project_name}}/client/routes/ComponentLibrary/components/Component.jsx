@@ -69,7 +69,7 @@ class ComponentLibrary extends BaseComponent {
           </div>
         </div>
         <div className='row'>
-          <div className='medium-6 columns'>
+          <div className='medium-12 columns'>
             {component}
           </div>
         </div>

@@ -18,9 +18,6 @@ else:
     answer = 'y'
 
 if answer == 'y':
-    drop_database(
-        config.get('mongo_database_name'),
-        config.get('redis_database')
-    )
+    drop_database(config)
 
 print('Done')

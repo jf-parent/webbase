@@ -92,26 +92,38 @@
       template: src=templates/project.yml.j2 dest=/home/vagrant/project.yml
     - name: Configure project
       shell: python /srv/python3.5.1/lib/python3.5/site-packages/cookiecutter/cli.py https://github.com/jf-parent/webbase --config-file /home/vagrant/project.yml --no-input
+      become: true
+      become_user: vagrant
       ignore_errors: True
     - name: pip deps-dev
       pip: executable="pip3.5" requirements=/home/vagrant/{{cookiecutter.project_name}}/requirements-dev.txt
     - name: Server config
+      become: true
+      become_user: vagrant
       template: src=templates/server.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/server.json
-    - name: nginx conf
-      template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
     - name: Social config
+      become: true
+      become_user: vagrant
       template: src=templates/social_media.json.j2 dest=/home/vagrant/{{cookiecutter.project_name}}/configs/social_media.json
     - shell: yarn install
+      become: true
+      become_user: vagrant
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
     - shell: npm run build:prod
+      become: true
+      become_user: vagrant
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
       when: env == 'production'
     - shell: npm run build:dev
+      become: true
+      become_user: vagrant
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
       when: env == 'development'
+    - name: nginx conf
+      template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
     - name: disable selinux
       selinux: state=disabled
       when: env == 'development'
