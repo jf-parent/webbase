@@ -14,13 +14,13 @@
 - [ ] Amazon SES
 - [ ] Sqlalchemy [postgresql / mysql]
 - [ ] ReactNative?
-- [ ] Netdata
+- [x] Netdata
 - [ ] Load Testing
 - [ ] Backend Webserver 
     - [ ] golang server
     - [ ] server-side rendering
 - [ ] Webpack 2
-- [ ] auth redis / mongod
+- [x] auth mongodb
 - [ ] OpenID (twitter / facebook / google / github)
 
 ### TEST - CLIENT

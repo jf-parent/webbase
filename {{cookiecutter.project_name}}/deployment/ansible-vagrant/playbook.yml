@@ -139,7 +139,7 @@
     - shell: printf "admin:$(openssl passwd -crypt '{{"{{"}}admin_password{{"}}"}}')" > /etc/nginx/passwords
     - name: Restart Nginx service
       service: state=restarted name=nginx
-    - replace: dest=/etc/netdata/netdata.conf regexp='# bind to = *' replace='bind to = localhost'
+    - replace: dest=/etc/netdata/netdata.conf regexp='# bind to = \*' replace='bind to = localhost'
     - name: Restart Netdata service
       service: state=restarted name=netdata
     - name: monit conf

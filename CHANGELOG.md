@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.5] - 2017-01-09
+### Added
+- Auth mongodb
+- Component Library
+- Ansible [Netdata / Monit]
+- Fixes
+
 ## [0.0.4] - 2017-01-06
 ### Added
 - Electron

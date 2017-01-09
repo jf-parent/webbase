@@ -4,6 +4,8 @@ import MenuItem from 'material-ui/MenuItem'
 
 import FormExample from './FormExample'
 import SelectExample from './SelectExample'
+import GridExample from './GridExample'
+import GraphExample from './GraphExample'
 import BaseComponent from 'core/BaseComponent'
 
 /*
@@ -23,6 +25,7 @@ class ComponentLibrary extends BaseComponent {
       'onComponentChange',
       'getForm',
       'getSelect',
+      'getGraph',
       'getGrid'
     )
     this.state = {
@@ -34,14 +37,16 @@ class ComponentLibrary extends BaseComponent {
     this.setState({component: value})
   }
 
-  getSelect () {
-    return <SelectExample />
+  getGraph () {
+    return <GraphExample />
   }
 
   getGrid () {
-    return (
-      <div>Todo</div>
-    )
+    return <GridExample />
+  }
+
+  getSelect () {
+    return <SelectExample />
   }
 
   getForm () {
@@ -68,11 +73,7 @@ class ComponentLibrary extends BaseComponent {
             </SelectField>
           </div>
         </div>
-        <div className='row'>
-          <div className='medium-12 columns'>
-            {component}
-          </div>
-        </div>
+        {component}
       </div>
     )
   }
