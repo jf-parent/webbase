@@ -1,8 +1,8 @@
 import React from 'react'
-import { injectIntl, FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import moment from 'moment'
-import Select from 'react-select'
-import 'layouts/react-select.css'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 
 import MaterialInput from 'components/ux/MaterialInput'
 import Form from 'components/ux/Form'
@@ -45,8 +45,8 @@ class Profile extends BaseComponent {
     }
   }
 
-  onLocaleChange (locale) {
-    this.setState({locale: locale.value})
+  onLocaleChange (event, index, value) {
+    this.setState({locale: value})
   }
 
   onSubmit (event) {
@@ -73,20 +73,13 @@ class Profile extends BaseComponent {
   render () {
     const errorMsg = this.props.state.profile.errorMsgId ? <ErrorMsg msgId={this.props.state.profile.errorMsgId} /> : null
     const successMsg = this.props.state.profile.successMsgId ? <SuccessMsg msgId={this.props.state.profile.successMsgId} /> : null
-    let localeOptions = [
-      {
-        value: 'en', label: 'English'
-      }, {
-        value: 'fr', label: 'Français'
-      }
-    ]
+    const { formatMessage } = this._reactInternalInstance._context.intl
     const emailNotConfirmedStyle = {
       color: 'red',
       position: 'relative',
       top: '1em',
       left: '8em'
     }
-
     const emailConfirmedStyle = {
       color: 'green',
       position: 'relative',
@@ -141,7 +134,7 @@ class Profile extends BaseComponent {
             </h5>
           </div>
         </div>
-        <Form ref='form' intl={this.props.intl}>
+        <Form ref='form' intl={this._reactInternalInstance._context.intl}>
           <div className='row'>
             <div className='medium-6 columns'>
               {emailConfirmed}
@@ -217,14 +210,15 @@ class Profile extends BaseComponent {
           </div>
           <div className='row'>
             <div className='medium-6 columns'>
-              <Select
-                style={{"{{"}}marginBottom: 10{{"}}"}}
+              <SelectField
+                style={{"{{"}}width: '100%'{{"}}"}}
                 name='locale'
+                floatingLabelText={formatMessage({'id': 'profile.Language'})}
                 value={this.state.locale}
-                options={localeOptions}
-                clearable={false}
-                onChange={this.onLocaleChange}
-              />
+                onChange={this.onLocaleChange}>
+                <MenuItem value='en' primaryText='English' />
+                <MenuItem value='fr' primaryText='Français' />
+              </SelectField>
             </div>
           </div>
           <div className='row'>
@@ -253,4 +247,4 @@ class Profile extends BaseComponent {
   }
 }
 
-export default injectIntl(Profile)
+export default Profile

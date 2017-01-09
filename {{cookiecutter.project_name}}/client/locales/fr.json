@@ -58,6 +58,7 @@
   "nav.Settings": "Paramètre",
   "notification.PleaseConfirmYourEmail": "Vous devez confirmer votre courriel: {email}",
   "notification.MarkAllAsRead": "Marquer comme tous lu",
+  "profile.Language": "Langue",
   "profile.LocalTime": "Heure locale",
   "profile.SubmitBtn": "Sauvegarder",
   "profile.SaveSettingsHeader": "Paramètres profil",

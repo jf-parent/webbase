@@ -38,6 +38,7 @@
   "general.RegistrationTokenValidation": "Registration Token",
   {%- endif %}
   "notification.PleaseConfirmYourEmail": "Please confirm your email: {email}",
+  "profile.Language": "Language",
   "profile.settingsSaveSuccessfully": "Profile settings save successfully!",
   "profile.OldPasswordPlaceholder": "Old password",
   "profile.NewPasswordPlaceholder": "New password",

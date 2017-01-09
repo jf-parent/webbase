@@ -1,6 +1,6 @@
 import React from 'react'
-import Select from 'react-select'
-import 'layouts/react-select.css'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 
 import FormExample from './FormExample'
 import SelectExample from './SelectExample'
@@ -28,15 +28,10 @@ class ComponentLibrary extends BaseComponent {
     this.state = {
       component: 'Form'
     }
-    this.componentOptions = [
-      { value: 'Form', label: 'Form' },
-      { value: 'Select', label: 'Select' },
-      { value: 'Grid', label: 'Grid' }
-    ]
   }
 
-  onComponentChange (component) {
-    this.setState({component: component.value})
+  onComponentChange (event, index, value) {
+    this.setState({component: value})
   }
 
   getSelect () {
@@ -53,25 +48,31 @@ class ComponentLibrary extends BaseComponent {
     return <FormExample />
   }
 
-  getComponentDropdown () {
-    return (
-      <Select
-        style={{"{{"}}zIndex: 20{{"}}"}}
-        placeholder='Components'
-        name='component-options'
-        value={this.state.component}
-        options={this.componentOptions}
-        onChange={this.onComponentChange}
-      />
-    )
-  }
-
   render () {
     let component = this['get' + this.state.component]()
     return (
       <div>
-        {this.getComponentDropdown()}
-        {component}
+        <div className='row'>
+          <div className='medium-6 columns'>
+            <SelectField
+              style={{"{{"}}width: '100%'{{"}}"}}
+              name='component-options'
+              floatingLabelText='Components'
+              value={this.state.component}
+              onChange={this.onComponentChange}
+            >
+              <MenuItem value='Form' primaryText='Form' />
+              <MenuItem value='Select' primaryText='Select' />
+              <MenuItem value='Grid' primaryText='Grid' />
+              <MenuItem value='Graph' primaryText='Graph' />
+            </SelectField>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='medium-6 columns'>
+            {component}
+          </div>
+        </div>
       </div>
     )
   }
