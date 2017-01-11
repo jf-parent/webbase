@@ -76,7 +76,7 @@ def test_send_reset_password_token_error_not_existing_email(client):
 def test_validate_reset_password_token_expired(client):
     loop = asyncio.get_event_loop()
     asyncio.set_event_loop(loop)
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         old_datetime = dateutil_parser.parse('2012 12 22 00:00:00')
         user = session.query(User).filter(User.email == 'test@test.com').one()
         reset_password_token = Resetpasswordtoken()

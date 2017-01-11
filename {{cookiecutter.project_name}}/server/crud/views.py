@@ -143,9 +143,7 @@ class CRUD(web.View):
                     elif action.get('uids'):
                         uids = action.get('uids')
                         base_query = self.request.db_session.query(model_class)
-                        response_data[index]['total'] = len(uids)
                         base_query = base_query.in_('mongo_id', *uids)
-                        results = base_query.all()
 
                     else:
                         filters = action.get('filters')

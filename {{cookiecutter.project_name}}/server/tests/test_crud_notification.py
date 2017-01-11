@@ -210,7 +210,7 @@ def test_crud_read_notifications(client):
 def test_crud_read_specific_notification(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid()).first()
 
@@ -345,7 +345,7 @@ def test_crud_read_limit_and_skip(client):
 def test_crud_update_notification_sanitize_data_for_normal_user(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid()).first()
 
@@ -375,7 +375,7 @@ def test_crud_update_notification_sanitize_data_for_normal_user(client):
 def test_crud_update_notification_by_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User)\
             .filter(User.email == 'test@test.com').one()
         notification = session.query(Notification)\
@@ -410,7 +410,7 @@ def test_crud_update_notification_by_admin(client):
 def test_crud_delete_not_allowed_for_normal_user(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid()).first()
 
@@ -433,7 +433,7 @@ def test_crud_delete_not_allowed_for_normal_user(client):
 def test_crud_delete_notification_by_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User)\
             .filter(User.email == 'test@test.com').one()
         notification = session.query(Notification)\
@@ -456,7 +456,7 @@ def test_crud_delete_notification_by_admin(client):
     assert response.json['success']
     assert response.json['total'] == 1
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert not session.query(Notification)\
             .filter(Notification.mongo_id == notification_uid).count()
 
@@ -464,7 +464,7 @@ def test_crud_delete_notification_by_admin(client):
 def test_crud_delete_all_notification_for_specific_user_by_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User)\
             .filter(User.email == 'test@test.com').one()
 
@@ -485,6 +485,6 @@ def test_crud_delete_all_notification_for_specific_user_by_admin(client):
     assert response.json['success']
     assert response.json['total'] == 4
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert not session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid()).count()

@@ -190,7 +190,7 @@ def test_crud_create_success(client):
 def test_crud_read_for_normal_user(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         admin = session.query(User) \
                 .filter(User.email == 'admin@admin.com').one()
 
@@ -229,7 +229,7 @@ def test_crud_read_for_normal_user(client):
 def test_crud_read_specific_user_with_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
                 .filter(User.email == 'test@test.com').one()
 
@@ -337,7 +337,7 @@ def test_crud_read_admin(client):
 def test_crud_update_normal_user_not_authorized(client):
     client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         admin = session.query(User) \
             .filter(User.email == 'admin@admin.com').one()
 
@@ -363,7 +363,7 @@ def test_crud_update_normal_user_not_authorized(client):
 def test_crud_update_admin_other_user(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
 
@@ -384,7 +384,7 @@ def test_crud_update_admin_other_user(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
         assert user.name == 'new_name'
@@ -411,7 +411,7 @@ def test_crud_update_email(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user_query = session.query(User) \
             .filter(User.email == 'newemail@newemail.com')
         assert user_query.count()
@@ -494,7 +494,7 @@ def test_crud_update_sanitize_data(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
         assert user.role == 'user'
@@ -521,7 +521,7 @@ def test_crud_update_name_with_same_email(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
         assert user.name == 'new_name'
@@ -530,7 +530,7 @@ def test_crud_update_name_with_same_email(client):
 def test_crud_update_sanitize_data_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
 
@@ -552,7 +552,7 @@ def test_crud_update_sanitize_data_admin(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
         assert user.role == 'admin'
@@ -705,7 +705,7 @@ def test_crud_delete_not_allowed_for_normal_user(client):
 def test_crud_delete_admin_success(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
                 .filter(User.email == 'test@test.com').one()
 
@@ -726,7 +726,7 @@ def test_crud_delete_admin_success(client):
     assert response.json['success']
     assert response.json['total'] == 1
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert not session.query(User) \
                 .filter(User.email == 'test@test.com').count()
 
@@ -734,7 +734,7 @@ def test_crud_delete_admin_success(client):
 def test_crud_delete_all_user_disabled_admin_success(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert session.query(User) \
                 .filter(User.enable == False).count() == 1  # noqa
 
@@ -755,6 +755,6 @@ def test_crud_delete_all_user_disabled_admin_success(client):
     assert response.json['success']
     assert response.json['total'] == 1
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert not session.query(User) \
                 .filter(User.enable == False).count()  # noqa

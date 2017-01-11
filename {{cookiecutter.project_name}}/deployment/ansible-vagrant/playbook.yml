@@ -122,6 +122,12 @@
       args:
         chdir: /home/vagrant/{{cookiecutter.project_name}}
       when: env == 'development'
+    - shell: make init-db-sample-data
+      become: true
+      become_user: vagrant
+      args:
+        chdir: /home/vagrant/{{cookiecutter.project_name}}
+      when: env == 'development'
     - name: nginx conf
       template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
     - name: disable selinux

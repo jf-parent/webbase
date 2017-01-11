@@ -33,14 +33,11 @@ def client():
         "server_host": "localhost"
     }
 
-    drop_database(
-        config.get('mongo_database_name'),
-        config.get('redis_database')
-    )
+    drop_database(config)
 
     _, _, app = loop.run_until_complete(init(loop, config))
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
 
         # INSERT DUMMY DATA
         users = [
@@ -129,7 +126,7 @@ def client():
             }
         )
         with DbSessionContext(
-            self.config.get('mongo_database_name')
+            self.config
         ) as session:
             user = session.query(User)\
                 .filter(User.email == email).one()

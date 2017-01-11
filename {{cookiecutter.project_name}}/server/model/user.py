@@ -311,10 +311,10 @@ class User(BaseModel):
         email = config.get('email_confirmation_email')
         email = email.copy()
         email['text'] = email['text'].format(
-            email_validation_token=self.email_validation_token.token
+            email_validation_token=email_confirmation_token.token
         )
         email['html'] = email['html'].format(
-            email_validation_token=self.email_validation_token.token
+            email_validation_token=email_confirmation_token.token
         )
         email['to'][0]['email'] = email['to'][0]['email'].format(
             user_email=self.email

@@ -159,7 +159,7 @@ def test_register_with_right_token(client):
     assert response.status_code == 200
     assert response.json['success']
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user_query = session.query(User) \
             .filter(User.email == DEFAULT_EMAIL)
 

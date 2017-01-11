@@ -3,6 +3,35 @@ from server.utils import DbSessionContext
 from server.model.user import User
 
 
+def test_crud_uids(client):
+    client.login('admin@admin.com')
+
+    uids = None
+    with DbSessionContext(config) as session:
+        users = session.query(User).all()
+        uids = [str(user.get_uid()) for user in users]
+
+    response = client.post_json(
+        '/api/crud',
+        {
+            'token': client.__token__,
+            'actions': {
+                'action': 'update',
+                'model': 'user',
+                'uids': uids,
+                'data': {
+                    'name': 'new name'
+                }
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert type(response.json['results']) == list
+    assert len(response.json['results']) == 4
+    assert response.json['results'][0]['name'] == 'new name'
+
+
 def test_crud_not_authorized(client):
     response = client.post_json(
         '/api/crud',
@@ -145,7 +174,7 @@ def test_crud_combination_multiple_model_multiple_action_by_admin(client):
 def test_crud_combination_multiple_model_multiple_action_by_user_not_allowed(client):  # noqa
     client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         admin = session.query(User) \
                 .filter(User.email == 'admin@admin.com').one()
 
@@ -189,7 +218,7 @@ def test_crud_combination_multiple_model_multiple_action_by_user_not_allowed(cli
 def test_crud_combination_multiple_model_multiple_action_by_user_some_allowed(client):  # noqa
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         admin = session.query(User) \
                 .filter(User.email == 'admin@admin.com').one()
 

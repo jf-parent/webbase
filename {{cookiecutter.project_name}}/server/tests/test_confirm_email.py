@@ -29,7 +29,7 @@ def test_confirm_email_invalid_request(client):
 def test_confirm_email_right_token(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         token = session.query(Emailconfirmationtoken)\
             .filter(Emailconfirmationtoken.user_uid == user.get_uid()).one()
 
@@ -44,7 +44,7 @@ def test_confirm_email_right_token(client):
     assert response.json['success']
     assert response.json['user']['email'] == 'test@test.com'
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         last_notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid())\
             .descending(Notification.created_ts)\
@@ -72,7 +72,7 @@ def test_confirm_email_wrong_token(client):
 def test_confirm_email_right_token_wrong_user(client):
     client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User)\
             .filter(User.email == 'admin@admin.com').one()
         token = session.query(Emailconfirmationtoken)\
@@ -93,7 +93,7 @@ def test_confirm_email_right_token_wrong_user(client):
 def test_confirm_email_already_confirmed(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         token = session.query(Emailconfirmationtoken)\
             .filter(Emailconfirmationtoken.user_uid == user.get_uid()).one()
 

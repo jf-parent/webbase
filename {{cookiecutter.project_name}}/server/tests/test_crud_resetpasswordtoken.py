@@ -123,7 +123,7 @@ def test_crud_read_not_allowed_for_normal_user(client):
 def test_crud_read_specific_user_with_admin(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
                 .filter(User.email == 'test@test.com').one()
 
@@ -230,7 +230,7 @@ def test_crud_read_admin(client):
 def test_crud_update_normal_user_not_authorized(client):
     client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         admin = session.query(User) \
             .filter(User.email == 'admin@admin.com').one()
 
@@ -259,7 +259,7 @@ def test_crud_update_normal_user_not_authorized(client):
 def test_crud_update_admin_other_user(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
             .filter(User.email == 'test@test.com').one()
 
@@ -284,7 +284,7 @@ def test_crud_update_admin_other_user(client):
     assert response.json['success']
     assert response.json['results'][0]['token'] == 'whatever'
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert session.query(Resetpasswordtoken) \
             .filter(Resetpasswordtoken.token == 'whatever').one()
 
@@ -297,7 +297,7 @@ def test_crud_update_admin_other_user(client):
 def test_crud_delete_not_allowed_for_normal_user(client):
     user = client.login('test@test.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         token = session.query(Resetpasswordtoken) \
             .filter(Resetpasswordtoken.user_uid == user.get_uid()).one()
 
@@ -320,7 +320,7 @@ def test_crud_delete_not_allowed_for_normal_user(client):
 def test_crud_delete_admin_success(client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
                 .filter(User.email == 'test@test.com').one()
         token = session.query(Resetpasswordtoken) \
@@ -343,6 +343,6 @@ def test_crud_delete_admin_success(client):
     assert response.json['success']
     assert response.json['total'] == 1
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         assert not session.query(Resetpasswordtoken) \
                 .filter(Resetpasswordtoken.mongo_id == token_uid).count()

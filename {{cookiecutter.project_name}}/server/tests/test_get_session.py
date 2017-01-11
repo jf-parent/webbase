@@ -37,7 +37,7 @@ def test_get_session_with_logged_disabled_user(client):
     assert response.json['success']
 
     # Disable user
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user.enable = False
         session.update(user)
 

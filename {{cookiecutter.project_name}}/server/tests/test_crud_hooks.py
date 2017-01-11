@@ -94,7 +94,7 @@ def test_after_update_and_before_update_called(aum, bum, client):
 def test_after_delete_and_before_delete_called(adm, bdm, client):
     client.login('admin@admin.com')
 
-    with DbSessionContext(config.get('mongo_database_name')) as session:
+    with DbSessionContext(config) as session:
         user = session.query(User) \
                 .filter(User.email == 'test@test.com').one()
 
