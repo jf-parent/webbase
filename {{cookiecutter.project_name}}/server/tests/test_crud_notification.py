@@ -458,7 +458,7 @@ def test_crud_delete_notification_by_admin(client):
 
     with DbSessionContext(config) as session:
         assert not session.query(Notification)\
-            .filter(Notification.mongo_id == notification_uid).count()
+            .filter(Notification.id == notification_uid).count()
 
 
 def test_crud_delete_all_notification_for_specific_user_by_admin(client):

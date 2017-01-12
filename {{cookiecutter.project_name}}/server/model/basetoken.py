@@ -1,9 +1,19 @@
+{%- if cookiecutter.database == 'mongodb' %}
 from mongoalchemy.document import Index
 from mongoalchemy.fields import (
     StringField,
     BoolField,
     ObjectIdField
 )
+{%- else %}
+from sqlalchemy import (
+    Column,
+    String,
+    ForeignKey,
+    Boolean
+)
+from sqlalchemy.ext.declarative import declared_attr
+{%- endif %}
 
 from server.utils import generate_token
 from server import exceptions
@@ -11,12 +21,23 @@ from server.model.basemodel import BaseModel
 
 
 class BaseToken(BaseModel):
+    {%- if cookiecutter.database == 'mongodb' %}
     token = StringField(required=True)
     used = BoolField(default=False)
     user_uid = ObjectIdField(required=True)
 
     i_token = Index().ascending('token').unique()
     i_user_uid = Index().ascending('user_uid')
+    {%- else %}
+    __tablename__ = 'base_token'
+
+    token = Column(String(250), nullable=False)
+    used = Column(Boolean, default=False)
+
+    @declared_attr
+    def user_uid(cls):
+        return Column('user_uid', ForeignKey('user.id'))
+    {%- endif %}
 
     def __eq__(self, target):
         return target == self.token
@@ -76,7 +97,12 @@ class BaseToken(BaseModel):
                 raise exceptions.InvalidRequestException('Missing user_uid')
 
         if save:
+            {%- if cookiecutter.database == 'mongodb' %}
             db_session.save(self, safe=True)
+            {%- else %}
+            db_session.add(self)
+            db_session.commit()
+            {%- endif %}
 
     def use(self, context):
         target = context.get('target')
@@ -93,7 +119,12 @@ class BaseToken(BaseModel):
             if self.is_belonging_to_user(user):
                 self.used = True
 
+                {%- if cookiecutter.database == 'mongodb' %}
                 db_session.save(self, safe=True)
+                {%- else %}
+                db_session.add(self)
+                db_session.commit()
+                {%- endif %}
 
                 return True
             else:

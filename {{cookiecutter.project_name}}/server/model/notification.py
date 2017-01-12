@@ -1,24 +1,55 @@
 from datetime import datetime
 
+{% if cookiecutter.database == 'mongodb' %}
 from mongoalchemy.fields import (
     ObjectIdField,
     DictField,
     DateTimeField,
     BoolField
 )
+{% else %}
+import json
+
+from sqlalchemy import (
+    Column,
+    String,
+    DateTime,
+    Boolean,
+    Integer,
+    ForeignKey
+)
+{% endif %}
 
 from server.model.basemodel import BaseModel
 from server import exceptions
 from server.utils import SafeStringField
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import Base
+{%- endif %}
 
-
+{% if cookiecutter.database == 'mongodb' %}
 class Notification(BaseModel):
+{% else %}
+class Notification(Base, BaseModel):
+{% endif %}
+    {%- if cookiecutter.database == 'mongodb' %}
     user_uid = ObjectIdField(required=True)
     message = SafeStringField()
     template_data = DictField(SafeStringField(), default_empty=True)
     seen = BoolField(default=False)
     target_url = SafeStringField(default='')
     seen_timestamp = DateTimeField(default=None)
+    {%- else %}
+    __tablename__ = 'notification'
+
+    message = Column(SafeStringField(250))
+    template_data = Column(String(250), default='')
+    seen = Column(Boolean, default=False)
+    target_url = Column(SafeStringField(250), default='')
+    seen_timestamp = Column(DateTime, default=None)
+
+    user_uid = Column(Integer, ForeignKey('user.id'))
+    {%- endif %}
 
     def __repr__(self):
         try:
@@ -88,10 +119,19 @@ class Notification(BaseModel):
         # TEMPLATE DATA
         template_data = data.get('template_data')
         if template_data:
+            {%- if cookiecutter.database == 'mongodb' %}
             self.template_data = template_data
+            {%- else %}
+            self.template_data = json.dumps(template_data)
+            {%- endif %}
 
         if save:
+            {%- if cookiecutter.database == 'mongodb' %}
             db_session.save(self, safe=True)
+            {%- else %}
+            db_session.add(self)
+            db_session.commit()
+            {%- endif %}
 
     async def method_autorized(self, context):
         method = context.get('method')
@@ -141,7 +181,14 @@ class Notification(BaseModel):
 
         data['uid'] = self.get_uid()
         data['message'] = self.message
+        {%- if cookiecutter.database == 'mongodb' %}
         data['template_data'] = self.template_data
+        {%- else %}
+        if self.template_data:
+            data['template_data'] = json.loads(self.template_data)
+        else:
+            data['template_data'] = {}
+        {%- endif %}
         data['target_url'] = self.target_url
         data['seen'] = self.seen
         if self.seen_timestamp:

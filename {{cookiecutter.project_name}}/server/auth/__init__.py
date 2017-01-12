@@ -9,7 +9,7 @@ def permits(request, session, permission):
     if not uid:
         return False
 
-    user_query = request.db_session.query(User).filter(User.mongo_id == uid)
+    user_query = request.db_session.query(User).filter(User.id == uid)
     if user_query.count():
         user = user_query.one()
         if user.enable:
@@ -29,7 +29,7 @@ def permits(request, session, permission):
 def get_user_from_session(session, db_session):
     try:
         return db_session.query(User)\
-            .filter(User.mongo_id == session['uid']).one()
+            .filter(User.id == session['uid']).one()
     except:
         return None
 

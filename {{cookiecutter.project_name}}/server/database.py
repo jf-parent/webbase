@@ -1,9 +1,82 @@
 from contextlib import ContextDecorator
+{%- if cookiecutter.database == 'mongodb' %}
 from dateutil import tz
 
 from mongoalchemy.session import Session
-from redis import StrictRedis
 from pymongo import MongoClient
+{% else %}
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+{% endif %}
+from redis import StrictRedis
+{%- if cookiecutter.database == 'postgresql' %}
+import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+{% endif %}
+
+{%- if cookiecutter.database == 'mongodb' %}
+DEFAULT_PORT = 27017
+{%- elif cookiecutter.database == 'postgresql' %}
+DEFAULT_PORT = 5432
+{%- endif %}
+
+{%- if cookiecutter.database != 'mongodb' %}
+Base = declarative_base()
+
+
+def create_db(config):
+    {%- if cookiecutter.database == 'postgresql' %}
+    db_name = config.get('db_name')
+
+    if config.get('db_user'):
+        conn = psycopg2.connect(
+            dbname='postgres',
+            user=config.get('db_user'),
+            host=config.get('db_host'),
+            password=config.get('db_pwd')
+        )
+    else:
+        conn = psycopg2.connect(
+            dbname='postgres'
+        )
+
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            'CREATE DATABASE "{db_name}";'
+            .format(
+                db_name=config.get('db_name')
+            )
+        )
+    except Exception as e:
+        if '"{db_name}" already exists'.format(db_name=db_name) in str(e):
+            pass
+        else:
+            raise
+        pass
+    conn.close()
+    {%- endif %}
+
+
+def init_db(config):
+    from server.model.user import User  # noqa
+    from server.model.notification import Notification  # noqa
+    from server.model.emailconfirmationtoken import Emailconfirmationtoken  # noqa
+    from server.model.resetpasswordtoken import Resetpasswordtoken  # noqa
+    create_db(config)
+    Base.metadata.create_all(
+        _get_client(
+            db_name=config.get('db_name'),
+            db_host=config.get('db_host'),
+            db_port=config.get('db_port'),
+            db_user=config.get('db_user'),
+            db_pwd=config.get('db_pwd')
+        )
+    )
+{%- endif %}
 
 
 class _DbSessionContext(ContextDecorator):
@@ -11,7 +84,7 @@ class _DbSessionContext(ContextDecorator):
             self,
             db_name,
             db_host='127.0.0.1',
-            db_port=27017,
+            db_port=DEFAULT_PORT,
             db_user=False,
             db_pwd=False):
 
@@ -27,15 +100,19 @@ class _DbSessionContext(ContextDecorator):
         return self.session
 
     def __exit__(self, *exc):
+        {%- if cookiecutter.database == 'mongodb' %}
         self.session.end()
         self.session.db.client.close()
+        {%- else %}
+        self.session.close()
+        {%- endif %}
         return False
 
 
 def _get_session(
         db_name,
         db_host='127.0.0.1',
-        db_port=27017,
+        db_port=DEFAULT_PORT,
         db_user=False,
         db_pwd=False):
 
@@ -43,19 +120,28 @@ def _get_session(
         db_host=db_host,
         db_port=db_port,
         db_user=db_user,
-        db_pwd=db_pwd
+        db_pwd=db_pwd,
+        db_name=db_name
     )
+    {%- if cookiecutter.database == 'mongodb' %}
     db = client[db_name]
 
     return Session(db, tz_aware=True, timezone=tz.gettz('UTC'))
+    {%- else %}
+    Base.metadata.bind = client
+    db_session = sessionmaker(bind=client)
+    return db_session()
+    {%- endif %}
 
 
 def _get_client(
         db_host='127.0.0.1',
-        db_port=27017,
+        db_port=DEFAULT_PORT,
         db_user=False,
-        db_pwd=False):
+        db_pwd=False,
+        db_name=False):
 
+    {%- if cookiecutter.database == 'mongodb' %}
     if db_user:
         return MongoClient(
             "mongodb://{db_user}:{db_pwd}@{db_host}:{db_port}"
@@ -68,17 +154,40 @@ def _get_client(
         )
     else:
         return MongoClient(host=db_host, port=db_port)
+    {%- elif cookiecutter.database == 'postgresql' %}
+    if db_user:
+        return create_engine(
+            'postgresql://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}'
+            .format(
+                db_user=db_user,
+                db_pwd=db_pwd,
+                db_host=db_host,
+                db_port=db_port,
+                db_name=db_name
+            )
+        )
+    else:
+        return create_engine(
+            'postgresql://localhost/{db_name}'
+            .format(
+                db_name=db_name
+            )
+        )
+    {%- endif %}
+    # TODO mysql
 
 
 def _drop_database(
         db_name,
         db_host='127.0.0.1',
-        db_port=27017,
+        db_port=DEFAULT_PORT,
         db_user=False,
         db_pwd=False,
         redis_database=0):
 
+    {%- if cookiecutter.database == 'mongodb' %}
     client = _get_client(
+        db_name=db_name,
         db_host=db_host,
         db_port=db_port,
         db_user=db_user,
@@ -86,6 +195,37 @@ def _drop_database(
     )
     db = getattr(client, db_name)
     db.client.drop_database(db_name)
+    {%- elif cookiecutter.database == 'postgresql' %}
+
+    if db_user:
+        conn = psycopg2.connect(
+            dbname='postgres',
+            user=db_user,
+            host=db_host,
+            password=db_pwd
+        )
+    else:
+        conn = psycopg2.connect(
+            dbname='postgres'
+        )
+
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT pg_terminate_backend(pg_stat_activity.pid)
+        FROM pg_stat_activity
+        WHERE pg_stat_activity.datname = '{db_name}'
+          AND pid <> pg_backend_pid();
+    """.format(db_name=db_name))
+    cursor.execute(
+        'DROP DATABASE IF EXISTS "{db_name}";'
+        .format(
+            db_name=db_name
+        )
+    )
+    conn.close()
+    {%- endif %}
 
     redis_client = StrictRedis(db=redis_database)
     redis_client.flushdb()

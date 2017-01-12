@@ -64,7 +64,7 @@ queue-dev:
 lint:
 	@echo "====Python flake8===="
 	flake8 server || true
-	@echo "====Javascript eslin====t"
+	@echo "====Javascript eslint===="
 	npm run lint
 
 serve-cwd:

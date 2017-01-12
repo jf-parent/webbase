@@ -47,7 +47,11 @@ def test_confirm_email_right_token(client):
     with DbSessionContext(config) as session:
         last_notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid())\
+            {%- if cookiecutter.database == 'mongodb' %}
             .descending(Notification.created_ts)\
+            {%- else %}
+            .order_by(Notification.created_ts.desc())\
+            {%- endif %}
             .first()
 
         assert last_notification.message == \

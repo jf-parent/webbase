@@ -8,6 +8,7 @@
   "closed_registration": "n",
   "include_cordova": "y",
   "include_electron": "y",
+  "database": ["mongodb", "postgresql", "mysql"],
   "_copy_without_render": [
     "*.html"
   ]

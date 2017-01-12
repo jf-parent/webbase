@@ -72,7 +72,7 @@ async def api_validate_reset_password_token(request):
     if token_query.count():
         reset_password_token = token_query.one()
         user = request.db_session.query(User)\
-            .filter(User.mongo_id == reset_password_token.user_uid).one()
+            .filter(User.id == reset_password_token.user_uid).one()
 
         context = {
             'user': user,

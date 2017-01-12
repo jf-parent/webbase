@@ -3,6 +3,9 @@ import traceback
 
 from aiohttp_session import get_session
 from aiohttp import web
+{%- if cookiecutter.database != 'mongodb' %}
+from sqlalchemy import or_
+{%- endif %}
 
 from server import exceptions
 from server.settings import logger
@@ -137,13 +140,27 @@ class CRUD(web.View):
                     if uid:
                         base_query = self.request.db_session\
                             .query(model_class)\
-                            .filter(model_class.mongo_id == uid)
+                            .filter(model_class.id == uid)
+                        {%- if cookiecutter.database != 'mongodb' %}
+                        response_data[index]['total'] = base_query.count()
+                        results = base_query.all()
+                        {%- endif %}
 
                     # BATCH
                     elif action.get('uids'):
                         uids = action.get('uids')
                         base_query = self.request.db_session.query(model_class)
-                        base_query = base_query.in_('mongo_id', *uids)
+                        {%- if cookiecutter.database == 'mongodb' %}
+                        base_query = base_query.in_('id', *uids)
+                        {%- else %}
+                        base_query = base_query.filter(
+                            getattr(model_class, 'id').in_(uids)
+                        )
+                        {%- endif %}
+                        {%- if cookiecutter.database != 'mongodb' %}
+                        response_data[index]['total'] = base_query.count()
+                        results = base_query.all()
+                        {%- endif %}
 
                     else:
                         filters = action.get('filters')
@@ -155,21 +172,9 @@ class CRUD(web.View):
 
                         base_query = self.request.db_session.query(model_class)
 
-                        if limit:
-                            base_query = base_query.limit(limit)
-
-                        if skip:
-                            base_query = base_query.skip(skip)
-
-                        if descending:
-                            base_query = base_query.descending(descending)
-
-                        if ascending:
-                            base_query = base_query.ascending(ascending)
-
                         if filters:
                             if 'uid' in filters:
-                                filters['mongo_id'] = filters['uid']
+                                filters['id'] = filters['uid']
                                 del filters['uid']
 
                             base_query = base_query.filter_by(**filters)
@@ -177,17 +182,67 @@ class CRUD(web.View):
                         if filters_wildcard:
                             wildcard = []
                             for key, value in iter(filters_wildcard.items()):
+                                {%- if cookiecutter.database == 'mongodb' %}
                                 wildcard.append(
                                     getattr(
                                         model_class,
                                         key
                                     ).regex('.*%s.*' % value, ignore_case=True)
                                 )
+                                {%- else %}
+                                wildcard.append(
+                                    getattr(model_class, key).ilike(
+                                        '%{value}%'.format(value=value)
+                                    )
+                                )
+                                {%- endif %}
 
+                            {%- if cookiecutter.database == 'mongodb' %}
                             base_query = base_query.or_(*wildcard)
+                            {%- else %}
+                            base_query = base_query.filter(or_(*wildcard))
+                            {%- endif %}
 
+                        {%- if cookiecutter.database != 'mongodb' %}
+                        response_data[index]['total'] = base_query.count()
+                        {%- endif %}
+
+                        if limit:
+                            base_query = base_query.limit(limit)
+
+                        if skip:
+                            {%- if cookiecutter.database == 'mongodb' %}
+                            base_query = base_query.skip(skip)
+                            {%- else %}
+                            base_query = base_query.offset(skip)
+                            {%- endif %}
+
+                        if descending:
+                            {%- if cookiecutter.database == 'mongodb' %}
+                            base_query = base_query.descending(descending)
+                            {%- else %}
+                            base_query = base_query.order_by(
+                                getattr(model_class, descending).desc()
+                            )
+                            {%- endif %}
+
+                        if ascending:
+                            {%- if cookiecutter.database == 'mongodb' %}
+                            base_query = base_query.ascending(ascending)
+                            {%- else %}
+                            base_query = base_query.order_by(
+                                getattr(model_class, ascending).asc()
+                            )
+                            {%- endif %}
+
+                        {%- if cookiecutter.database != 'mongodb' %}
+                        results = base_query.all()
+                        {%- endif %}
+
+                    {%- if cookiecutter.database == 'mongodb' %}
                     response_data[index]['total'] = base_query.count()
                     results = base_query.all()
+                    {%- endif %}
 
                 # PROCESSING RESULTS
                 for result in results:
@@ -248,7 +303,12 @@ class CRUD(web.View):
                     # DELETE
                     elif action_name == 'delete':
                         await result.before_delete(action_context)
+                        {%- if cookiecutter.database == 'mongodb' %}
                         self.request.db_session.remove(result, safe=True)
+                        {%- else %}
+                        self.request.db_session.delete(result)
+                        self.request.db_session.commit()
+                        {%- endif %}
                         await result.after_delete(action_context)
 
                     if not action.get('total_only', False) \

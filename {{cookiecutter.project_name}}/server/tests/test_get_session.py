@@ -39,7 +39,12 @@ def test_get_session_with_logged_disabled_user(client):
     # Disable user
     with DbSessionContext(config) as session:
         user.enable = False
+        {%- if cookiecutter.database == 'mongodb' %}
         session.update(user)
+        {%- else %}
+        session.add(user)
+        session.commit()
+        {%- endif %}
 
     # Get session
     data = {'user_timezone': 'Australia/Sydney'}

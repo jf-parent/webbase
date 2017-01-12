@@ -4,12 +4,17 @@ from datetime import datetime
 import pytz
 
 import bcrypt
+{%- if cookiecutter.database == 'mongodb' %}
 from mongoalchemy.document import Index
 from mongoalchemy.fields import (
     EnumField,
     StringField,
     BoolField
 )
+{%- else %}
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, String, Boolean, Enum
+{%- endif %}
 from validate_email import validate_email
 
 from jobs.send_email import send_email
@@ -19,13 +24,19 @@ from server.utils import convert_tz_datetime
 from server.model.notification import Notification
 from server.settings import config
 from server import exceptions
-from server.model.emailconfirmationtoken import Emailconfirmationtoken
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import Base
+{% endif %}
 
 NAME_MIN_LEN = 2  # e.g.: Ed
 NAME_MAX_LEN = 60  # e.g.: Hubert Blaine Wolfeschlegelsteinhausenbergerdorff, Sr. # noqa
 
-
+{% if cookiecutter.database == 'mongodb' %}
 class User(BaseModel):
+{% else %}
+class User(Base, BaseModel):
+{% endif %}
+    {%- if cookiecutter.database == 'mongodb' %}
     name = SafeStringField(required=True, min_length=NAME_MIN_LEN, max_length=NAME_MAX_LEN)  # noqa
     email = SafeStringField(required=True)
     role = EnumField(StringField(), 'admin', 'user', default="user")
@@ -40,6 +51,45 @@ class User(BaseModel):
 
     # INDEX
     i_email = Index().ascending('email').unique()
+    {%- else %}
+    __tablename__ = 'user'
+
+    name = Column(SafeStringField(250), nullable=False)
+    email = Column(SafeStringField(250), nullable=False)
+    role = Column(Enum('admin', 'user', name='role_types'), default='user')
+    enable = Column(Boolean, default=True)
+    email_confirmed = Column(Boolean, default=False)
+    gravatar_url = Column(String(250), default='')
+    locale = Column(Enum('fr', 'en', name='locale_types'), default='en')
+    notifications = relationship(
+        "Notification",
+        backref=backref(
+            "user",
+            cascade="all, delete-orphan",
+            single_parent=True
+        )
+    )
+    email_confirmation_tokens = relationship(
+        "Emailconfirmationtoken",
+        backref=backref(
+            "user",
+            cascade="all, delete-orphan",
+            single_parent=True
+        )
+    )
+    reset_password_tokens = relationship(
+        "Resetpasswordtoken",
+        backref=backref(
+            "user",
+            cascade="all, delete-orphan",
+            single_parent=True
+        )
+    )
+
+    # PASSWORD
+    hashed_password = Column(String(250), nullable=False)
+    salt = Column(String(250), nullable=False)
+    {%- endif %}
 
     def __eq__(self, target):
         return target.get_uid() == self.get_uid()
@@ -186,7 +236,7 @@ class User(BaseModel):
                     .filter(User.email == email)
                 if not is_new:
                     email_uniqueness_query = email_uniqueness_query\
-                        .filter(User.mongo_id != self.get_uid())
+                        .filter(User.id != self.get_uid())
 
                 if email_uniqueness_query.count():
                     raise exceptions.EmailAlreadyExistsException(email)
@@ -219,9 +269,15 @@ class User(BaseModel):
                 raise exceptions.InvalidEmailException('empty email')
 
         if save:
+            {%- if cookiecutter.database == 'mongodb' %}
             db_session.save(self, safe=True)
+            {%- else %}
+            db_session.add(self)
+            db_session.commit()
+            {%- endif %}
 
         if not self.email_confirmed:
+            from server.model.emailconfirmationtoken import Emailconfirmationtoken  # noqa
             email_confirmation_token = Emailconfirmationtoken()
             context['data']['user_uid'] = self.get_uid()
             await email_confirmation_token.validate_and_save(context)

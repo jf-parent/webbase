@@ -115,7 +115,7 @@ class BaseView(ModelView):
 
                 if not is_created:
                     model_obj = session.query(model_class)\
-                        .filter(model_class.mongo_id == model['_id'])\
+                        .filter(model_class.id == model['_id'])\
                         .one()
                 else:
                     model_obj = model_class()

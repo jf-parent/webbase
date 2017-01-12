@@ -13,8 +13,12 @@ from server.utils import get_session  # noqa
 from server.model.user import User  # noqa
 from server.model.notification import Notification  # noqa
 from server.settings import config  # noqa
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import init_db  # noqa
+{%- endif %}
 
 config.configure()
+init_db(config)
 
 session = get_session(config)
 

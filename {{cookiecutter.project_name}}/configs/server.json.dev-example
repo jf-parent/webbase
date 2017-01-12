@@ -12,11 +12,11 @@
     {%- if cookiecutter.closed_registration %}
     "registration_token": "", #CHANGEME
     {%- endif %}
-    "mongo_database_name": "{{cookiecutter.project_name|lower}}-dev",
-    "mongo_host": "127.0.0.1",
-    "mongo_port": 27017,
-    "mongo_user": false,
-    "mongo_pwd": "",
+    "db_name": "{{cookiecutter.project_name|lower}}-dev",
+    "db_host": "127.0.0.1",
+    "db_port": 27017,
+    "db_user": false,
+    "db_pwd": "",
     "server_port": 8000,
     "server_host": "127.0.0.1",
     "cordova_base_url": "127.0.0.1:8000",

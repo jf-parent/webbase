@@ -345,4 +345,4 @@ def test_crud_delete_admin_success(client):
 
     with DbSessionContext(config) as session:
         assert not session.query(Resetpasswordtoken) \
-                .filter(Resetpasswordtoken.mongo_id == token_uid).count()
+                .filter(Resetpasswordtoken.id == token_uid).count()

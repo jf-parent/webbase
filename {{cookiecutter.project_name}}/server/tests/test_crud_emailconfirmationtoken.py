@@ -341,4 +341,4 @@ def test_crud_delete_admin_success(client):
 
     with DbSessionContext(config) as session:
         assert not session.query(Emailconfirmationtoken) \
-                .filter(Emailconfirmationtoken.mongo_id == token_uid).count()
+                .filter(Emailconfirmationtoken.id == token_uid).count()

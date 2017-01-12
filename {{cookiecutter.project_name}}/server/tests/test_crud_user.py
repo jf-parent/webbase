@@ -1,6 +1,3 @@
-
-from pytest import set_trace  # noqa
-
 from server.settings import config
 from server.utils import DbSessionContext
 from server.model.user import User
@@ -423,7 +420,11 @@ def test_crud_update_email(client):
 
         last_notification = session.query(Notification)\
             .filter(Notification.user_uid == user.get_uid())\
+            {%- if cookiecutter.database == 'mongodb' %}
             .descending(Notification.created_ts)\
+            {%- else %}
+            .order_by(Notification.created_ts.desc())\
+            {%- endif %}
             .first()
 
         assert last_notification.message == \

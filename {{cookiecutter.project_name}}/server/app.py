@@ -18,6 +18,9 @@ sys.path.append(os.path.join(HERE, '..'))
 from server.routes import routes  # noqa
 from server.middlewares import db_handler  # noqa
 from server.settings import config, logger, ROOT  # noqa
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import init_db  # noqa
+{%- endif %}
 
 
 async def on_shutdown(app):
@@ -61,6 +64,9 @@ async def init(loop, config_args=None):
 
     app.redis_pool = redis_pool
 
+    {%- if cookiecutter.database != 'mongodb' %}
+    init_db(config)
+    {%- endif %}
     # QUEUE
     app.queue = Queue(connection=Redis())
 
@@ -107,8 +113,12 @@ async def init(loop, config_args=None):
     # PREPARE HOOK
     async def after_request(request, response):
         if hasattr(request, 'db_session'):
+            {%- if cookiecutter.database == 'mongodb' %}
             request.db_session.end()
             request.db_session.db.client.close()
+            {%- else %}
+            request.db_session.close()
+            {%- endif %}
 
     app.on_response_prepare.append(after_request)
 

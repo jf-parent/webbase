@@ -17,6 +17,9 @@ from server.utils import (
 from server.model.user import User  # noqa
 from server.settings import config  # noqa
 from server.model.notification import Notification  # noqa
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import init_db  # noqa
+{%- endif %}
 
 config.configure()
 loop = asyncio.get_event_loop()
@@ -27,6 +30,12 @@ if config.get('env', 'production') != 'development':
     sys.exit(1)
 
 drop_database(config)
+
+
+{%- if cookiecutter.database != 'mongodb' %}
+init_db(config)
+{%- endif %}
+
 
 with DbSessionContext(config) as session:
     # INSERT DUMMY DATA

@@ -2,19 +2,36 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
+{%- if cookiecutter.database == 'mongodb' %}
 from mongoalchemy.fields import (
     BoolField,
     DateTimeField
 )
+{%- else %}
+from sqlalchemy import Column, DateTime, Boolean
+{%- endif %}
 
 from server.model.basetoken import BaseToken
 from server.settings import config
 from jobs.send_email import send_email
+{%- if cookiecutter.database != 'mongodb' %}
+from server.database import Base
+{%- endif %}
 
-
+{% if cookiecutter.database == 'mongodb' %}
 class Resetpasswordtoken(BaseToken):
+{% else %}
+class Resetpasswordtoken(Base, BaseToken):
+{% endif %}
+    {%- if cookiecutter.database == 'mongodb' %}
     expiration_datetime = DateTimeField(required=True)
     password_reset = BoolField(default=False)
+    {%- else %}
+    __tablename__ = 'reset_password_token'
+
+    expiration_datetime = Column(DateTime, nullable=False)
+    password_reset = Column(Boolean, default=False)
+    {%- endif %}
 
     async def validate_and_save(self, context):
         NOW = datetime.now()
@@ -52,7 +69,12 @@ class Resetpasswordtoken(BaseToken):
 
         # SAVE
         if save:
+            {%- if cookiecutter.database == 'mongodb' %}
             db_session.save(self, safe=True)
+            {%- else %}
+            db_session.add(self)
+            db_session.commit()
+            {%- endif %}
 
         # FORMAT EMAIL TEMPLATE
         if config.get('env', 'production') == 'production' \

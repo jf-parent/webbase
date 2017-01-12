@@ -8,3 +8,4 @@ default_context:
   closed_registration: "n"
   include_cordova: "y"
   include_electron: "y"
+  database: "mongodb"
