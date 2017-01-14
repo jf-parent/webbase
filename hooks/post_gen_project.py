@@ -31,3 +31,15 @@ if __name__ == '__main__':
     if '{{ cookiecutter.include_electron }}' != 'y':
         remove_file('client/electron.js')
         remove_file('client/package.json')
+
+    # SQL DATABASE
+    if '{{ cookiecutter.database }}' != 'mongodb':
+        remove_dir('db_migration_scripts')
+        remove_file('db_migrate.py')
+        remove_file('server/model/migrationbase.py')
+        remove_file('server/model/migrationdummy.py')
+
+    # MONGODB
+    if '{{ cookiecutter.database }}' == 'mongodb':
+        remove_dir('alembic')
+        remove_file('alembic.ini')

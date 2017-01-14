@@ -286,3 +286,59 @@ def test_crud_combination_total_only(client):
     assert response.json['results'][1]['total'] == 16
     assert not response.json['results'][0]['results']
     assert not response.json['results'][1]['results']
+
+
+def test_crud_descending(client):
+    client.login('admin@admin.com')
+
+    with DbSessionContext(config) as session:
+        user = session.query(User)\
+            {%- if cookiecutter.database == 'mongodb' %}
+            .descending(User.created_ts)\
+            {%- else %}
+            .order_by(User.created_ts.desc())\
+            {%- endif %}
+            .first()
+
+    response = client.post_json(
+        '/api/crud',
+        {
+            'token': client.__token__,
+            'actions': {
+                'action': 'read',
+                'model': 'user',
+                'descending': 'created_ts'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert response.json['results'][0]['email'] == user.email
+
+
+def test_crud_ascending(client):
+    client.login('admin@admin.com')
+
+    with DbSessionContext(config) as session:
+        user = session.query(User)\
+            {%- if cookiecutter.database == 'mongodb' %}
+            .ascending(User.created_ts)\
+            {%- else %}
+            .order_by(User.created_ts.asc())\
+            {%- endif %}
+            .first()
+
+    response = client.post_json(
+        '/api/crud',
+        {
+            'token': client.__token__,
+            'actions': {
+                'action': 'read',
+                'model': 'user',
+                'ascending': 'created_ts'
+            }
+        }
+    )
+    assert response.status_code == 200
+    assert response.json['success']
+    assert response.json['results'][0]['email'] == user.email

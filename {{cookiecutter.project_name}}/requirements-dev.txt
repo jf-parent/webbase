@@ -1,17 +1,15 @@
 -r requirements.txt
-ipython
-ipdb
-flake8
-pip-save
-tmuxp
-webtest-aiohttp
-pytest
-pytest-xdist
-pytest-instafail
-pytest-html
-pytest-mock
-mock
-freezegun
-cookiecutter
 # brome
-Faker
+Faker==0.7.3
+flake8==3.0.4
+freezegun==0.3.7
+ipython==5.1.0
+ipdb==0.10.1
+mock==2.0.0
+pytest==3.0.0
+pytest-html==1.10.0
+pytest-instafail==0.3.0
+pytest-mock==1.2
+pytest-xdist==1.15.0
+tmuxp==1.2.0
+webtest-aiohttp==1.1.0

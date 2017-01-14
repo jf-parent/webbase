@@ -65,24 +65,21 @@ class User(Base, BaseModel):
         "Notification",
         backref=backref(
             "user",
-            cascade="all, delete-orphan",
-            single_parent=True
+            cascade="delete"
         )
     )
     email_confirmation_tokens = relationship(
         "Emailconfirmationtoken",
         backref=backref(
             "user",
-            cascade="all, delete-orphan",
-            single_parent=True
+            cascade="delete"
         )
     )
     reset_password_tokens = relationship(
         "Resetpasswordtoken",
         backref=backref(
             "user",
-            cascade="all, delete-orphan",
-            single_parent=True
+            cascade="delete"
         )
     )
 
@@ -92,7 +89,13 @@ class User(Base, BaseModel):
     {%- endif %}
 
     def __eq__(self, target):
-        return target.get_uid() == self.get_uid()
+        if target:
+            if hasattr(target, 'get_uid'):
+                return target.get_uid() == self.get_uid()
+            else:
+                return target == self.get_uid()
+        else:
+            return False
 
     def __repr__(self):
         try:

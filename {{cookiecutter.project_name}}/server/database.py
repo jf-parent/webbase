@@ -52,11 +52,8 @@ def create_db(config):
             )
         )
     except Exception as e:
-        if '"{db_name}" already exists'.format(db_name=db_name) in str(e):
-            pass
-        else:
+        if '"{db_name}" already exists'.format(db_name=db_name) not in str(e):
             raise
-        pass
     conn.close()
     {%- endif %}
 
@@ -66,6 +63,7 @@ def init_db(config):
     from server.model.notification import Notification  # noqa
     from server.model.emailconfirmationtoken import Emailconfirmationtoken  # noqa
     from server.model.resetpasswordtoken import Resetpasswordtoken  # noqa
+    # TODO automate
     create_db(config)
     Base.metadata.create_all(
         _get_client(
@@ -77,6 +75,33 @@ def init_db(config):
         )
     )
 {%- endif %}
+
+
+def get_connection_url(config):
+    {%- if cookiecutter.database != 'mongodb' %}
+    db_type = '{{cookiecutter.database}}'
+    {%- endif %}
+    if config.get('db_user'):
+        {%- if cookiecutter.database == 'mongodb' %}
+        return "mongodb://{db_user}:{db_pwd}@{db_host}:{db_port}"\
+            .format(
+                **config
+            )
+        {%- else %}
+        return '{db_type}://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}'\
+            .format(
+                db_type=db_type,
+                **config
+            )
+        {%- endif %}
+    else:
+        {%- if cookiecutter.database != 'mongodb' %}
+        return '{db_type}://localhost/{db_name}'\
+            .format(
+                db_name=config.get('db_name'),
+                db_type=db_type
+            )
+        {%- endif %}
 
 
 class _DbSessionContext(ContextDecorator):
@@ -141,40 +166,21 @@ def _get_client(
         db_pwd=False,
         db_name=False):
 
+    config = {
+        'db_name': db_name,
+        'db_port': db_port,
+        'db_user': db_user,
+        'db_pwd': db_pwd,
+        'db_name': db_name
+    }
     {%- if cookiecutter.database == 'mongodb' %}
     if db_user:
-        return MongoClient(
-            "mongodb://{db_user}:{db_pwd}@{db_host}:{db_port}"
-            .format(
-                db_user=db_user,
-                db_pwd=db_pwd,
-                db_host=db_host,
-                db_port=db_port
-            )
-        )
+        return MongoClient(get_connection_url(config))
     else:
         return MongoClient(host=db_host, port=db_port)
-    {%- elif cookiecutter.database == 'postgresql' %}
-    if db_user:
-        return create_engine(
-            'postgresql://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}'
-            .format(
-                db_user=db_user,
-                db_pwd=db_pwd,
-                db_host=db_host,
-                db_port=db_port,
-                db_name=db_name
-            )
-        )
-    else:
-        return create_engine(
-            'postgresql://localhost/{db_name}'
-            .format(
-                db_name=db_name
-            )
-        )
+    {%- else %}
+    return create_engine(get_connection_url(config))
     {%- endif %}
-    # TODO mysql
 
 
 def _drop_database(

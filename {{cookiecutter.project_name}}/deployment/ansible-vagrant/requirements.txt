@@ -1,6 +1,12 @@
-ice9js.mongodb
 olibob.nodejs
 samsixtyone.epel
 FrogyYen.centos7-nginx
 jffz.netdata
 geerlingguy.redis
+{%- if cookiecutter.database == 'mongodb' %}
+ice9js.mongodb
+{%- elif cookiecutter.database == 'postgresql' %}
+dblenkus.postgresql
+{%- else %}
+Aplyca.MySQL
+{% endif %}

@@ -20,7 +20,13 @@
    - { role: FrogyYen.centos7-nginx }
    - { role: geerlingguy.redis }
    - { role: olibob.nodejs }
+   {%- if cookiecutter.database == 'mongodb' %}
    - { role: ice9js.mongodb }
+   {%- elif cookiecutter.database == 'postgresql' %}
+   - { role: dblenkus.postgresql }
+   {%- else %}
+   - { role: aplyca.MySQL }
+   {% endif %}
    - { role: jffz.netdata }
   tasks:
     - name: install the latest version of JQ
@@ -77,8 +83,16 @@
         dest='/usr/local/bin/pip'
         state=link
       when: py35_already_installed.stat.exists == false
+     {%- if cookiecutter.database == 'mongodb' %}
     - name: Mongo service
       service: state=started name=mongod
+     {%- elif cookiecutter.database == 'postgresql' %}
+    - name: Postgres service
+      service: state=started name=postgresql
+     {%- else %}
+    - name: Mysql service
+      service: state=started name=mysqld
+     {% endif %}
     - name: Redis service
       service: state=started name=redis
     - name: install the yarn's repo
