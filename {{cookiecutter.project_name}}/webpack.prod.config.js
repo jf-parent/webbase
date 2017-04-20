@@ -10,8 +10,8 @@ const current_date = (new Date()).valueOf().toString();
 const random = Math.random().toString();
 const versionHash = crypto.createHash('sha1').update(current_date + random).digest('hex');
 const INDEX_TPL_FILE = 'index.tpl'
-const isCordova = process.env.NODE_ENV === 'cordova';
-const isElectron = process.env.NODE_ENV === 'electron';
+const isCordova = process.env.NODE_TARGET === 'cordova';
+const isElectron = process.env.NODE_TARGET === 'electron';
 let BUILD_DIR
 let publicPath
 

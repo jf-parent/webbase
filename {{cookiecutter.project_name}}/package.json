@@ -10,10 +10,10 @@
     "profile": "NODE_ENV=production webpack --profile --json > stats.json && echo 'visualize => http://webpack.github.io/analyse/#modules'",
     "build": "webpack --progress",
     "build:prod": "NODE_ENV=production npm run build",
-    "build:travis": "NODE_ENV=travis webpack",
+    "build:travis": "NODE_ENV=test NODE_TARGET=travis webpack",
     "build:dev": "NODE_ENV=build-development npm run build",
-    "build:electron": "rm -fr electron-dist && NODE_ENV=electron npm run build && cd electron-dist && npm install",
-    "build:cordova": "rm -fr www/* && NODE_ENV=cordova npm run build",
+    "build:electron": "rm -fr electron-dist && NODE_ENV=production NODE_TARGET=electron npm run build && cd electron-dist && npm install",
+    "build:cordova": "rm -fr www/* && NODE_ENV=production NODE_TARGET=cordova npm run build",
     "lint": "node node_modules/eslint/bin/eslint.js client --ext .js --ext .jsx --cache || true",
     "sass": "gulp sass"
   },

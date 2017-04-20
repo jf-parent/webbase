@@ -1,11 +1,11 @@
 const webpack = require('webpack');
 
-const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'travis' || process.env.NODE_ENV === 'build-development'
-const isTravis = process.env.NODE_ENV === 'travis';
+const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'build-development'
 const isProd = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
-const isCordova = process.env.NODE_ENV === 'cordova';
-const isElectron = process.env.NODE_ENV === 'electron';
+const isTravis = process.env.NODE_TARGET === 'travis';
+const isCordova = process.env.NODE_TARGET === 'cordova';
+const isElectron = process.env.NODE_TARGET === 'electron';
 const logLevel = isDev ? "'debug'" : "'error'";
 
 let NODE_ENV = process.env.NODE_ENV
