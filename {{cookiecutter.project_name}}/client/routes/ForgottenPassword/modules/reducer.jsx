@@ -14,13 +14,6 @@ export const VALIDATE_RESET_PASSWORD_TOKEN_ERROR = 'VALIDATE_RESET_PASSWORD_TOKE
 export const RESET_FORGOTTEN_PASSWORD_STATE = 'RESET_FORGOTTEN_PASSWORD_STATE'
 
 // ====================================
-// Logger
-// ====================================
-
-const logger = require('loglevel').getLogger('ForgottenPassword')
-logger.setLevel(__LOGLEVEL__)
-
-// ====================================
 // Actions
 // ====================================
 
@@ -30,7 +23,6 @@ export function doSendResetPasswordToken (data) {
 
     axios.post('/api/send_reset_password_token', data)
       .then((response) => {
-        logger.debug('/api/send_reset_password_token (response)', response)
         if (response.data.success) {
           dispatch(sendResetPasswordSuccess())
         } else {
@@ -61,7 +53,6 @@ export function doValidateResetPasswordToken (data) {
 
     axios.post('/api/validate_reset_password_token', data)
       .then((response) => {
-        logger.debug('/api/reset_password (response)', response)
         if (response.data.success) {
           dispatch(getSessionRegistered(response.data))
           dispatch(routerActions.push('/resetpassword?resetPasswordToken=' + data['reset_password_token']))
@@ -70,7 +61,6 @@ export function doValidateResetPasswordToken (data) {
         }
       })
       .catch((response) => {
-        logger.debug('/api/reset_password error (response)', response)
         dispatch(validateResetPasswordTokenError(response.data.error))
       })
   }

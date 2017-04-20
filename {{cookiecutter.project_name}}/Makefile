@@ -13,6 +13,7 @@ help:
 	@echo "[*] 'start-queue-prod': start the queue service and detach"
 	@echo "[*] 'stop-queue-prod': stop the queue service from the pid file"
 	@echo "-DEV-----------------------------------------------------------"
+	@echo "[*] 'server-dev-reload': start the server without detaching and reload on file saved in server/**.py"
 	@echo "[*] 'new-model': create a new model skeleton file in server/model/"
 	@echo "[*] 'new-migration-script': create a new migration script skeleton file in db_migration_scripts/"
 	@echo "[*] 'new-route': create a new route skeleton file in client/routes/"
@@ -35,13 +36,13 @@ deps-dev:
 	pip install -r requirements-dev.txt
 
 new-migration-script:
-	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-migration-script -o db_migration_scripts
+	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-migration-script -o db_migration_scripts
 
 new-model:
-	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o server/model/
+	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o server/model/
 
 new-route:
-	cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-route -o client/routes/
+	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-route -o client/routes/
 
 admin-dev:
 	python admin/app.py
@@ -78,6 +79,9 @@ test:
 
 test-debug:
 	flake8 server && py.test server/tests --pdb
+
+server-dev-reload:
+	find server -name '*.py' -print | entr -r make server-dev
 
 server-dev:
 	python server/app.py

@@ -10,13 +10,6 @@ export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
 export const RESET_PASSWORD_ERROR = 'RESET_PASSWORD_ERROR'
 
 // ====================================
-// Logger
-// ====================================
-
-const logger = require('loglevel').getLogger('ResetPassword')
-logger.setLevel(__LOGLEVEL__)
-
-// ====================================
 // Actions
 // ====================================
 
@@ -28,7 +21,6 @@ export function doResetPassword (data) {
 
     axios.post('/api/reset_password', data)
       .then((response) => {
-        logger.debug('/api/reset_password (response)', response)
         if (response.data.success) {
           dispatch(resetPasswordSuccess())
         } else {

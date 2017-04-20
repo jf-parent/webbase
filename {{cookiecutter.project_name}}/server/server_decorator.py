@@ -14,7 +14,6 @@ def require(permission):
     def wrapper(func):
         @functools.wraps(func)
         async def wrapped(*args):
-            logger.debug('require: {permission}'.format(permission=permission))
 
             # Supports class based views see web.View
             if isinstance(args[0], AbstractView):
@@ -69,7 +68,6 @@ def csrf_protected():
     def wrapper(func):
         @functools.wraps(func)
         async def wrapped(*args):
-            logger.debug('csrf_protected')
 
             # Supports class based views see web.View
             if isinstance(args[0], AbstractView):

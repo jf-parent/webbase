@@ -20,9 +20,6 @@ export const REGISTER_RESET_STATE = 'REGISTER_RESET_STATE'
 // Actions
 // ====================================
 
-const logger = require('loglevel').getLogger('Register')
-logger.setLevel(__LOGLEVEL__)
-
 export function doCheckEmailDisponibility (email) {
   return dispatch => {
     dispatch({type: REGISTER_CHECK_EMAIL_DISPONIBILITY_LOADING})
@@ -33,8 +30,6 @@ export function doCheckEmailDisponibility (email) {
 
     axios.post('/api/check_email_disponibility', data)
       .then((response) => {
-        logger.debug('/api/check_email_disponibility (data) (response)', data, response)
-
         if (response.data.success) {
           dispatch({type: 'REGISTER_CHECK_EMAIL_DISPONIBILITY_SUCCESS', data: response.data})
         } else {
@@ -52,8 +47,6 @@ export function doRegister (data, nextPath) {
 
     axios.post('/api/register', data)
       .then((response) => {
-        logger.debug('/api/register (data) (response)', data, response)
-
         if (response.data.success) {
           dispatch(resetRegisterState())
           dispatch(getSessionRegistered(response.data))

@@ -144,7 +144,7 @@ class Form extends BaseComponent {
         return this.traverseChildren(c, func, index)
       })
     } else {
-      if (component === null) {
+      if (component === null || component === undefined) {
         return component
       } else if (component.props === undefined) {
         return component
@@ -177,11 +177,15 @@ class Form extends BaseComponent {
       }
     }
 
-    let result = results.reduce((a, b) => { return a && b })
-    if (result) {
-      return 'success'
+    if (results.length) {
+      let result = results.reduce((a, b) => { return a && b })
+      if (result) {
+        return 'success'
+      } else {
+        return 'error'
+      }
     } else {
-      return 'error'
+      return 'success'
     }
   }
 

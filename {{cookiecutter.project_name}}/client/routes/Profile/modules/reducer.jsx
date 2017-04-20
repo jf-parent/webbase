@@ -16,17 +16,12 @@ export const PROFILE_RESET_STATE = 'PROFILE_RESET_STATE'
 // Actions
 // ====================================
 
-const logger = require('loglevel').getLogger('Profile')
-logger.setLevel(__LOGLEVEL__)
-
 export function doSave (data) {
   return dispatch => {
     dispatch({type: PROFILE_LOADING})
 
     axios.post('/api/crud', data)
       .then((response) => {
-        logger.debug('/api/crud (data) (response)', data, response)
-
         if (response.data.success) {
           dispatch(updateSessionUser(response.data.results[0]))
           dispatch(doChangeLocale(response.data.results[0].locale))

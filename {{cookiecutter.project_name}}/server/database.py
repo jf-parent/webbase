@@ -101,6 +101,8 @@ def get_connection_url(config):
                 db_name=config.get('db_name'),
                 db_type=db_type
             )
+        {%- else %}
+            return None
         {%- endif %}
 
 

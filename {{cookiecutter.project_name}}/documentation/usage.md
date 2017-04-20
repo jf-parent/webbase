@@ -12,6 +12,8 @@
 ```bash
 $ npm run start
 $ make server-dev
+$ # brew install entrk # http://entrproject.org/
+$ make server-dev-reload
 ```
 
 ## PROD

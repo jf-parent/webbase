@@ -84,7 +84,7 @@ logger.addHandler(fh)
 {%- if cookiecutter.database == 'mongodb' %}
 # MONGO
 pymongo_client = get_client(config)
-db = pymongo_client[config.get('mongo_database_name')]
+db = pymongo_client[config.get('db_name')]
 {%- endif %}
 
 # APP
@@ -256,7 +256,7 @@ class EmailConfirmationTokenForm(form.Form):
     used = fields.BooleanField()
 
 
-{% if cookiecutter.database == 'mongodb' %}
+{%- if cookiecutter.database == 'mongodb' %}
 class EmailConfirmationTokenView(UidToEmailView):
 {% else %}
 class EmailConfirmationTokenView(BaseView):

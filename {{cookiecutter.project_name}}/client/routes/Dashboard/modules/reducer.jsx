@@ -6,13 +6,6 @@ export const RESET_DASHBOARD_STATE = 'RESET_DASHBOARD_STATE'
 export const DISPLAY_SUCCESS_MSG = 'DISPLAY_SUCCESS_MSG'
 
 // ====================================
-// Logger
-// ====================================
-
-const logger = require('loglevel').getLogger('Dashboard')
-logger.setLevel(__LOGLEVEL__)
-
-// ====================================
 // Actions
 // ====================================
 

@@ -18,9 +18,6 @@ export const LOGIN_RESET_STATE = 'LOGIN_RESET_STATE'
 // Actions
 // ====================================
 
-const logger = require('loglevel').getLogger('Login')
-logger.setLevel(__LOGLEVEL__)
-
 export function doLogin (data, nextPath) {
   return dispatch => {
     dispatch({type: LOGIN_LOADING})
@@ -29,8 +26,6 @@ export function doLogin (data, nextPath) {
 
     axios.post('/api/login', data)
       .then((response) => {
-        logger.debug('/api/login (data) (response)', data, response)
-
         if (response.data.success) {
           dispatch(resetLoginState())
           dispatch(getSessionLoggedIn(response.data))

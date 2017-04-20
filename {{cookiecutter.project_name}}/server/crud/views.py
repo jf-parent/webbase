@@ -207,16 +207,6 @@ class CRUD(web.View):
                         response_data[index]['total'] = base_query.count()
                         {%- endif %}
 
-                        if limit:
-                            base_query = base_query.limit(limit)
-
-                        if skip:
-                            {%- if cookiecutter.database == 'mongodb' %}
-                            base_query = base_query.skip(skip)
-                            {%- else %}
-                            base_query = base_query.offset(skip)
-                            {%- endif %}
-
                         if descending:
                             {%- if cookiecutter.database == 'mongodb' %}
                             base_query = base_query.descending(descending)
@@ -233,6 +223,16 @@ class CRUD(web.View):
                             base_query = base_query.order_by(
                                 getattr(model_class, ascending).asc()
                             )
+                            {%- endif %}
+
+                        if limit:
+                            base_query = base_query.limit(limit)
+
+                        if skip:
+                            {%- if cookiecutter.database == 'mongodb' %}
+                            base_query = base_query.skip(skip)
+                            {%- else %}
+                            base_query = base_query.offset(skip)
                             {%- endif %}
 
                         {%- if cookiecutter.database != 'mongodb' %}

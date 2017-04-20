@@ -11,13 +11,6 @@ export const CONFIRM_EMAIL_SUCCESS = 'CONFIRM_EMAIL_SUCCESS'
 export const CONFIRM_EMAIL_ERROR = 'CONFIRM_EMAIL_ERROR'
 
 // ====================================
-// Logger
-// ====================================
-
-const logger = require('loglevel').getLogger('Confirmation')
-logger.setLevel(__LOGLEVEL__)
-
-// ====================================
 // Actions
 // ====================================
 
@@ -27,7 +20,6 @@ export function doConfirmEmail (token) {
 
     axios.post('/api/confirm_email', {token: token})
       .then((response) => {
-        logger.debug('/api/confirm_email (response)', response)
         if (response.data.success) {
           dispatch(confirmEmailSuccess())
           dispatch(updateSessionUser(response.data.user))
