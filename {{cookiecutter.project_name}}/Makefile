@@ -39,7 +39,11 @@ new-migration-script:
 	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-migration-script -o db_migration_scripts
 
 new-model:
+{%- if cookiecutter.database == 'mongodb' %}
 	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model -o server/model/
+{%- else %}
+	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-model-sql -o server/model/
+{%- endif %}
 
 new-route:
 	python -m cookiecutter https://github.com/jf-parent/webbase-cookiecutter-create-route -o client/routes/
